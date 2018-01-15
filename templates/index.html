@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}GradeTip - Sell your old tests, homework, or notes. {% endblock %}
+{% block page_description %}
+  <meta name="description" content="Sell your old tests, homework or notes to other students.">
+{% endblock %}
+{% block extended_content %}
+{{ super() }}
+<style>
+#cv-search {
+	position:absolute; /*it can be fixed too*/
+    left:0; right:0;
+    top:0; bottom:0;
+    margin:auto;
+
+    /*this to solve "the content will not be cut when the window is smaller than the content": */
+    height:200px;
+    width:800px;
+    max-width:100%;
+    max-height:100%;
+}
+#cv-searchbar {
+	width:600px;
+	height:60px;
+	font-size: 40px
+}
+#cv-searchbtn {
+	float:right;
+	height:60px;
+	font-size:15px
+}
+</style>
+<script>
+
+</script>
+  <form id="cv-search" enctype="multipart/form-data" method="post" action="">
+    <ul style="list-style:none; float:center">
+      <li>
+        <input id="cv-searchbar" type="text" name="squery">
+        <input id="cv-searchbtn" type="submit" value="Search">
+      </li>
+    </ul>
+</form>
+{% endblock %}

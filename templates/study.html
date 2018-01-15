@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}{{ entry.name }} details{% endblock %}
+{% block page_description %}
+  <meta name="description"
+        content="Page for displaying information specific to a URL name, such
+                 as Name, URL, User, Modification Time, Creation Time, and
+                 Visitation Count. Name and URL can be edited depending
+                 on user.">
+{% endblock %}
+{% block css %}
+  {{ super() }}
+  <link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='css/details.css') }}">
+  <link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='css/skeleton-alerts.css') }}">
+{% endblock %}
+{% block javascript %}
+  <script type="text/javascript"
+    src="{{url_for('static', filename='js/jquery-3.0.0.min.js') }}"></script>
+  <script type="text/javascript"
+    src="{{url_for('static', filename='js/custom.js') }}"></script>
+{% endblock %}
+{% block content %}
+  {{ super() }}
+  <!-- Header
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <section class="header">
+    <h4 class="title">Details</h4>
+  </section>
+
+  <!-- Details Form
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="container link-content">
+    <div class="row">
+      <div class="column">
+        {% if error_message %}
+          <p class="alert alert-error">
+            {{error_message}}
+          </p>
+        {% endif %}
+        <form action="{{url_for('edit', linkname=entry.name)}}" method="post">
+          {% if current_user.id == entry.user %}
+            <a class="edit-button button">Edit</a>
+            <input type="submit" id="confirm-save" class="button" value="Save">
+            <button class="cancel-save button">Cancel</button>
+            <a class="delete-button button">Delete</a>
+          {% endif %}
+          <!-- readonly form by default -->
+          <div class="row">
+            <label for="linkName">Name</label>
+            <input class="u-full-width editname" name="name" type="text"
+              value="{{ entry.name }}" id="linkName" maxlength="30" readonly>
+            <label for="linkInput">Link</label>
+            <textarea class="u-full-width editurl" name="url" type="text"
+              id="linkInput" readonly>{{ entry.url }}</textarea>
+            <label for="userName">User</label>
+            <input class="u-full-width" name="user" type="text"
+              value="{{ entry.user }}" id="userName" readonly>
+            <label for="modifyTime">Time Modified</label>
+            <input class="u-full-width" name="timemodified" type="text"
+              value="{{ entry.timemodified }}" id="modify" readonly>
+            <label for="creationTime">Time Created</label>
+            <input class="u-full-width" name="timecreated" type="text"
+              value="{{ entry.timecreated }}" id="creationTime" readonly>
+            <label for="visitTime">Time Last Visited</label>
+            <input class="u-full-width" name="timevisited" type="text"
+              value="{{ entry.timevisited }}" id="visitTime" readonly>
+            <label for="usageCount">Number of Visits</label>
+            <input class="u-full-width" name="visits" type="text"
+              value="{{ entry.visits }}" id="usageCount" readonly>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Popup Modal
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="modal-container">
+  </div>
+  <div class="modal row">
+    <form action="{{url_for('delete', linkname=entry.name)}}" method="post">
+      <span class="close-modal"></span>
+      <p>Delete this link?</p>
+      <input type="button" id="cancel-modal" class="button" value="Cancel">
+      <input type="submit" id="confirm-delete" class="button" value="Delete">
+    </form>
+  </div>
+{% endblock %}

@@ -1,0 +1,14 @@
+*.eyaml.tmp
+doc_data
+*.egg-info
+.cache
+.coverage
+htmlcov
+dist
+*.xml
+.eggs
+pylint.out
+test-reports
+__pycache__
+logs
+.DS_Store

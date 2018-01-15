@@ -1,0 +1,131 @@
+ /* Table of Contents:
+ ––––––––––––––––––––––––––––––––––––––––––––––––––
+ - Base Style
+ - Error Pages
+ - Navigation Bar
+ - Table
+ */
+
+/* Base Style
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+body {
+  font-family: 'Open Sans', sans-serif;
+  background-color: #f3f3f3;
+}
+a {
+  text-decoration: none;
+}
+::selection {
+  background: #e1e1e1;
+}
+::-moz-selection {
+  background: #e1e1e1;
+}
+.header {
+  text-align: center;
+  font-weight: 600;
+  font-size: 35px;
+}
+.footer {
+  top: 2000px;
+  float: center;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Error Pages
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.errorPage {
+  text-align: center;
+  word-wrap: break-word;
+  margin-top: 10em;
+  margin-bottom: 10em;
+}
+/* div containing 'go back to home' button */
+.errorPage .row:last-child {
+  width: 300px; /* match width of button */
+  margin: auto;
+  margin-top: 1em;
+}
+.errorPage a {
+  margin-bottom: 2em;
+}
+
+/* Navigation Bar
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.navbar {
+  margin-top: -1em;
+  background: transparent;
+  background-repeat: repeat;
+  height: 110px;
+}
+.navbar container {
+  width: 100%;
+}
+.navbar-list {
+    list-style: none;
+    margin-bottom: 0;
+}
+.navbar-brand a {
+  font-weight: 600;
+  text-decoration: none;
+  line-height: 5rem;
+  color: #000033;
+  font-size: 20px;
+  float: left;
+  position: relative;
+  margin-top: 0.75em;
+  margin-left: 1em;
+  margin-bottom: 0;
+}
+/* navbar list items on top right */
+.navbar-item {
+  float: left;
+  position: relative;
+  margin-bottom: 0;
+}
+.navbar-login {
+  float: right;
+  position: relative;
+  margin-top: 0.75em
+}
+/* navbar list links */
+.navbar-link {
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  line-height: 5rem;
+  color: white;
+}
+/*For devices smaller than 750px*/
+@media (max-width: 750px) {
+  .navbar-brand a 
+    font-size: 16px;
+  }
+  .navbar-link {
+    font-size: 14px;
+  }
+}
+
+/* Table
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+/* div containing table */
+.table-content {
+  margin: auto;
+  font-size: 14px;
+}
+th, td {
+  padding: 8px;
+}
+
+/*For devices smaller than 750px*/
+@media (max-width: 750px) {
+  .table-content {
+    font-size: 13px;
+  }
+}

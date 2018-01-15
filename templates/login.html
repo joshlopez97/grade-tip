@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Sign in{% endblock %}
+{% block css %}
+  {{ super() }}
+  <link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='css/login.css') }}">
+  <link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='css/skeleton-alerts.css') }}">
+{% endblock %}
+{% block extended_content %}
+{{ super () }}
+
+  <section class="header">
+   <h3 class="title">Sign in to GradeTip</h3>
+  </section>
+
+  <!-- Login Box
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="login-box">
+    {% if error %}
+      <p class="alert alert-error">Couldn't log in. Try again.</p>
+    {% endif %}
+    <form action="{{url_for('loginpage')}}" method="post">
+      <div class="row">
+        <input class="u-full-width" name="username" placeholder="Username"
+          type="text" id="usernameInput" autofocus="autofocus">
+        <input class="u-full-width" name="password" placeholder="Password"
+          type="password" id="passwordInput">
+      </div>
+      <input class="submit-login" type="submit" value="Login">
+    </form>
+  </div>
+{% endblock %}

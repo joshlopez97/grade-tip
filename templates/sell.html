@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block css %}
+<!-- Bootstrap styles -->
+{{ super() }}
+<link rel="stylesheet" href="static/css/sellpage.css">
+
+{% endblock %}
+{% block extended_content %}
+{{ super () }}
+<link rel="stylesheet" href="static/css/jquery-ui.css">
+<script src="static/js/sellpage.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+var college_list = {{ colleges|tojson }};
+var course_data = {{ data|tojson }};
+$( function() {
+function toTitleCase(str)
+{
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+};
+$("#element_1" ).autocomplete({
+    source: function(request, response) {
+        var results = [];
+        var terms = request.term.split(' ').filter(Boolean);
+        for (i = 0; i < college_list.length; i++) {
+            if ((college_list[i].match(/\b(?!of|at|and|the)(\w)/g).join('').startsWith(request.term.toUpperCase())) || (terms.length > 1 && college_list[i].match(/\b(?!of|at|and|the)(\w)/g).join('').startsWith(terms[0].toUpperCase()) && college_list[i].includes(toTitleCase(terms[1])))) {
+                if (!results.includes(college_list[i])) {
+                    results.push(college_list[i]);
+                }
+            }
+        }
+        results.push.apply(results, $.ui.autocomplete.filter(college_list, request.term));
+        response(results.slice(0, 5));
+    }
+});
+});
+$( function() {
+$("#element_2" ).autocomplete({
+    source: function(request, response) {
+        var entered_college = document.getElementById("element_1").value;
+        var results = [];
+        var terms = request.term.split(' ').filter(Boolean);
+
+        if (college_list.includes(entered_college) && Array.isArray(course_data[entered_college]['courses'])){
+            course_list = course_data[entered_college]['courses'];
+        }
+        else {
+            return;
+        }
+
+        for (i = 0; i < course_list.length; i++) {
+            if (course_list[i].startsWith(request.term.toUpperCase()) && !results.includes(course_list[i])) {
+                results.push(course_list[i]);
+            }
+            else if (course_list[i].match(/\b([A-Z])/g).join('').startsWith(terms[0].toUpperCase()) && !results.includes(course_list[i])) {
+                if (terms.length == 1 || (terms.length > 1 && course_list[i].match(/([a-zA-Z]?[0-9]+[a-zA-Z]?)/g).join('').startsWith(request.term.match(/([a-zA-Z]?[0-9]+[a-zA-Z]?)/g).join('').toUpperCase())))
+                {
+                    results.push(course_list[i]);
+                }
+            }
+        }
+        if (results.length < 5) {
+            for (i = 0; i < course_list.length; i++) {
+                if (course_list[i].includes(request.term.toUpperCase()) && !results.includes(course_list[i])) {
+                    results.push(course_list[i]);
+                }
+            }
+        }
+        response(results.slice(0, 5));
+    }
+});
+});
+</script>
+<div id="form_container">
+    <form id="form_49549" class="appnitro"  enctype="multipart/form-data" method="post" action="">
+        <div class="header">
+            <h1 align="left">Sell An Assignment</h1>
+        </div>
+        <div class="header-sub">
+            <p>Please provide details about this assignment.</p>
+        </div>
+        <br>
+        <ul>
+            <li id="li_1">
+                <label class="description" for="element_1">School </label>
+                <div>
+                    <input id="element_1" name="element_1" class="element text large" type="text" maxlength="255" value=""/> 
+                </div>
+                <p class="guidelines" id="guide_1"><small>What school is this assignment for?</small></p> 
+            </li>
+            <li id="li_2" >
+                <label class="description" for="element_2">Class </label>
+                <div>
+                    <input id="element_2" name="element_2" class="element text large" type="text" maxlength="255" value=""/> 
+                </div>
+                <p class="guidelines" id="guide_2"><small>What class is this assignment for?</small></p> 
+            </li>
+            <li id="li_4" >
+                <label class="description" for="element_4">Assignment Type </label>
+                <div>
+                    <select class="element select large" id="element_4" name="element_4" onclick=format_course()> 
+                        <option value="" selected="selected"></option>
+                        <option value="1" >Test</option>
+                        <option value="2" >Homework</option>
+                        <option value="3" >Notes</option>
+                        <option value="4" >Essay / Report</option>
+                        <option value="5" >Project</option>
+                    </select>
+                </div>
+                <p class="guidelines" id="guide_4"><small>Choose a category that best matches your assignment.</small></p> 
+            </li>
+            <li id="li_3" >
+                <label class="description" for="element_3">Document Title </label>
+                <div>
+                    <input id="element_3" name="element_3" class="element text large" type="text" maxlength="255" value=""/> 
+                </div>
+                <p class="guidelines" id="guide_3"><small>Choose a title that accurately describes your assignment.</small></p> 
+            </li>
+            <li class="buttons">
+                <input type="hidden" name="form_id" value="49549" />
+                <input id="saveForm" class="button_text" type="submit" name="submit" value="Submit" />
+            </li>
+        </ul>
+    </form>
+</div>
+
+{% endblock %}
