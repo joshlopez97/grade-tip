@@ -1,6 +1,9 @@
 # GRADETIP: Assignment sharing platform
+### This repository contains the beta version of GradeTip. You can find the finished product [here](http://gradetip.com)!
 ##### Overview
-GradeTip allows users to share assignments with other users anonymously. Users can leave comments on the work of others and start anonymous discussion threads. The production release of this GradeTip is not included in this release for security reasons. This version has been tweaked to be ran locally with other minor revisions. Once live, the site will be available to view at [GradeTip.com](https://gradetip.com).
+GradeTip allows users to share assignments with other users anonymously. Users can leave comments on the work of others and start anonymous discussion threads. The production release of this GradeTip is not included in this release for security reasons. This version has been tweaked to be ran locally with other minor revisions. Once live, the site will be available to view at [GradeTip.com](http://gradetip.com).
+##### Schools Near You
+GradeTip uses user's geoip location to find the closest universities in their area and displays them on the homepage. This makes a quick link for many students to quickly navigate to their school's page.
 ##### Adding Assignments
 Adding assignments has been made easy with a local database of course titles from almost every school in the United States. This database is used to facilitate autofill features, which can detect spelling mistakes and acronyms so users can easily find the courses and schools they're looking for. Assignment images and documents can be uploaded with corresponding course and school information to allow other users to find it easily. These uploads can be edited before being added to the GradeTip database. Users can also specify a preview window that will be viewable to users before they are granted access. Eventually, payment may be incorporated to grant this access to other users (so users can profit from their assignments).
 ##### Finding Assignments
