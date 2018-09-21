@@ -96,12 +96,6 @@ def registerpage():
         create_user(redis_server, email, passwordHash, school, displayName)
     return render_template('register.html', colleges=list(data.keys()), animals=animals, adjectives=adjectives)
 
-
-@app.route('/study', methods=['GET', 'POST'])
-def studypage():
-    # TODO
-    return render_template('sell.html')
-
 @app.route('/sell', methods=['GET', 'POST'])
 def sellpage():
     """ On POST, retrieves sell form info from template and generates unique uuid4 for new
@@ -123,65 +117,9 @@ def sellpage():
         return redirect(url_for('uploadpage', ID=ID))
     return render_template('sell.html', colleges=list(data.keys()), data=data)
 
-@app.route('/upload', methods=['GET', 'POST'])
-def uploadpage():
-    ID = request.args.get('ID')
-    if not ID:
-        abort(404)
-    if request.method == 'POST':
-        coords = (int(request.form['x1']), int(request.form['y1']), int(request.form['x2']), int(request.form['y2']))
-        files = request.files.getlist('file')
-        preview_index = int(request.form['preview_index'])
-        if not os.path.exists(os.path.join('static', 'doc_data', str(ID))):
-            fnames = []
-            os.makedirs(os.path.join('static', 'doc_data', str(ID)))
-            for i, file in enumerate(files):
-                ext = re.findall('\.\w+$', file.filename)[0]
-                fnames += ["{0:0>2}".format(i) + ext]
-                file.save(os.path.join('static', 'doc_data', str(ID), "{0:0>2}".format(i) + ext))
-            ext = re.findall('\.\w+$', files[preview_index].filename)[0]
-            preview = Image.open(os.path.join('static', 'doc_data', str(ID), "{0:0>2}".format(preview_index) + ext)).crop(coords)
-            pname = "preview{}".format(ext)
-            preview.save(os.path.join('static', 'doc_data', str(ID), pname))
-            set_fnames(ID, fnames, redis_server)
-            set_preview(ID, pname, preview_index, (coords[0], coords[1]), redis_server)
-        return redirect(url_for('index'))
-    return render_template('upload.html')
-
-@app.route('/addcomment', methods=['POST'])
-def addcomment():
-    ID = re.findall(r'.*\?ID=([a-zA-Z0-9-]*)', request.referrer)[0]
-    comment = request.form['comment']
-    add_comment(ID, comment, "AnonymousUser", redis_server)
-    return json.dumps(get_comments(ID, redis_server, format_times=True))
-
-@app.route('/likecomment', methods=['POST'])
-def likecomment():
-    ID = re.findall(r'.*\?ID=([a-zA-Z0-9-]*)', request.referrer)[0]
-    index = int(request.form['index'])
-    like_comment(ID, index, "AnonymousUser", redis_server)
-    return json.dumps(get_comments(ID, redis_server, format_times=True))
-
-@app.route('/dislikecomment', methods=['POST'])
-def dislikecomment():
-    ID = re.findall(r'.*\?ID=([a-zA-Z0-9-]*)', request.referrer)[0]
-    index = int(request.form['index'])
-    dislike_comment(ID, index, "AnonymousUser", redis_server)
-    return json.dumps(get_comments(ID, redis_server, format_times=True))
-
-@app.route('/nullifycomment', methods=['POST'])
-def nullifycomment():
-    ID = re.findall(r'.*\?ID=([a-zA-Z0-9-]*)', request.referrer)[0]
-    index = int(request.form['index'])
-    nullify_comment(ID, index, "AnonymousUser", redis_server)
-    return json.dumps(get_comments(ID, redis_server, format_times=True))
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     """ Main page of GradeTip with search bar for finding assignment entries.
-    
-    Returns:
-        Rendered page template from the templates folder.
     """
     if request.method == 'POST':
         query = request.form.get('squery')
@@ -190,6 +128,8 @@ def index():
 
 @app.route('/search', methods=['GET', 'POST'])
 def resultspage():
+	""" Gets results of a search query.
+	"""
     query = request.args.get('q')
     if not query:
         abort(404)
@@ -199,6 +139,8 @@ def resultspage():
 
 @app.route('/item',  methods=['GET', 'POST'])
 def itempage():
+	"""D isplays item details page.
+	"""
     ID = request.args.get('ID')
     if not ID:
         abort(404)

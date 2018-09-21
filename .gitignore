@@ -12,3 +12,5 @@ test-reports
 __pycache__
 logs
 .DS_Store
+course_catalog.json
+requirements.txt
