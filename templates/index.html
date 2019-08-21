@@ -16,15 +16,19 @@
 {% block extended_content %}
 {{ super() }}
 <form id="cv-search" enctype="multipart/form-data" method="post" action="">
-	<h1 style="color: white;">Find your school</h1>
-  <ul style="list-style:none; margin:0px">
-    <li class="cv-holder" style="margin:0px !important">
-      <input id="cv-searchbar" type="text" name="squery" style="margin:0px !important">
-      <input id="cv-searchbtn" type="submit" value="Search">
+	<h1>Find your school</h1>
+  <ul style="list-style:none; margin:0;">
+    <li class="cv-holder" style="margin:0 !important">
+      <input id="cv-searchbar" type="text" name="squery" style="margin:0 !important">
+      <div id="cv-searchbtn">
+        <svg id="cv-searchbtn-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="35px" height="35px" viewBox="0 0 35 35" enable-background="new 0 0 35 35" xml:space="preserve">
+          <path fill="#555" d="M4.555,32.844c-0.622,0-1.207-0.241-1.649-0.679c-0.918-0.908-0.926-2.396-0.017-3.314l10.083-10.188 c-1.099-1.725-1.677-3.707-1.677-5.758c0-5.926,4.821-10.747,10.747-10.747c5.927,0,10.748,4.821,10.748,10.747 c0,5.925-4.821,10.747-10.748,10.747c-2.051,0-4.031-0.577-5.754-1.675L6.221,32.147C5.777,32.597,5.186,32.844,4.555,32.844z M22.041,6.491c-3.536,0-6.412,2.876-6.412,6.413s2.876,6.413,6.412,6.413c3.537,0,6.414-2.876,6.414-6.413 S25.578,6.491,22.041,6.491z"></path>
+        </svg>
+      </div>
     </li>
   </ul>
 </form>
-<video class='hpvideo' id='hpvideo' loop autoplay poster='/img/homepage.jpg'></video>
+<div class='home-background'></div>
 <div class="hp"></div>
 <script type="text/javascript"
   src="{{url_for('static', filename='js/index.js')}}">

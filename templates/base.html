@@ -57,48 +57,46 @@
 <!-- Navigation
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 {% block navbar %}
-<nav class="navbar" id="navbar-main">
-    <ul class="navbar-list">
-      <li class="navbar-brand">
-        <a href="{{ url_for('index') }}">
-          <img id="logo" src="{{ url_for('static', filename='img/logo_new.png') }}" alt="gradetip"/>
-        </a>
-      </li>
-      <li class="navbar-holder">
-        <button class="gtbtn nav usearch" id="usearch-btn">Find School</button>
-        <div class="usearch usearch-holder" id="usearch-holder">
-          <input class="usearch usearch-bar" id="usearch" type="text" placeholder="Search for a school">
-        </div>
-        {% if current_user.is_authenticated %}
-        <button class="gtbtn nav" id="upload-btn" onclick="location.href='/sell';">Upload</button>
-        {% else %}
-        <button class="gtbtn nav" id="upload-btn" onclick="location.href='/sell';">Upload</button>
-        {% endif %}
-      </li>
-      <li class="navbar-login">
-        {% if current_user.is_authenticated %}
-        <button class="gtbtn acct profile" onclick="location.href='/logout';">Logout</button>
-        {% else %}
-        <button class="gtbtn acct" id="reg-btn" onclick="location.href='/register';">Register</button>
-        <button class="gtbtn acct" id="login-btn" onclick="location.href='/login';">Login</button>
-        {% endif %}
-      </li>
-      <li class="usearch-mobile-icon-holder">
-        <svg class="usearch-mobile-icon" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="35px" height="35px" viewBox="0 0 35 35" enable-background="new 0 0 35 35" xml:space="preserve"> <path fill="#ffffff" d="M4.555,32.844c-0.622,0-1.207-0.241-1.649-0.679c-0.918-0.908-0.926-2.396-0.017-3.314l10.083-10.188 c-1.099-1.725-1.677-3.707-1.677-5.758c0-5.926,4.821-10.747,10.747-10.747c5.927,0,10.748,4.821,10.748,10.747 c0,5.925-4.821,10.747-10.748,10.747c-2.051,0-4.031-0.577-5.754-1.675L6.221,32.147C5.777,32.597,5.186,32.844,4.555,32.844z M22.041,6.491c-3.536,0-6.412,2.876-6.412,6.413s2.876,6.413,6.412,6.413c3.537,0,6.414-2.876,6.414-6.413 S25.578,6.491,22.041,6.491z"/> </svg>
-      </li>
-      <li class="sidebar-mobile-icon-holder">
-          <!-- <img id="sidebar-icon" width="30px" class="sidebar-mobile-icon" src="/img/sidebar/icon.png"> -->
-          <div class="icon-wrapper">
-            <div class="sidebar-button"></div>
-            <div class="circle icon">
-              <span class="line top"></span>
-              <span class="line middle"></span>
-              <span class="line bottom"></span>
-            </div>
+  <nav class="navbar" id="navbar-main">
+      <ul class="navbar-list">
+        <li class="navbar-brand">
+          <a id="logo-link" href="{{ url_for('index') }}">
+            <img id="logo" src="{{ url_for('static', filename='img/logo_new_black.png') }}" alt="gradetip"/>
+          </a>
+        </li>
+        <li class="navbar-holder">
+          <button class="gtbtn nav usearch" id="usearch-btn">Find School</button>
+          <div class="usearch usearch-holder" id="usearch-holder">
+            <input class="usearch usearch-bar" id="usearch" type="text" placeholder="Search for a school">
           </div>
-      </li>
-    </ul>
-</nav>
+          {% if current_user.is_authenticated %}
+          <button class="gtbtn nav" id="upload-btn" onclick="location.href='/sell';">Upload</button>
+          {% else %}
+          <button class="gtbtn nav" id="upload-btn" onclick="location.href='/sell';">Upload</button>
+          {% endif %}
+        </li>
+        <li class="navbar-login">
+          {% if current_user.is_authenticated %}
+          <button class="gtbtn acct profile" onclick="location.href='/logout';">Logout</button>
+          {% else %}
+          <button class="gtbtn acct" id="reg-btn" onclick="location.href='/register';">Register</button>
+          <button class="gtbtn acct" id="login-btn" onclick="location.href='/login';">Login</button>
+          {% endif %}
+        </li>
+        <li class="sidebar-mobile-icon-holder">
+            <!-- <img id="sidebar-icon" width="30px" class="sidebar-mobile-icon" src="/img/sidebar/icon.png"> -->
+            <div class="icon-wrapper">
+              <div class="sidebar-button"></div>
+              <div class="circle icon">
+                <span class="line top"></span>
+                <span class="line middle"></span>
+                <span class="line bottom"></span>
+              </div>
+            </div>
+        </li>
+      </ul>
+  </nav>
+  <div class="top-space"></div>
 {% endblock %}
 
 <!-- Primary Page Layout

@@ -20,19 +20,13 @@ $(document).ready(function() {
       }
     }
   });
-  /* Show searchbar when user hovers or clicks on 'Find School' button */
-  $('.usearch').hover(searchActive, searchInactive);
-  $('#usearch-btn').click(searchActive);
-
   /* (Mobile only) Event handlers for showing hidebar and showing search bar */
-  $('.usearch-mobile-icon-holder').click(mobileSearchActive);
   $(".sidebar-mobile-icon-holder").click(displaySidebar);
 
   /* (Mobile only) Hide sidebar and search bar when user clicks away */
   $("body").click(function(e){
     if (!$(e.target).hasClass('side'))
       hideSidebar();
-    mobileSearchInactive();
   });
   $(".usearch-mobile-holder, .usearch-mobile, .usearch-bar, .navbar, .navbar-list, .side, .gtbtn, div.side.sidebar").click(function(e){e.stopPropagation();});
 

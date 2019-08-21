@@ -10,7 +10,7 @@ import ipaddress
 from bisect import insort
 from GradeTip.models import redis_server
 from GradeTip.models.utilities import distance_between
-from flask import request, Session
+from flask import request
 from PIL import Image
 from pathlib import Path
 from pdf2image import convert_from_bytes

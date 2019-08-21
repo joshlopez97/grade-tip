@@ -12,16 +12,13 @@
 {% endblock %}
 {% block javascript %}
 {{ super() }}
-<script>
-var sid = {{sid}};
-</script>
 <script type="text/javascript"
   src="{{ url_for('static', filename='js/jquery.timepicker.min.js') }}">
 </script>
 {% endblock %}
 {% block extended_content %}
 {{ super() }}
-<a class="banner" href="{{'/school/' + sid}}""><span class="banner-title">{{ school }}</span></a>
+<a class="banner" href="{{'/school/' + sid}}"><span class="banner-title">{{ school }}</span></a>
 <div class="container"></div>
 <input type="hidden" id="ptype" name="type">
 <script type="text/javascript"

@@ -4,7 +4,6 @@ $(document).ready(function() {
   });
   var schools = [];
   var last = [];
-  $("#hpvideo").append("<source src='/img/homepage.mp4' type='video/mp4'>");
   $("#cv-searchbar").autocomplete({
     source: get_res, 
     select: linkToSchool
@@ -28,7 +27,7 @@ $(document).ready(function() {
   function setUpHomepage() {
     sizer();
     $("#cv-search").append(
-      `<h5 class='schools-header' style='color:white;margin:10px 0px 10px 0px'>Schools Near You</h5>
+      `<h5 class='schools-header' style='margin:10px 0'>Schools Near You</h5>
             <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
             <div class='schools-holder'><ul class='schools'></ul></div>`
     );
@@ -125,7 +124,7 @@ $(document).ready(function() {
   }
   function appendSchool(school, sid) {
     if ($("#" + sid).length === 0) {
-      let newSchool = $("<li class='ns'><span class='nschool' id=" + sid + ">" + school + "</span></li>")
+      let newSchool = $("<li class='ns'><a class='nschool' id=" + sid + ">" + school + "</a></li>")
       $(".schools").append(newSchool);
       newSchool.click(function(){window.location = ("/school/" + sid);})
     }

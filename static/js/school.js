@@ -1,5 +1,6 @@
+let sid = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
 $(document).ready(function() {
-	console.log('document ready')
+	console.log('document ready');
     createPage();
   	/* Change style of elements on window resize */
   	$(window).resize(function() {
@@ -81,108 +82,6 @@ $(document).ready(function() {
       $(".banner").prepend(si);
       $(".banner").find('path').css('fill','black');
       $(".banner").css('visibility','visible');
-
-      /* Create new post button */
-      var create = $("<div class='create'>" + ai + ci + "</div>");
-      $(".container").prepend(create);
-      setColorSVG(create,'#d25a77');
-      create.append("<span class='create-content btn btn-primary'>New Post</span>");
-    }
-  	function newPost(labels=['Title','Content','Course'],fields=['Title','Body','Course'],types=[input,textarea,input],required=[true,false,false],btntxt="Post",optionaltxt="Optional") {
-  		$(".create").empty();
-      $(".create").addClass('enter');
-      $(".create").append("<form class='cform' method='post' ></form>");
-
-      // Add all form fields
-      for (var i = 0; i < fields.length; ++i) {
-        $(".cform").append("<label class='description'>"+labels[i]+(required[i]?" <font color='red'>*</font>":" <p class='notice'>("+optionaltxt+")</p>")+"</label>"+types[i]);
-        if (types[i] != time && types[i] != textarea)
-          $($("label.description")[i]).nextAll(".cfield").attr({id: fields[i],name: fields[i]});
-        if (required[i])
-          $($("label.description")[i]).nextAll(".cfield").addClass('required');
-      }
-      // Submit and cancel buttons
-      $(".cform").append('<button id="cancelForm" class="button_text">back</button><button id="saveForm" disabled class="button_text" name="submit">' + btntxt + '</button>');
-  		
-      // Animate opening of form
-      $("div.create.clicked").animate({"border-radius": "0px","border-width": "1px","border-color": "gray",
-        "height": ($(".cform").height() + 10) + "px"},
-  			500, function() {
-          // Execute after animation
-          $(".create").css({"border-style":"solid","cursor":"initial"});
-          $(".cform").css("visibility","visible");
-
-          // Datepicker plugin
-          $(".cdate").datepicker({minDate:0,dateFormat: "DD - mm/dd/y",onSelect:function(i,o){$(this).datepicker('option','dateFormat','DD - mm/dd/y');var d=new Date(i),t=new Date(),tm=new Date();tm.setDate(t.getDate()+1);if((d.getMonth()!=t.getMonth()||d.getYear()!=t.getYear())&&(d.getMonth()!=tm.getMonth()||d.getYear()!=tm.getYear()))return;if(t.getDate() == d.getDate())$(this).datepicker('option','dateFormat',"T'od'a'y' - mm/dd/y"); else if(tm.getDate() == d.getDate())$(this).datepicker('option','dateFormat',"T'omo'rr'o'w - mm/dd/y");adjustTLs();}});
-
-          // If input[type=time] not supported, use timepicker plugin
-          if ($(".ctime").length > 0 && $(".ctime")[0].type != "time") {
-            $(".ctime").attr("type","text")
-            $(".ctime").timepicker({step:15, 'scrollDefault': 'now' });
-          }
-
-          // Cancel form event handler
-          $("#cancelForm").click(displayPostTypes);
-
-          // Enable submit button if required fields are filled
-          $(".cfield.required").on("input",function(e){var f=true;$(".cfield.required").each(function(){if(!$.trim(this.value).length)f=false;});$("#saveForm").prop("disabled",f?false:true);});
-  		});
-  	}
-    function adjustTLs()
-    {
-      var STEP=15;
-      if($(".cdate").val().indexOf("Today")== -1)
-        return;
-      var d=new Date();
-      d.setMinutes(d.getMinutes()+(STEP-(d.getMinutes()%STEP))+STEP);
-      setExtremaTime(d,$("#StartTime"));
-    }
-    function setExtremaTime(time,obj,ext="min")
-    {
-      var h=time.getHours(),m=time.getMinutes();s=(h<10?"0"+h:h)+":"+(m<10?"0"+m:m);
-      console.log(s);
-      if (obj.attr("type")=="time")
-        obj.attr(ext,s);
-      else
-        obj.timepicker('option',ext+"Time",time);
-    }
-
-    function displayPostTypes() {
-      $(".create").empty();
-      $(".create").removeClass("enter");
-      $(".create").css("border-style","dashed");
-      $(".create").animate({
-        width: document.documentElement.clientWidth > 975? "675px":(document.documentElement.clientWidth-36)+"px",
-        height: document.documentElement.clientWidth > 975? "190px":"375px",
-        "border-radius": "15px","border-width": "3px","border-color": "#b3b3b3"},
-        600, function() {
-          $(this).append("<div class='button-holder' id='1'></div>");
-          $(this).append("<div class='button-holder' id='2'></div>");
-          $("#1.button-holder").append("<span class='pb-header'>Ask for help</span>");
-          $("#1.button-holder").append("<button id='lb' class='postbtn'>" + lecture_icon + "<span class='btn-content'> Request to have a class attended</span></button>");
-          $("#1.button-holder").append("<button id='rb' class='postbtn'>" + request_icon + "<span class='btn-content'> Request an assignment</span></button>");
-          $("#2.button-holder").append("<span class='pb-header'>Make money by contributing</span>");
-          $("#2.button-holder").append("<button id='cb' style='background:#af4c7e;' class='postbtn'>" + toclass_icon + "<span class='btn-content'> Offer to attend a class</span></button>");
-          $("#2.button-holder").append("<button id='ob' style='background:#af4c7e;' class='postbtn'>" + offer_icon + "<span class='btn-content'> Offer an assignment</span></button>");
-          $(".postbtn").hover(function(){changeColorSVG($(this),-30,"none","background");},function(){changeColorSVG($(this),30,"none","background");});
-          $("#ob").click(function(e){
-            newPost(["Assignment Title","Course Code","Assignment Type","Description"],['Title','Course','Kind','Body'],[input,input,radio,textarea],[true,true,true,false],"Next");
-            $("#ptype").val("Assignment");
-            focusField($(".cfield").first());
-          });
-          $("#rb").click(function(e){
-            newPost(["Assignment Title","Course Code","Assignment Type","Description"],['Title','Course','Kind','Body'],[input,input,radio,textarea],[true,true,true,false]);
-            $("#ptype").val("Assignment Request");
-            focusField($(".cfield").first());
-          });
-          $("#lb").click(function(e){
-            newPost(["Course Code","When is your class?","Details"],['Course','Time','Body'],[input,time,textarea],[true,true,false],"Post","Recommended");
-            $("#ptype").val("Lecture Request");
-            focusField($(".cfield").first());
-          });
-          sizer();
-      });
-      return false;
     }
 
     function fetchPosts() {
@@ -198,12 +97,17 @@ $(document).ready(function() {
     }
 
     function noPosts() {
-      $(".container").append("<div class='noposts'><h3>Here are some things you can do:</h3><ul style='list-style: square;margin-left: 20px;font-size: 13pt;'>\
-        <li><a>Request to have a class attended</a></li>\
-        <li><a>Request an assignment</a></li>\
-        <li><a>Offer to attend a class</a></li>\
-        <li><a>Offer an assignment</a></li>\
-        </div>")
+      $(".container").append(`
+        <div class='noposts'>
+          <h3>Here are some things you can do:</h3>
+          <ul style='list-style: square;margin-left: 20px;font-size: 13pt;'>
+            <li><a>Request to have a class attended</a></li>
+            <li><a>Request an assignment</a></li>
+            <li><a>Offer to attend a class</a></li>
+            <li><a>Offer an assignment</a></li>
+          </ul>
+        </div>
+      `);
     }
 
     function appendPost(pid, post_data) {

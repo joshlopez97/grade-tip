@@ -10,7 +10,6 @@
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 body {
   font-family: 'Open Sans', sans-serif;
-  background-color: #f3f3f3;
 }
 a {
   text-decoration: none;
@@ -26,9 +25,11 @@ a {
   font-weight: 600;
   font-size: 35px;
 }
+.top-space {
+  height: 60px;
+}
 .footer {
   top: 1000px;
-  float: center;
   position: absolute;
   margin-left: auto;
   margin-right: auto;
@@ -76,8 +77,14 @@ a {
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .navbar {
   padding-top: 5px;
-  background: black;
+  background: white;
   height: 56px;
+  box-shadow: 0 0 5px grey;
+  z-index: 100;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
 }
 .navbar-list {
   list-style: none;
@@ -91,20 +98,27 @@ a {
   position: absolute;
 }
 .navbar-brand {
-  height: 50px;
+  height: 45px;
   font-weight: 600;
   text-decoration: none;
   line-height: 5rem;
   color: #000033;
   font-size: 20px;
   position: relative;
-  margin: 3px 0px 0px 10px;
-  width: 200px;
+  margin: 0;
+  width: 185px;
   display: inline-block;
 }
+#logo-link {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
 #logo {
-  height: 45px;
+  height: 35px;
   cursor: pointer;
+  vertical-align: middle;
 }
 /* navbar list items on top right */
 .navbar-holder {
@@ -128,19 +142,26 @@ a {
 }
 
 /* Menu Buttons */
-.gtbtn {
+.gtbtn,
+.gtbtn:active,
+.gtbtn:focus,
+.gtbtn:focus-within,
+.gtbtn:visited
+{
   border-radius: 0;
-  background: transparent;
-  color: white;
+  background: white;
+  color: black;
   padding: 10px;
   font-size: 15pt;
-  font-weight: normal;
+  font-weight: 100;
   border: none;
   border-bottom: 4px solid transparent;
   cursor: pointer;
-  height:40px;
-  width:auto;
-  text-align:center;
+  height: 40px;
+  width: auto;
+  text-align: center;
+  letter-spacing: 0;
+  text-transform: none;
 }
 .gtbtn.nav {
   line-height: 5px;
@@ -154,10 +175,8 @@ a {
   margin: 7px 20px 0;
 }
 .gtbtn:hover {
-  border: none;
-  background: transparent;
-  border-bottom: 4px solid #cc0066;
-  color: #f3f3f3;
+  color: #cc0066;
+  background: white;
 }
 .gtbtn.side:hover {
   border-bottom: 4px solid black;
@@ -184,12 +203,13 @@ a {
   top: 0;
   left: 0;
 }
+
 .navcolor {
   z-index: -1;
   position: absolute;
   display: none;
   height: 61px;
-  top: 0px;
+  top: 0;
 }
 .usearch-mobile {
   display: inline-block !important;
@@ -231,12 +251,19 @@ a {
 }
 
 .sidebar {
-  position: absolute;
+  position: fixed;
   height: 100%;
   width: 185px;
   left: -325px; top: 61px;
-  background: black;
+  background: white;
   color: white;
+  box-shadow: 5px 0 5px -5px grey;
+}
+.sidebar.empty {
+  height: 15px;
+  top: 55px;
+  z-index: 101;
+  box-shadow: none;
 }
 
 @media screen and (max-width: 975px) {
@@ -286,9 +313,9 @@ a {
 }
 .line {
   position: absolute;
-  height: 5px;
+  height: 3px;
   width:100%;
-  background:white;
+  background: black;
   border-radius:4px;
   transition: all cubic-bezier(0.26, 0.0, 0.27, 0.0) 0.2s;
 }
@@ -296,6 +323,7 @@ a {
   top:18%;
 }
 .middle {
+  width: 80%;
   top:48%;
 }
 .bottom {
@@ -304,6 +332,9 @@ a {
 .icon.close .top {
   transform:rotate(45deg);
   top:48%;
+}
+.icon.close .middle {
+  width: 100%;
 }
 .icon.close .middle, .icon.close .bottom {
   transform:rotate(-45deg);

@@ -3,8 +3,7 @@
 	position:relative;
   left:0; right:0;
   top:0; bottom:0;
-  margin:auto;
-  margin-top: 130px;
+  margin: 130px auto auto;
   height:200px;
   width:800px;
   max-width:100%;
@@ -12,17 +11,31 @@
 }
 #cv-searchbar {
   border: 2px solid #9a9a9a;
-  border-radius:25px 0px 0px 25px;
-	width:600px;
-	height:60px;
-	font-size: 40px
+  border-radius: 25px 0 0 25px;
+  width: 600px;
+  height: 60px;
+  font-size: 40px;
+  border-right: none;
+  display: inline-block;
+  vertical-align: top;
 }
 #cv-searchbtn {
-  border-radius:0px 25px 25px 0px;
-	float:right;
-	height:60px;
-	font-size:15px;
-  background: black;
+  cursor: pointer;
+  border-radius: 0 25px 25px 0;
+  border: 2px solid #9a9a9a;
+  border-left: none;
+  height: 56px;
+  width: 65px;
+  font-size: 15px;
+  background: white;
+  display: inline-block;
+  margin-left: -5px;
+  text-align: center;
+}
+#cv-searchbtn-icon {
+  display: inline-block;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 div.hp {
   width:100%;
@@ -43,39 +56,33 @@ div.hp {
   margin:auto;
 }
 .nschool, #more {
-  color: #ffd367;
+  color: black;
   cursor: pointer;
-  font-weight: initial;
-}
-.nschool:hover, #more:hover {
-  color: #dfb347;
+  font-weight: bold;
+  font-size: 12pt;
 }
 .nschool {
-  font-size: 15pt;
   text-decoration: underline;
 }
 #more {
   font-size: 12pt;
   margin-top: 10px;
 }
-.navbar {
-  background: transparent !important;
-}
 
-/* Background video */
-.hpvideo {
+/* Background image */
+.home-background {
   position: absolute;
   top: 0;
   right: 0;
-  display: inline;
   height: 100%;
-  min-height: 700px;
+  min-width: 100%;
   z-index: -2;
+  background-size: cover;
+  background: url(/img/home.png) repeat-x bottom center;
 }
 @media screen and (min-width: 1225px) {
-  .hpvideo {
-    height: initial;
-    width:100%;
+  .home-background {
+
   }
 }
 @media screen and (max-width: 800px) {
