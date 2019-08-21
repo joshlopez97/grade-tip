@@ -1,7 +1,5 @@
-doc_data
-dist
+doc_data/
 *.xml
-.eggs
 test-reports
 logs
 .DS_Store
@@ -9,6 +7,7 @@ gtenv/
 *.ini
 .idea/
 *.rdb
+well-known/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
