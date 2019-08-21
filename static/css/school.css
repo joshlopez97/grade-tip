@@ -1,0 +1,359 @@
+
+/* Banner containing school name and icon */
+.banner 
+{
+  display: block;
+	visibility:hidden;
+  font-weight: bold;
+  background: transparent;
+  background-position: left center;
+  background-repeat: no-repeat;
+  color: black;
+  height: 60px;
+  margin-top: 6px;
+  padding-left: 12px;
+}
+a.banner:hover
+{
+  color: black !important;
+}
+span.banner-title 
+{
+	font-size: 24pt;
+  font-family: "Helvetica Heue", Helvetica, Arial, sans-serif;
+	display: table-cell;
+  line-height: 1em;
+  overflow: hidden;
+  height: 60px;
+  vertical-align: middle;
+  padding: 3px 0px 0px 10px;
+}
+svg.panel-icon 
+{
+	position: absolute;
+	display:block;
+	height: 50px;
+	width: 50px;
+	padding: 5px;
+}
+div.panel-icon-holder {
+  margin-right: 8px;
+  height: 100%;
+  width: 60px;
+  position: relative;
+  display: table-cell;
+}
+
+/* Create new post button */
+div.create 
+{
+  display: inline-block;
+  height: 75px;
+  width:185px;
+  border: dashed 3px #b3b3b3;
+  margin: 0px; /*20px 15px 15px 15px;*/
+  border-radius: 15px;
+  cursor: pointer;
+  overflow: visible;
+  background:white;
+}
+div.create:hover 
+{
+  border: dashed 3px #939393;
+}
+div.container 
+{
+	top:0; left:0;
+	display: block;
+  width: 100%;
+  padding: 20px;
+  margin: 0;
+}
+div.add-icon-holder {
+  height: 30px;
+  width: 30px;
+  position: relative;
+  display: table-cell;
+  top: -17px;
+  left: 166px;
+}
+.add-icon 
+{
+  position: absolute;
+  display: block;
+  height: 40px;
+}
+div.create-icon-holder {
+  height: 50px;
+  width: 52px;
+  position: relative;
+  display: table-cell;
+  top: 12px;
+  left: -24px;
+}
+.create-icon
+{
+	position: absolute;
+	height:65px;
+	width:65px;
+	display: block;
+}
+.create-content
+{
+  font-size: 15pt;
+  display: table-cell;
+  position: relative;
+  vertical-align: middle;
+  top: 10px;
+  left: -6px;
+  line-height: 20px;
+  color: #252525;
+}
+
+/* Form to create new post */
+.cform
+{
+  visibility: hidden;
+  padding: 10px;
+  text-overflow: ellipsis;
+}
+.cfield
+{
+  border: 1px solid #aaa;
+  border-radius: 12px;
+  display: inline-block;
+  height: 45px;
+  font-size: 15pt;
+  width: 90%;
+}
+.ctime
+{
+  width: 90% !important;
+  
+}
+.cdate
+{
+  background: url(/img/cal.png);
+  background-repeat: no-repeat;
+  background-position: 98% 50%;
+}
+.tlabel
+{
+  display: block;
+  margin-bottom: 7px;
+}
+.tholder
+{
+  display: inline-block;
+  width: 47%;
+}
+/*.cdate
+{
+  width: 48% !important;
+  min-width: 210px !important;
+  margin-right: 3%;
+}*/
+input[type="text"].cfield
+{
+  height: 45px;
+}
+textarea.cfield
+{
+  height: 180px;
+  resize: none;
+}
+label.description
+{
+  border:none;
+  color:#222;
+  display:block;
+  font-size:12pt;
+  line-height:150%;
+  padding:0 0 1px;
+}
+p.notice
+{
+  display: inline;
+  padding-top: 0;
+  clear:both;
+  color:#777;
+  font-weight: normal;
+  font-size:9pt;
+  font-style: italic;
+  margin:0 0 5px;
+}
+.button_text
+{
+  overflow:visible;
+  padding:0 7px;
+  font-size: 14pt;
+  width: 150px !important;
+}
+#saveForm
+{
+  float:right;
+}
+#saveForm:disabled
+{
+  background:gray;
+}
+#cancelForm
+{
+  background: #e874aa;
+}
+#cancelForm:hover
+{
+  background:#af567f;
+}
+
+/* Custom radio buttons */
+label.cont {
+    display: inline-block;
+    position: relative;
+    margin: 5px 10px 5px 0px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    width: 116px;
+    height: 26px;
+}
+label.cont input.aradio {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+span.checkmark {
+  font-weight: normal;
+  font-size: 12pt;
+  line-height: 26px;
+    position: absolute;
+    height: 26px;
+    width: 100px;
+    padding: 0 8px 0;
+    background-color: #ddd;
+    border-radius: 999px;
+    text-align: center;
+    margin: 0px;
+}
+label.cont:hover input.aradio ~ span.checkmark {
+    background-color: #bbb;
+}
+label.cont input.aradio:checked ~ span.checkmark {
+    background-color: #ff99cc;
+}
+span.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+label.cont input.radio:checked ~ span.checkmark:after {
+    display: inline-block;
+}
+label.cont .checkmark:after {
+  background: transparent;
+}
+
+/* Buttons for selecting type of post */
+div.button-holder
+{
+	display: table-cell;
+	padding: 3px 5px 5px 10px;
+}
+span.pb-header
+{
+	display:block;
+	margin-left: 10px;
+	margin-top: 10px;
+	font-size: 17pt;
+	line-height: 1.5em;
+}
+.postbtn
+{
+	display:block;
+  margin: 5px;
+  padding: 0 12px;
+  border-radius: 15px;
+  width: 308px;
+  white-space: normal;
+  height: 55px;
+  color: white;
+  line-height: 1.1em;
+  text-align: left;
+  background: #196ab1;
+}
+div.btn-icon-holder {
+  height: 50px;
+  width: 52px;
+  position: relative;
+  display: table-cell;
+  padding-right: 8px;
+}
+svg.btn-icon {
+	position: absolute;
+	display:block;
+	height: 50px;
+	width: 50px;
+}
+span.btn-content {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+/* Posts list */
+ul.posts {
+  list-style: none;
+}
+li.post-holder {
+  background: white;
+  border: 1px solid #ddd;
+  margin: 5px 0px;
+  height: 50px;
+  padding: 3px 9px;
+}
+.post-title {
+  font-weight: bold
+}
+.post-time {
+  color: #888;
+  margin-left: 5px;
+}
+.post-content {
+
+}
+.noposts {
+  background: white;
+  border: 1px solid #ddd;
+  margin: 5px 0px;
+  padding: 3px 9px;
+}
+
+/* Mobile support */
+@media screen and (max-width: 975px) {
+  div.banner {
+		background-size: 1000px 58px;
+		height: 50px;
+  }
+  span.banner-title {
+  	font-size: 14pt;
+  	height: 50px;
+    padding-left: 0px;
+  }
+  svg.panel-icon {
+  	height: 40px;
+  	width: 40px;
+    margin-bottom: -15px;
+		padding: 5px;
+  }
+  span.pb-header {
+  	font-size: 15pt;
+  }
+  div.button-holder {
+  	display: block;
+  }
+  .button_text {
+    width: 125px !important;
+  }
+}

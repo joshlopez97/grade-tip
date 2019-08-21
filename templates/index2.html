@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}GradeTip - Share your old tests, homework, or notes. {% endblock %}
+{% block page_description %}
+  <meta name="description" content="Share your old tests, homework or notes to other students.">
+{% endblock %}
+{% block css %}
+{{ super() }}
+<link rel="stylesheet" type="text/css"
+  href="{{ url_for('static', filename='css/game.css') }}">
+{% endblock %}
+{% block javascript %}
+{{ super() }}
+<script type="text/javascript"
+  src="{{url_for('static', filename='js/game.js') }}">
+</script>
+{% endblock %}
+{% block extended_content %}
+{{ super() }}
+<div id="game"></div>
+{% endblock %}

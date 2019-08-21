@@ -60,6 +60,7 @@ class User(UserMixin):
 
 def create_user(redis_server, email, passwordHash, school, displayName):
     redis_server.sadd('users', email)
+    redis_server.sadd('displayNames', displayName)
     user_data = {}
     user_data['school'] = school
     user_data['displayName'] = displayName

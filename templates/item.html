@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% block css %}
 <!-- Bootstrap styles -->
-<link rel="stylesheet" href="static/css/bootstrap.min.css">
-<link rel="stylesheet" href="static/css/sellpage.css">
-<link rel="stylesheet" href="static/css/jquery-ui.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/sellpage.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
 {{ super() }}
 {% endblock %}
 {% block extended_content %}
 {{ super () }}
-<script src="static/js/jquery-1.8.3.js"></script>
+<script src="{{ url_for('static', filename='js/jquery-1.8.3.js') }}"></script>
 <style>
   textarea {
     min-width:500px;
@@ -91,32 +91,32 @@
   }
   .comment-btn.like-btn {
     display:inline;
-    background-image: url('static/img/caret-up.png');
+    background-image: url('{{ url_for('static', filename='img/caret-up.png') }}');
     top:0;
     bottom:0;
     right:30px;
     opacity:50%;
   }
   .comment-btn.like-btn:hover {
-    background-image: url('static/img/caret-up-selected.png');
+    background-image: url('{{ url_for('static', filename='img/caret-up-selected.png') }}');
   }
   .comment-btn.like-btn.disabled, .comment-btn.like-btn.disabled:hover{
-    background-image: url('static/img/caret-up-selected.png');
+    background-image: url('{{ url_for('static', filename='img/caret-up-selected.png') }}');
     cursor:pointer;
   }
   .comment-btn.dislike-btn {
     display:inline;
-    background-image: url('static/img/caret-down.png');
+    background-image: url('{{ url_for('static', filename='img/caret-down.png') }}');
     top:0;
     bottom:0;
     right:0;
     opacity:50%;
   }
   .comment-btn.dislike-btn:hover {
-    background-image: url('static/img/caret-down-selected.png');
+    background-image: url('{{ url_for('static', filename='img/caret-down-selected.png') }}');
   }
   .comment-btn.dislike-btn.disabled, .comment-btn.dislike-btn.disabled:hover{
-    background-image: url('static/img/caret-down-selected.png');
+    background-image: url('{{ url_for('static', filename='img/caret-down-selected.png') }}');
     cursor:pointer;
   }
   #likes {
@@ -138,8 +138,7 @@ var user = "{{ username }}";
   $(window).load(function(){
   refreshComments(comments);
   var measurer = $('<span>', {
-                  style: "display:inline-block;word-break:break-word;visibility:hidden;white-space:pre-wrap;"})
-     .appendTo('#comment-container');
+                  style: "display:inline-block;word-break:break-word;visibility:hidden;white-space:pre-wrap;"}).appendTo('#comment-container');
   function refreshComments(data){
     comments = data;
     console.log('REFRESH');

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{school}} | GradeTip{% endblock %}
+{% block page_description %}
+  <meta name="description" content="Share your old tests, homework or notes to other students.">
+{% endblock %}
+{% block css %}
+{{ super() }}
+<link rel="stylesheet" type="text/css"
+  href="{{ url_for('static', filename='css/school.css') }}">
+<link rel="stylesheet" type="text/css"
+  href="{{ url_for('static', filename='css/jquery.timepicker.min.css') }}">
+{% endblock %}
+{% block javascript %}
+{{ super() }}
+<script>
+var sid = {{sid}};
+</script>
+<script type="text/javascript"
+  src="{{ url_for('static', filename='js/jquery.timepicker.min.js') }}">
+</script>
+{% endblock %}
+{% block extended_content %}
+{{ super() }}
+<a class="banner" href="{{'/school/' + sid}}""><span class="banner-title">{{ school }}</span></a>
+<div class="container"></div>
+<input type="hidden" id="ptype" name="type">
+<script type="text/javascript"
+  src="{{ url_for('static', filename='js/school.js') | bust_cache(sid) }}">
+</script>
+{% endblock %}

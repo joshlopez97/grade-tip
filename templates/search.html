@@ -9,9 +9,23 @@
 {% endblock %}
 {% block extended_content %}
 {{ super() }}
-<script src="static/js/jquery-1.8.3.js"></script>
+<script src="{{ url_for('static', filename='js/jquery-1.8.3.js') }}"></script>
 <script>
-var results = {{ results|tojson }}
+var data = {{ results|tojson }}
+$(window).load(function(){
+  refreshResults(data);
+  function refreshResults(data){
+    results = data;
+    console.log('REFRESH');
+//    $('#results-list').empty();
+    console.log(results);
+    for (i=0; i < results.length; i++) {
+      var formattedResult = '<div class="result-holder"><div class="thumbnail-holder"><img class="result-thumbnail" src="' + results[i]['thumbpath'] + '"></div><div class="result-info"><span class="result-title">Midterm Exam 1</span><span class="result-details">University of California Irvine</br>I&C SCI 46</span></div></div>';
+      $(formattedResult).appendTo('#results-list');
+    }
+    return false;
+  }
+});
 </script>
 <style>
 #results-container {
@@ -41,8 +55,16 @@ var results = {{ results|tojson }}
   font-size: 15pt;
 }
 .result-thumbnail {
+  height:100px;
+  max-width:100px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.thumbnail-holder {
   display: inline-block;
   height:100px;
+  width:75px;
 }
 .result-title {
   vertical-align: top;
@@ -63,20 +85,10 @@ var results = {{ results|tojson }}
 }
 </style>
 <div id="results-container">
+  <div class="results-description">
+    Showing results that match "{{ query }}"
+  </div>
   <ul id="results-list">
-    <li>
-      <div class="results-description">
-        Showing results that match "{{ search_term }}"
-      </div>
-    <li>
-      <div class="result-holder">
-        <img class="result-thumbnail" src="static/doc_data/0a8b4589-c05e-4b33-aebf-f3035481dc4a/03_blur.png">
-        <div class="result-info">
-          <span class="result-title">Midterm Exam 1</span>
-          <span class="result-details">University of California Irvine</br>I&C SCI 46</span>
-        </div>
-      </div>
-    </li>
   </ul>
 </div>
 {% endblock %}

@@ -1,46 +1,65 @@
+from flask import url_for
 from flask_login import current_user
 from PIL import Image, ImageFilter
 import ast
 import os
 import re
 import time
-from datetime import datetime
-
-from GradeTip.config.redis import assignment as asnmtConfig
+import json
+from datetime import datetime, timedelta
+from uuid import uuid4
+from GradeTip import college_data
+from GradeTip.config.redis import post
 
 timeunits = ['year', 'month', 'day', 'hour', 'minute', 'second', 'second']
 
-def create_entry(school, course, kind, name, ID, redis_server):
+def create_entry(school, course, kind, name, redis_server):
     """ Create a new hash entry with key value name in Redis. Initialize
     attributes and add new name in ENTRIES set in Redis.
     """
 
     # redis: add ID to set called "entries"
-    redis_server.sadd("entries", ID)
+    sid = college_data[school]['sid']
+    pid = redis_server.scard("entries/{}".format(sid))
+    redis_server.sadd("entries/{}".format(sid), pid)
 
     # create python dictionary for all assignment info
     info = {}
-    info[asnmtConfig.school] = school
-    info[asnmtConfig.kind] = kind
-    info[asnmtConfig.name] = name
-    info[asnmtConfig.time] = time.strftime(asnmtConfig.time_format, time.localtime())
-    info[asnmtConfig.user] = current_user.displayName
+    info[post.sid] = school
+    info[post.cid] = course
+    info[post.uid] = "user" #current_user.displayName
+    info[post.kind] = kind
+    info[post.title] = name
+    info[post.time] = time.strftime(post.time_format, time.localtime())
 
-    # redis: store dictionary into field called ID
-    redis_server.hmset(ID, info)
+    # redis: store dictionary into (sid, pid) identifier
+    identifier = "{}/{}".format(sid, pid)
+    redis_server.hmset(identifier, info)
+    redis_server.expire(identifier, post.ex)
+
+    ID = uuid4()
+    while redis_server.hexists("ondeck",ID):
+        ID = uuid4()
+
+    redis_server.set(ID, identifier, ex=post.ex)
 
     # save in background
     redis_server.bgsave()
+
+    return ID
 
 def get_matching_entries(query, redis_server):
     terms = query.split(' ')
     results1 = []
     results2 = []
-    for entryid in redis_server.smembers('entries'):
-        if all(t.lower() in redis_server.hget(entryid, "name").lower() for t in terms):
-            results1 += [entryid]
-        elif any(t.lower() in redis_server.hget(entryid, "name").lower() for t in terms):
-            results2 += [entryid]
+    try:
+        for entryid in redis_server.smembers('entries'):
+            if all(t.lower() in redis_server.hget(entryid, "name").lower() for t in terms):
+                results1 += [get_result_entry_data(entryid,redis_server)]
+            elif any(t.lower() in redis_server.hget(entryid, "name").lower() for t in terms):
+                results2 += [get_result_entry_data(entryid,redis_server)]
+    except Exception:
+        print(Exception)
     return results1 + results2
 
 def set_fnames(ID, fnames, redis_server):
@@ -77,7 +96,7 @@ def get_fnames(ID, redis_server):
 
 def get_result_entry_data(ID, redis_server):
     data = {}
-    data['thumbpath'] = os.path.join('static','doc_data',re.sub('.','_blur.',get_fnames(ID, redis_server)[0]))
+    data['thumbpath'] = url_for('static',filename=os.path.join('doc_data',ID,get_fnames(ID,redis_server)[0]))
     data['name'] = redis_server.hget(ID, 'name')
     data['school'] = redis_server.hget(ID, 'school')
     data['course'] = redis_server.hget(ID, 'course')
@@ -94,7 +113,10 @@ def get_comments(ID, redis_server, format_times=False):
     Returns:
     list of all filenames associated with item
     """
-    comments = ast.literal_eval(redis_server.hget(ID, "comments"))
+    comment_data = redis_server.hget(ID, "comments")
+    if comment_data is None:
+        return []
+    comments = ast.literal_eval(comment_data)
     if format_times:
         for comment in comments:
             comment['time'] = formatTime(comment['time'])
@@ -149,9 +171,6 @@ def add_comment(ID, comment, user, redis_server):
 def get_preview(ID, redis_server):
     return redis_server.hget(ID, "pname")
 
-def get_time():
-    return "{0:0>2}".format(datetime.now().year - 2000) + "{0:0>2}".format(datetime.now().month) + "{0:0>2}".format(datetime.now().day) + "{0:0>2}".format(datetime.now().hour) + "{0:0>2}".format(datetime.now().minute) + "{0:0>2}".format(datetime.now().second)
-
 def edit_entry(ID, key, value, redis_server):
     """ Edit an existing hash entry in Redis..
 
@@ -204,6 +223,7 @@ def process_img_data(ID, redis_server):
 
     paths = []
     for i, fname in enumerate(fnames):
+        print(fname)
         ext = re.findall('\.\w+$', fname)[0]
         image_path = os.path.join('static', 'doc_data', ID, fname)
         image = Image.open(image_path)
@@ -213,6 +233,12 @@ def process_img_data(ID, redis_server):
         blurred_image.save(os.path.join('static', 'doc_data', ID, "{0:0>2}".format(i) + "_blur" + ext))
         paths += [os.path.join('static', 'doc_data', ID, "{0:0>2}".format(i) + "_blur" + ext)]
     return paths
+
+def get_time():
+    return datetime.now().strftime('%y%m%d%H%M%S')
+
+def too_many_requests(redis_server, allowed=100, minutes=1):
+    return redis_server.llen('ipreq') == allowed and datetime.now() - datetime.strptime(redis_server.lrange('ipreq',-1,-1)[0],'%y%m%d%H%M%S') < timedelta(minutes=minutes)
 
 def formatTime(time):
     now = get_time()
@@ -227,3 +253,8 @@ def formatTime(time):
             else:
                 return " {} {} ago".format(diff, unit)
     return " just now"
+
+def get_school(sid):
+    for college, info in college_data.items():
+        if info['sid'] == sid:
+            return college

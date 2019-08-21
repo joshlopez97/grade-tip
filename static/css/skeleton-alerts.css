@@ -1,0 +1,42 @@
+/**
+ * Author: Nathan Cahill <nathan@nathancahill.com>
+ * Homepage: https://github.com/nathancahill/skeleton-alerts
+ * free to use under MIT license
+ * Jul 8, 2015
+ *
+ * Description: Alert box style for messages indicating successes,
+ *              information, warnings, and errors.
+ *
+ *  Usage:
+ *  <p class="alert alert-success">...</p>
+ *  <p class="alert alert-info">...</p>
+ *  <p class="alert alert-warning">...</p>
+ *  <p class="alert alert-error">...</p>
+ *
+ */
+
+.alert {
+    display: block;
+    padding: 5px 20px;
+    border-left: 5px solid;
+}
+.alert-success {
+    background-color: #D5F5E3;
+    border-left-color: #2ECC71;
+    color: #2ECC71;
+}
+.alert-info {
+    background-color: #D6EAF8;
+    border-left-color: #3498DB;
+    color: #3498DB;
+}
+.alert-warning {
+    background-color: #FCF3CF;
+    border-left-color: #F1C40F;
+    color: #F1C40F;
+}
+.alert-error {
+    background-color: #F2D7D5;
+    border-left-color: #C0392B;
+    color: #C0392B;
+}

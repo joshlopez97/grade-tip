@@ -4,6 +4,21 @@
   {{ super() }}
   <!-- Error message
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<style>
+a.error-btn {
+  font-size: 15px;
+  color: #FFF;
+  background-color: #b97098;
+  border: none;
+  width: 200px;
+  padding: 10px 30px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  }
+a.error-btn:hover {
+  background-color: #925174;
+}
+</style>
   <div class="container errorPage">
     <div class="row">
       <div class="column">
@@ -13,7 +28,7 @@
     </div>
     <div class="row">
       <div class="column">
-        <a class="button button-primary" href="{{url_for('index')}}">
+        <a class="error-btn" href="{{url_for('index')}}">
           Go Back to Home
         </a>
       </div>

@@ -1,238 +1,62 @@
 {% extends "base.html" %}
+{% block title %}Register{% endblock %}
 {% block css %}
 <!-- Bootstrap styles -->
 {{ super() }}
-<link rel="stylesheet" href="static/css/sellpage.css">
-<link rel="stylesheet" href="static/css/jquery-ui.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
+{% endblock %}
+{% block javascript %}
+{{ super() }}
+
+<script type="text/javascript"
+  src="{{url_for('static', filename='js/register.js') }}">
+</script>
 {% endblock %}
 {% block extended_content %}
 {{ super () }}
-<script src="static/js/sellpage.js"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script>
-$(window).load(function(){
-  var animals = {{ animals|tojson }};
-  var adjectives = {{ adjectives|tojson }};
-  var college_list = {{ colleges|tojson }};
-  var nameCache = [];
-  getUsername();
-  $("#element_1").focus();
-  function randBetween(min,max)
-  {
-    return Math.floor(Math.random()*(max-min+1)+min);
-  }
-  $( function() {
-  function toTitleCase(str)
-  {
-    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-  };
-  function validate_school(school) {
-    if (college_list.includes(school)) {
-      enableField('element_2');
-      focusField('element_2')
-      document.getElementById('ok_1').src = "static/img/confirm.png"
-    }
-    else {
-      document.getElementById('ok_1').src = "static/img/cancel.png";
-    }
-    document.getElementById('ok_1').style.display = "inline";
-  }
-  function validate_email(email) {
-    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-  }
-  $("#element_1").on("focus", function(){
-    document.getElementById('ok_1').style.display = "none";
-  });
-  $("#element_1").on("blur", function(){
-    validate_school(this.value);
-  });
-  $("#element_1").autocomplete({
-      select: function(event, ui){
-        console.log(ui.item.value)
-        this.value = ui.item.value;
-        document.getElementById('element_1').blur();
-        enableField('element_2');
-        document.getElementById('ok_1').style.display = "inline";
-      },
-      source: function(request, response) {
-          var results = [];
-          var terms = request.term.split(' ').filter(Boolean);
-          for (i = 0; i < college_list.length; i++) {
-            if ((college_list[i].match(/\b(?!of|at|and|the)(\w)/g).join('').startsWith(request.term.toUpperCase())) || (terms.length > 1 && college_list[i].match(/\b(?!of|at|and|the)(\w)/g).join('').startsWith(terms[0].toUpperCase()) && college_list[i].includes(toTitleCase(terms[1])))) {
-                if (!results.includes(college_list[i])) {
-                    results.push(college_list[i]);
-                }
-            }
-          }
-          results.push.apply(results, $.ui.autocomplete.filter(college_list, request.term));
-          response(results.slice(0, 5));
-      }
-  });
-  $("#element_2").on("focus", function(){
-    document.getElementById('ok_2').style.display = "none";
-  });
-  $("#element_2").on("input", function(){
-    if (validate_email(this.value)) {
-      document.getElementById('guide_2').style.display = "none";
-      document.getElementById('ok_2').src = "static/img/confirm.png";
-      document.getElementById('ok_2').style.display = "inline";
-      enableField('element_3');
-    }
-    else {
-      document.getElementById('guide_2').style.display = "inline";
-      document.getElementById('ok_2').style.display = "none";
-    }
-  });
-  $("#element_2").on("blur", function(){
-    if (this.value == "") return;
-    if (validate_email(this.value)) {
-      document.getElementById('ok_2').src = "static/img/confirm.png";
-      document.getElementById('ok_2').style.display = "inline";
-      enableField('element_3');
-    }
-    else {
-      document.getElementById('ok_2').src = "static/img/cancel.png";
-      document.getElementById('ok_2').style.display = "inline";
-    }
-  })
-  $("#element_3").on("input", function(){
-    if (this.value.length >= 6) {
-      document.getElementById('element_4').disabled = false;
-      document.getElementById('ok_3').src = "static/img/confirm.png";
-      document.getElementById('ok_3').style.display = "inline";
-      document.getElementById('guide_3').style.display = "none";
-    }
-    else {
-      document.getElementById('guide_3').style.display = "inline";
-      document.getElementById('ok_3').style.display = "none";
-    }
-  })
-  $("#element_3").on("blur", function(){
-    if (this.value.length >= 6) {
-      document.getElementById('element_4').disabled = false;
-      document.getElementById('ok_3').src = "static/img/confirm.png";
-      document.getElementById('ok_3').style.display = "inline";
-      document.getElementById('guide_3').style.display = "none";
-    }
-    else {
-      document.getElementById('guide_3').style.display = "inline";
-      document.getElementById('ok_3').src = "static/img/cancel.png";
-      document.getElementById('ok_3').style.display = "inline";
-    }
-  })
-  $("#element_4").on("input", function(){
-    if (this.value == document.getElementById('element_3').value) {
-      document.getElementById('ok_4').src = "static/img/confirm.png";
-      document.getElementById('ok_4').style.display = "inline";
-    }
-    else {
-      document.getElementById('ok_4').style.display = "none";
-    }
-  })
-  $("#element_4").on("blur", function(){
-    if (this.value == document.getElementById('element_3').value) {
-      document.getElementById('ok_4').src = "static/img/confirm.png";
-      document.getElementById('ok_4').style.display = "inline";
-    }
-    else {
-      document.getElementById('ok_4').src = "static/img/cancel.png";
-      document.getElementById('ok_4').style.display = "inline";
-    }
-  })
-  $("#get-username").click(getUsername);
-  $("#back-username").click(getLastUsername);
-  });
-  function disableField(id) {
-    document.getElementById(id).disabled = true;
-  }
-  function enableField(id) {
-    document.getElementById(id).disabled = false;
-  }
-  function focusField(id) {
-    window.setTimeout(function()
-    {
-      document.getElementById(id).focus();
-    }, 0);
-  }
-  function getLastUsername(){
-    if (nameCache.length > 1) {
-      var username = nameCache[nameCache.length - 2];
-      nameCache.splice(nameCache.length - 1, 1);
-      $("#userholder").empty();
-      $("#userholder").append("<span id=\"username\">" + username + "</span>");
-      document.getElementById("element_5").value = username
-    }
-    else {
-      var username = $("#username");
-      $("#userholder").empty();
-      $("#userholder").append(username);
-    }
-    return false;
-  }
-
-  function getUsername(){
-    var username = adjectives[Math.floor(Math.random() * adjectives.length)] + animals[Math.floor(Math.random() * animals.length)];
-    nameCache.push(username);
-    $("#userholder").empty();
-    $("#userholder").append("<span id=\"username\">" + username + "</span>");
-    document.getElementById("element_5").value = username
-    return false;
-  }
-});
-</script>
 <div id="form_container">
-    <form id="form_49549" class="appnitro"  enctype="multipart/form-data" method="post" action="">
+    <form class="appnitro"  enctype="multipart/form-data" method="post" action="">
         <div class="header">
-            <h1 align="left">Register</h1>
+            <h1 align="left">Create an account</h1>
         </div>
         <div class="header-sub">
-            <p>Please provide your information below</p>
+            <p>Already have an account? Sign in <a href="/login">here</a>.</p>
         </div>
-        <br>
         <ul>
-            <li id="li_1">
-                <label class="description" for="element_1">School </label>
-                <div>
-                    <input id="element_1" name="element_1" class="element text large" type="text" maxlength="255" value=""/> 
+            <li id="li_1" class="ritem">
+                <label class="description" for="element_1">School <p class="notice">(Optional)</p></label>
+                <div id="school-holder">
+                    <input id="element_1" name="element_1" class="element text large" type="text" maxlength="255" value="" /> 
                 </div>
-                <img src="static/img/confirm.png" class="ok" id="ok_1">
-                <p class="guidelines" id="guide_1"><small>What school are you currently attending?</small></p> 
             </li>
-            <li id="li_2" >
-                <label class="description" for="element_2">Email </label>
+            <li id="li_2" class="ritem">
+                <label class="description" for="element_2">Email <font color="red">*</font></label>
                 <div>
-                    <input id="element_2" name="element_2" class="element text large" type="text" maxlength="255" value="" disabled/> 
+                    <input id="element_2" name="element_2" class="element text large" type="text" maxlength="255" value="" /> 
                 </div>
-                <img src="static/img/confirm.png" class="ok" id="ok_2">
-                <p class="guidelines" id="guide_2"><small>Enter a valid email address.</small></p> 
             </li>
-            <li id="li_3" >
-                <label class="description" for="element_3">Password </label>
+            <li id="li_3" class="ritem">
+                <label class="description" for="element_3">Password <font color="red">* </font><p class="notice">(At least 8 characters)</p></label>
                 <div>
-                    <input id="element_3" name="element_3" class="element text large" maxlength="255" value="" type="password" disabled/> 
+                    <input id="element_3" name="element_3" class="element text large" maxlength="255" value="" type="password" disabled/>
                 </div>
-                <img src="static/img/confirm.png" class="ok" id="ok_3">
-                <p class="guidelines" id="guide_3"><small>Must be at least 6 characters.</small></p> 
             </li>
-            <li id="li_4" >
-                <label class="description" for="element_4">Confirm Password </label>
+            <li id="li_4" class="ritem">
+                <label class="description" for="element_4">Confirm Password <font color="red">*</font></label>
                 <div>
                     <input id="element_4" name="element_4" class="element text large" maxlength="255" value="" type="password" disabled/> 
                 </div>
-                <img src="static/img/confirm.png" class="ok" id="ok_4">
+
             </li>
-            <li>
-              <label class="description" for="element_5">Display Name </label>
+            <li style="margin-top:15px">
+              <label class="description" for="element_5">Display Name <font color="red">*</font></label>
                 <div id="userholder"></div>
                 <input id="element_5" name="element_5" type="hidden" value="">
                 <button id="get-username" action="">New Name</button>
-                <button id="back-username" action="">↵</button>
             </li>
             <li class="buttons">
-                <input type="hidden" name="form_id" value="49549" />
-                <input id="saveForm" class="button_text" type="submit" name="submit" value="Continue" />
+                <button id="saveForm" disabled class="button_text" name="submit">Continue</button>
             </li>
         </ul>
     </form>

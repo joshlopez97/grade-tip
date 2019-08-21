@@ -1,33 +1,48 @@
 {% extends "base.html" %}
 {% block title %}Sign in{% endblock %}
 {% block css %}
-  {{ super() }}
-  <link rel="stylesheet" type="text/css"
-    href="{{ url_for('static', filename='css/login.css') }}">
-  <link rel="stylesheet" type="text/css"
-    href="{{ url_for('static', filename='css/skeleton-alerts.css') }}">
+{{ super() }}
+<link rel="stylesheet" type="text/css"
+  href="{{ url_for('static', filename='css/skeleton-alerts.css') }}">
+<link rel="stylesheet" type="text/css" 
+  href="{{ url_for('static', filename='css/form.css') }}">
+<link rel="stylesheet" type="text/css" 
+  href="{{ url_for('static', filename='css/jquery-ui.css') }}">
 {% endblock %}
 {% block extended_content %}
 {{ super () }}
 
-  <section class="header">
-   <h3 class="title">Sign in to GradeTip</h3>
-  </section>
-
   <!-- Login Box
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <div class="login-box">
-    {% if error %}
-      <p class="alert alert-error">Couldn't log in. Try again.</p>
-    {% endif %}
-    <form action="{{url_for('loginpage')}}" method="post">
-      <div class="row">
-        <input class="u-full-width" name="username" placeholder="Username"
-          type="text" id="usernameInput" autofocus="autofocus">
-        <input class="u-full-width" name="password" placeholder="Password"
-          type="password" id="passwordInput">
-      </div>
-      <input class="submit-login" type="submit" value="Login">
+  <div id="form_container">
+    <form class="appnitro"  enctype="multipart/form-data" action="{{url_for('loginpage')}}" method="post">
+        <div class="header">
+            <h1 align="left">Sign in to GradeTip</h1>
+        </div>
+        <div class="header-sub">
+            <p>New to GradeTip? Register <a href="/register">here</a>.</p>
+        </div>
+        {% if error %}
+          <p class="alert alert-error">Email or password is incorrect.</p>
+        {% endif %}
+        <ul>
+            <li id="li_1">
+                <label class="description" for="element_1">Email </label>
+                <div>
+                    <input id="usernameInput" name="username" class="element text large" type="text" maxlength="255" value="" placeholder="Email Address"/> 
+                </div>
+            </li>
+            <li id="li_2" >
+                <label class="description" for="element_2">Password </label>
+                <div>
+                    <input id="passwordInput" name="password" class="element text large" type="password" maxlength="255" value="" placeholder="Password"/> 
+                </div>
+            </li>
+            <li class="buttons">
+                <input type="hidden" name="form_id" value="49549" />
+                <input id="saveForm" class="button_text" type="submit" name="submit" value="Login" />
+            </li>
+        </ul>
     </form>
-  </div>
+</div>
 {% endblock %}

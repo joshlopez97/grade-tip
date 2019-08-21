@@ -27,7 +27,7 @@ a {
   font-size: 35px;
 }
 .footer {
-  top: 2000px;
+  top: 1000px;
   float: center;
   position: absolute;
   margin-left: auto;
@@ -36,6 +36,22 @@ a {
   right: 0;
   font-size: 11px;
   font-weight: 600;
+}
+#loader {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background: black !important;
+  top:0 !important; left:0 !important;
+}
+.load-anim {
+  background: none;
+  position: absolute;
+  z-index: 1005;
+  top: 50%;
+  left: 50%;
+  margin: -75px 0 0 -75px;
 }
 
 /* Error Pages
@@ -59,40 +75,48 @@ a {
 /* Navigation Bar
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .navbar {
-  margin-top: -1em;
-  background: transparent;
-  background-repeat: repeat;
-  height: 110px;
-}
-.navbar container {
-  width: 100%;
+  padding-top: 5px;
+  background: black;
+  height: 56px;
 }
 .navbar-list {
-    list-style: none;
-    margin-bottom: 0;
+  list-style: none;
+  margin-bottom: 0;
+  width: 100%;
+  position: absolute;
+  height: 60px;
 }
-.navbar-brand a {
+.sidenav-list {
+  list-style: none;
+  position: absolute;
+}
+.navbar-brand {
+  height: 50px;
   font-weight: 600;
   text-decoration: none;
   line-height: 5rem;
   color: #000033;
   font-size: 20px;
-  float: left;
   position: relative;
-  margin-top: 0.75em;
-  margin-left: 1em;
-  margin-bottom: 0;
+  margin: 3px 0px 0px 10px;
+  width: 200px;
+  display: inline-block;
+}
+#logo {
+  height: 45px;
+  cursor: pointer;
 }
 /* navbar list items on top right */
-.navbar-item {
-  float: left;
+.navbar-holder {
   position: relative;
-  margin-bottom: 0;
+  display: inline-block;
+  vertical-align: top;
 }
 .navbar-login {
   float: right;
   position: relative;
-  margin-top: 0.75em
+  display: inline-block;
+  vertical-align: top;
 }
 /* navbar list links */
 .navbar-link {
@@ -102,30 +126,186 @@ a {
   line-height: 5rem;
   color: white;
 }
-/*For devices smaller than 750px*/
-@media (max-width: 750px) {
-  .navbar-brand a 
-    font-size: 16px;
-  }
-  .navbar-link {
-    font-size: 14px;
-  }
+
+/* Menu Buttons */
+.gtbtn {
+  border-radius: 0;
+  background: transparent;
+  color: white;
+  padding: 10px;
+  font-size: 15pt;
+  font-weight: normal;
+  border: none;
+  border-bottom: 4px solid transparent;
+  cursor: pointer;
+  height:40px;
+  width:auto;
+  text-align:center;
+}
+.gtbtn.nav {
+  line-height: 5px;
+  margin: 7px 60px 0;
+}
+.side .gtbtn {
+   margin: 7px 12px 0 !important;
+}
+.gtbtn.acct {
+  line-height: 5px;
+  margin: 7px 20px 0;
+}
+.gtbtn:hover {
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #cc0066;
+  color: #f3f3f3;
+}
+.gtbtn.side:hover {
+  border-bottom: 4px solid black;
+  color: #dc94b8;
 }
 
-/* Table
+.gtnbtn.acct.profile {
+  text-transform: none;
+  font-weight: normal;
+}
+.usearch-mobile-icon-holder {
+  display: none;
+  cursor: pointer;
+  padding: 7px 10px 0 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.sidebar-mobile-icon-holder {
+  display: none;
+  cursor: pointer;
+  padding: 7px 0 0 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.navcolor {
+  z-index: -1;
+  position: absolute;
+  display: none;
+  height: 61px;
+  top: 0px;
+}
+.usearch-mobile {
+  display: inline-block !important;
+  border-radius: 10px !important;
+  border: 2px solid #ff99cc !important;
+}
+.usearch-mobile-holder {
+  text-align: right !important;
+  display: inline-block !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  margin-left: 50px !important;
+  margin-top: 7px !important;
+}
+.ui-menu {
+  text-align: left !important;
+}
+
+/* Pop Up Search Bar
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-/* div containing table */
-.table-content {
-  margin: auto;
-  font-size: 14px;
-}
-th, td {
-  padding: 8px;
+.usearch-holder {
+  display: none;
+  margin-left:60px;
+  height:45px;
+  width:400px;
+  position: absolute;
+  z-index: 100;
 }
 
-/*For devices smaller than 750px*/
-@media (max-width: 750px) {
-  .table-content {
-    font-size: 13px;
+.usearch-bar {
+  margin: 0px !important; 
+  font-size: 16pt;
+  border-radius: 0px 10px 10px 10px;
+  border: 2px solid #cc0066 !important;
+  width: 400px;
+  height: 45px !important;
+  z-index: 100;
+}
+
+.sidebar {
+  position: absolute;
+  height: 100%;
+  width: 185px;
+  left: -325px; top: 61px;
+  background: black;
+  color: white;
+}
+
+@media screen and (max-width: 975px) {
+  .navbar-holder {
+/*    visibility: hidden;
+    clear: both;
+    float: left;
+    margin: 10px auto 5px 20px;
+    width: 0%;*/
+    display: none;
   }
+  .navbar-login {
+/*    visibility: hidden;
+    clear: both;
+    float: left;
+    margin: 10px auto 5px 20px;
+    width: 0%;*/
+    display: none;
+  }
+  .navbar-brand {
+    margin-left: 15px;
+  }
+  .navbar-list {
+    text-align: center;
+  }
+  .usearch-mobile-icon-holder {
+    display: inline-block;
+    z-index: 500;
+  }
+  .sidebar-mobile-icon-holder {
+    display: inline-block;
+    z-index: 500;
+    height: 50px;
+    width: 50px;
+  }
+}
+
+ /* Mobile sidebar icon animation */
+.icon-wrapper {
+  height: 30px;
+  width: 30px;
+}
+.circle {
+  width:30px;
+  height:30px;
+  position:relative;
+}
+.line {
+  position: absolute;
+  height: 5px;
+  width:100%;
+  background:white;
+  border-radius:4px;
+  transition: all cubic-bezier(0.26, 0.0, 0.27, 0.0) 0.2s;
+}
+.top {
+  top:18%;
+}
+.middle {
+  top:48%;
+}
+.bottom {
+  top:78%;
+}
+.icon.close .top {
+  transform:rotate(45deg);
+  top:48%;
+}
+.icon.close .middle, .icon.close .bottom {
+  transform:rotate(-45deg);
+  top:48%;
 }

@@ -1,6 +1,6 @@
 /* jquery.Jcrop.min.css v0.9.12 (build:20130126) */
 .jcrop-holder{direction:ltr;text-align:center;}
-canvas{width:350px;border:1px solid #e3e3e3;}
+canvas{border:1px solid #e3e3e3; z-index: -1;}
 .jcrop-vline,.jcrop-hline{background:#FFF url(../img/Jcrop.gif);font-size:0;position:absolute;}
 .jcrop-vline{height:100%;width:1px!important;}
 .jcrop-vline.right{right:0;}
@@ -28,3 +28,4 @@ canvas{width:350px;border:1px solid #e3e3e3;}
 .jcrop-dark .jcrop-handle{-moz-border-radius:3px;-webkit-border-radius:3px;background-color:#FFF;border-color:#000;border-radius:3px;}
 .solid-line .jcrop-vline,.solid-line .jcrop-hline{background:#FFF;}
 .jcrop-holder img,img.jcrop-preview{max-width:none;}
+input[type="radio"].jcrop-keymgr{display:none;}
