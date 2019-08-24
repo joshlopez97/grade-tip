@@ -15,27 +15,29 @@ function showRequests() {
     postsHolder.append(createRequestHolder("Title", "Description preview goes here", "User", new Date()));
     for (let [pid, post_data] of Object.entries(posts))
     {
-      let post = createRequestHolder(post_data["title"], post_data["description"], post_data["uid"], new Date(post_data["time"]), pid);
+      console.log(post_data)
+      let post = createRequestHolder(post_data, pid);
       post.click(() => showPost(post_data, pid));
       postsHolder.append(post);
     }
   });
 }
 
-function createRequestHolder(title, description, user, time, pid) {
+function createRequestHolder(post_data, pid) {
   return $(`
     <li class='post-holder' id="${pid}">
       <div class="post-info">
-        <span class="post-user">Posted by ${user}</span>
-        <span class="post-time">${moment(time).fromNow()}</span>
+        <span class="post-user">Posted by ${post_data["uid"]}</span>
+        <span class="post-time">${moment(new Date(post_data["time"])).fromNow()}</span>
+        <span>to SID ${post_data["sid"]}</span>
       </div>
       <div class="post-content">
-        <div class="post-title">${title}</div>
-        <div class="post-description">${description}</div>
+        <div class="post-title">${post_data["title"]}</div>
+        <div class="post-description">${post_data["description"]}</div>
       </div>
       <div class="post-controls">
-        <a class="post-btn">Like</a>
-        <a class="post-btn">Reply</a>
+        <a class="post-btn">Approve</a>
+        <a class="post-btn">Delete</a>
       </div>
     </li>
   `);

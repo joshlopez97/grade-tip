@@ -106,9 +106,8 @@ function showNewPostPopup()
     {
       console.log(window.location);
       $.post(window.location, parsedFormData, (res, status, xhr) => {
-        console.log(res);
-        console.log(status);
-        console.log(xhr);
+        destroyPopup();
+        notice("Your request has been received and will be processed by our moderators shortly.", 5500)
       });
     }
     else

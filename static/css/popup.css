@@ -24,15 +24,15 @@ img.close-icon
 img.close-notice
 {
   height: 19px;
-  margin: 18px;
+  margin: 15px;
 }
 
 .close-icon-holder
 {
   cursor: pointer;
-  position: absolute;
-  top: 0;
-  right: 0;
+  display: inline-block;
+  vertical-align: top;
+  float: right;
 }
 .popup-header
 {
@@ -50,6 +50,20 @@ img.close-notice
 {
   margin: 0 30px;
 }
+/* Mini alerts/notices appearing on the top */
+.notice
+{
+  display: none;
+  width: 100%;
+  background: rgb(247, 224, 246);
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  text-align: center;
+  font-size: 14pt;
+}
+
 .popup-form.big-form
 {
   height: 420px;
@@ -87,8 +101,21 @@ input[type="number"].popup-form-field-input
   font-size: 10pt;
   margin-top: 5px;
 }
+.notice-text {
+  display: inline-block;
+  width: 80%;
+  word-wrap: break-word;
+  margin: 15px 0;
+}
 @media (max-width: 975px) {
   .popup {
     width: 90%;
+  }
+  .notice {
+    font-size: 11pt;
+  }
+
+  img.close-notice {
+    height: 13px;
   }
 }
