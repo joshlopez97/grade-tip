@@ -68,15 +68,11 @@
           </a>
         </li>
         <li class="navbar-holder">
-          <button class="gtbtn nav usearch" id="usearch-btn">Find School</button>
+          <button class="gtbtn nav usearch" id="usearch-btn" onclick="location.href='/';">Find School</button>
           <div class="usearch usearch-holder" id="usearch-holder">
             <input class="usearch usearch-bar" id="usearch" type="text" placeholder="Search for a school">
           </div>
-          {% if current_user.is_authenticated %}
           <button class="gtbtn nav" id="upload-btn" onclick="location.href='/sell';">Upload</button>
-          {% else %}
-          <button class="gtbtn nav" id="upload-btn" onclick="location.href='/sell';">Upload</button>
-          {% endif %}
         </li>
         <li class="navbar-login">
           {% if current_user.is_authenticated %}
