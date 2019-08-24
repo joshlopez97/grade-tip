@@ -1,6 +1,6 @@
 from flask import current_app as app, jsonify
 
-from GradeTip.content.posts import create_post
+from GradeTip.content.posts import create_post, delete_request
 from GradeTip.models import redis_server
 
 
@@ -14,7 +14,8 @@ def fetch_post_requests():
 
 
 def approve_request(request):
-    if create_post(redis_server, request):
-        return jsonify({"created": True})
-    return jsonify({"created": False})
+    return jsonify({"result": create_post(redis_server, request)})
 
+
+def deny_request(request_id):
+    return jsonify({"result": delete_request(redis_server, request_id)})

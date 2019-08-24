@@ -7,7 +7,7 @@ import os
 import re
 from types import FunctionType
 
-from GradeTip.admin.monitoring import fetch_post_requests
+from GradeTip.admin.requests import fetch_post_requests
 from GradeTip.models.users import User
 from GradeTip import ajax
 from GradeTip import pages
