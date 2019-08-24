@@ -1,31 +1,22 @@
-from flask_login import current_user
 from flask import current_app as app
 
-from GradeTip.content.redis import get_new_id
-from GradeTip.models.entries import get_time, formatTime
+from GradeTip.content.posts import get_username
+from GradeTip.models.entries import get_time
 
 
-def validate_post_data(post_data):
+def validate_reply_data(reply_data):
     # TODO: Validate post data
     return True
 
 
-def get_username():
-    # TODO: Disable Anonymous user posts
-    displayName = "Anonymous"
-    if current_user.is_authenticated:
-        displayName = current_user.displayName
-    return displayName
-
-
-def request_post(redis_server, school_id, form_data):
+def request_reply(redis_server, school_id, form_data):
     """ Request to create a post in a school's page. """
     try:
         # get new request_id from key 'requests' set
-        request_id = get_new_id(redis_server, "requests")
+        request_id = redis_server.scard("requests".format(school_id))
 
         # add new request_id to set
-        redis_server.sadd("requests", request_id)
+        redis_server.sadd("requests".format(school_id), request_id)
 
         username = get_username()
 
@@ -55,7 +46,7 @@ def create_post(redis_server, request):
     try:
         school_id = request["sid"]
         # get new post_id from key 'posts/sid' set
-        post_id = get_new_id(redis_server, "posts/{}".format(school_id))
+        post_id = redis_server.scard("posts/{}".format(school_id))
 
         # add new post_id to set
         redis_server.sadd("posts/{}".format(school_id), post_id)
