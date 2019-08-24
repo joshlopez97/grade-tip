@@ -175,10 +175,10 @@ def registerpage():
     In a post request, all required input fields are taken and a new user is created.
     """
     if request.method == 'POST':
-        school_name = request.form['element_1']
-        email = request.form['element_2']
-        password = request.form['element_3']
-        displayName = request.form['element_5']
+        school_name = request.form['school']
+        email = request.form['email']
+        password = request.form['password']
+        displayName = request.form['displayname']
         passwordHash = bcrypt.hashpw(str.encode(password), bcrypt.gensalt())
         create_user(redis_server, email, passwordHash, school_name, displayName)
         create_session(email, redis_server)
