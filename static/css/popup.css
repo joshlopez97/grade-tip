@@ -1,0 +1,89 @@
+.popup
+{
+  position: fixed;
+  background: white;
+  width: 450px;
+  z-index: 100;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  border: 1px solid #41425a;
+}
+.popup.loading
+{
+  padding: 150px 0;
+}
+
+img.close-icon
+{
+  height: 20px;
+  margin: 15px;
+}
+
+img.close-notice
+{
+  height: 19px;
+  margin: 18px;
+}
+
+.close-icon-holder
+{
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.popup-header
+{
+  font-size: 18pt;
+  color: black;
+  font-weight: 100;
+  padding: 15px 30px;
+}
+.popup-submit
+{
+  margin: 25px 0;
+  width: unset;
+}
+.popup-form
+{
+  margin: 0 30px;
+}
+.popup-form.big-form
+{
+  height: 420px;
+  overflow-y: scroll;
+}
+.popup-form-field
+{
+  font-size: 12pt;
+  font-weight: 100;
+  margin: 25px 0;
+}
+.popup-form-field-label
+{
+  text-transform: capitalize;
+  margin-bottom: 5px;
+}
+
+.popup-form-field-input
+{
+  border: 1px solid #ddd;
+}
+
+.popup-form-field-input,
+.popup-form-field-input:hover
+{
+  width: 75%;
+}
+input[type="number"].popup-form-field-input
+{
+  width: 50px;
+}
+.popup-error
+{
+  color: #b72626;
+  font-size: 10pt;
+  margin-top: 5px;
+}

@@ -1,39 +1,41 @@
 
 /* Banner containing school name and icon */
+.navbar
+{
+  box-shadow: none;
+  border-bottom: 1px solid #ccc;
+}
 .banner 
 {
   display: block;
-	visibility:hidden;
-  font-weight: bold;
-  background: transparent;
-  background-position: left center;
-  background-repeat: no-repeat;
+  font-weight: 100;
   color: black;
-  height: 60px;
-  margin-top: 6px;
-  padding-left: 12px;
+  background: white;
+  box-shadow: 0 0 5px grey;
+  padding: 5px 30px;
+  height: 50px;
 }
-a.banner:hover
+.panel-icon-holder path
 {
-  color: black !important;
+  fill: black;
 }
 span.banner-title 
 {
-	font-size: 24pt;
+	font-size: 14pt;
   font-family: "Helvetica Heue", Helvetica, Arial, sans-serif;
 	display: table-cell;
   line-height: 1em;
   overflow: hidden;
-  height: 60px;
+  height: 50px;
   vertical-align: middle;
-  padding: 3px 0px 0px 10px;
+  padding: 3px 0 0 10px;
 }
 svg.panel-icon 
 {
 	position: absolute;
 	display:block;
-	height: 50px;
-	width: 50px;
+	height: 40px;
+	width: 40px;
 	padding: 5px;
 }
 div.panel-icon-holder {
@@ -43,23 +45,10 @@ div.panel-icon-holder {
   position: relative;
   display: table-cell;
 }
-
-/* Create new post button */
-div.create 
-{
-  display: inline-block;
-  height: 75px;
-  width:185px;
-  border: dashed 3px #b3b3b3;
-  margin: 0px; /*20px 15px 15px 15px;*/
-  border-radius: 15px;
-  cursor: pointer;
-  overflow: visible;
-  background:white;
-}
-div.create:hover 
-{
-  border: dashed 3px #939393;
+svg.panel-icon {
+  height: 40px;
+  width: 40px;
+  padding: 5px;
 }
 div.container 
 {
@@ -69,46 +58,13 @@ div.container
   padding: 20px;
   margin: 0;
 }
-div.add-icon-holder {
-  height: 30px;
-  width: 30px;
-  position: relative;
-  display: table-cell;
-  top: -17px;
-  left: 166px;
-}
-.add-icon 
+/* Create post button */
+.create-post
 {
-  position: absolute;
-  display: block;
-  height: 40px;
+  padding: 5px;
+  cursor: pointer;
 }
-div.create-icon-holder {
-  height: 50px;
-  width: 52px;
-  position: relative;
-  display: table-cell;
-  top: 12px;
-  left: -24px;
-}
-.create-icon
-{
-	position: absolute;
-	height:65px;
-	width:65px;
-	display: block;
-}
-.create-content
-{
-  font-size: 15pt;
-  display: table-cell;
-  position: relative;
-  vertical-align: middle;
-  top: 10px;
-  left: -6px;
-  line-height: 20px;
-  color: #252525;
-}
+
 
 /* Form to create new post */
 .cform
@@ -133,9 +89,7 @@ div.create-icon-holder {
 }
 .cdate
 {
-  background: url(/img/cal.png);
-  background-repeat: no-repeat;
-  background-position: 98% 50%;
+  background: url(/img/cal.png) no-repeat 98% 50%;
 }
 .tlabel
 {
@@ -309,16 +263,33 @@ ul.posts {
 li.post-holder {
   background: white;
   border: 1px solid #ddd;
-  margin: 5px 0px;
-  height: 50px;
+  margin: 5px 0;
   padding: 3px 9px;
+  cursor: pointer;
+}
+li.post-holder:hover {
+  border: 1px solid #aaa;
+}
+.post-info {
+  color: #888;
+  font-size: 9pt;
+}
+.post-user {
+
 }
 .post-title {
-  font-weight: bold
+  font-weight: bold;
+  font-size: 13pt;
+}
+.post-description {
+  font-size: 10pt;
+}
+.post-btn {
+  font-size: 9pt;
+  margin-right: 10px;
+  cursor: pointer;
 }
 .post-time {
-  color: #888;
-  margin-left: 5px;
 }
 .post-content {
 
@@ -326,27 +297,41 @@ li.post-holder {
 .noposts {
   background: white;
   border: 1px solid #ddd;
-  margin: 5px 0px;
+  margin: 5px 0;
   padding: 3px 9px;
+}
+
+/* Post details Page */
+div.large-post-holder {
+  background: white;
+  border: 1px solid #ddd;
+  padding: 15px 15px 10px;
+  display: none;
+}
+.large-post-holder .post-title {
+  font-size: 15pt;
+}
+.large-post-holder .post-description {
+  font-size: 11pt;
+}
+.large-post-holder .post-content {
+  margin-bottom: 10px;
+}
+.large-post-holder .post-btn {
+  font-size: 9.5pt;
+  margin-right: 15px;
+}
+.back-btn {
+  display: none;
+  vertical-align: middle;
+  width: 200px;
+  height: 50px;
+  font-size: 13pt;
+  cursor: pointer;
 }
 
 /* Mobile support */
 @media screen and (max-width: 975px) {
-  div.banner {
-		background-size: 1000px 58px;
-		height: 50px;
-  }
-  span.banner-title {
-  	font-size: 14pt;
-  	height: 50px;
-    padding-left: 0px;
-  }
-  svg.panel-icon {
-  	height: 40px;
-  	width: 40px;
-    margin-bottom: -15px;
-		padding: 5px;
-  }
   span.pb-header {
   	font-size: 15pt;
   }

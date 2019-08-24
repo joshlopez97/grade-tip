@@ -78,14 +78,35 @@ div.hp {
   min-width: 100%;
   z-index: -2;
   background-size: cover;
+}
+.home-background.bg {
   background: url(/img/home.png) repeat-x bottom center;
 }
-@media screen and (min-width: 1225px) {
-  .home-background {
-
-  }
+.home-background.fg {
+  background: url(/img/clouds.png) repeat-x bottom center;
+  animation: slide 5s linear infinite;
+  -webkit-animation: slide 100s linear infinite;
+}
+@keyframes slide {
+    from { background-position: 0 bottom; }
+    to { background-position: -1512px bottom; }
+}
+@-webkit-keyframes slide {
+    from { background-position: 0 bottom; }
+    to { background-position: -1512px bottom; }
 }
 @media screen and (max-width: 800px) {
+  @keyframes slide {
+    from { background-position: 0 bottom; }
+    to { background-position: -800px bottom; }
+  }
+  @-webkit-keyframes slide {
+      from { background-position: 0 bottom; }
+      to { background-position: -800px bottom; }
+  }
+  .home-background {
+    background-size: 800px !important;
+  }
   #cv-search {
     text-align: center;
     margin-top:110px;

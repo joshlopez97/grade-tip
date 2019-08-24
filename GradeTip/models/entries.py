@@ -13,6 +13,7 @@ from GradeTip.config.redis import post
 
 timeunits = ['year', 'month', 'day', 'hour', 'minute', 'second', 'second']
 
+
 def create_entry(school, course, kind, name, redis_server):
     """ Create a new hash entry with key value name in Redis. Initialize
     attributes and add new name in ENTRIES set in Redis.
@@ -27,7 +28,7 @@ def create_entry(school, course, kind, name, redis_server):
     info = {}
     info[post.sid] = school
     info[post.cid] = course
-    info[post.uid] = "user" #current_user.displayName
+    info[post.uid] = "user"  # current_user.displayName
     info[post.kind] = kind
     info[post.title] = name
     info[post.time] = time.strftime(post.time_format, time.localtime())
@@ -38,7 +39,7 @@ def create_entry(school, course, kind, name, redis_server):
     redis_server.expire(identifier, post.ex)
 
     ID = uuid4()
-    while redis_server.hexists("ondeck",ID):
+    while redis_server.hexists("ondeck", ID):
         ID = uuid4()
 
     redis_server.set(ID, identifier, ex=post.ex)
@@ -48,6 +49,7 @@ def create_entry(school, course, kind, name, redis_server):
 
     return ID
 
+
 def get_matching_entries(query, redis_server):
     terms = query.split(' ')
     results1 = []
@@ -55,12 +57,13 @@ def get_matching_entries(query, redis_server):
     try:
         for entryid in redis_server.smembers('entries'):
             if all(t.lower() in redis_server.hget(entryid, "name").lower() for t in terms):
-                results1 += [get_result_entry_data(entryid,redis_server)]
+                results1 += [get_result_entry_data(entryid, redis_server)]
             elif any(t.lower() in redis_server.hget(entryid, "name").lower() for t in terms):
-                results2 += [get_result_entry_data(entryid,redis_server)]
+                results2 += [get_result_entry_data(entryid, redis_server)]
     except Exception:
         print(Exception)
     return results1 + results2
+
 
 def set_fnames(ID, fnames, redis_server):
     """ Set list of names of all files associated with item ID and set
@@ -75,11 +78,13 @@ def set_fnames(ID, fnames, redis_server):
     redis_server.hset(ID, "fnames", fnames)
     redis_server.bgsave()
 
+
 def set_preview(ID, pname, pindex, pcoords, redis_server):
     redis_server.hset(ID, "pname", pname)
     redis_server.hset(ID, "pindex", pindex)
     redis_server.hset(ID, "pxcoord", pcoords[0])
     redis_server.hset(ID, "pycoord", pcoords[1])
+
 
 def get_fnames(ID, redis_server):
     """ Returns list of names of all files associated with item ID.
@@ -94,13 +99,15 @@ def get_fnames(ID, redis_server):
     """
     return ast.literal_eval(redis_server.hget(ID, "fnames"))
 
+
 def get_result_entry_data(ID, redis_server):
     data = {}
-    data['thumbpath'] = url_for('static',filename=os.path.join('doc_data',ID,get_fnames(ID,redis_server)[0]))
+    data['thumbpath'] = url_for('static', filename=os.path.join('doc_data', ID, get_fnames(ID, redis_server)[0]))
     data['name'] = redis_server.hget(ID, 'name')
     data['school'] = redis_server.hget(ID, 'school')
     data['course'] = redis_server.hget(ID, 'course')
     return data
+
 
 def get_comments(ID, redis_server, format_times=False):
     """ Returns list of names of all files associated with item ID.
@@ -122,6 +129,7 @@ def get_comments(ID, redis_server, format_times=False):
             comment['time'] = formatTime(comment['time'])
     return comments
 
+
 def like_comment(ID, index, username, redis_server):
     comments = get_comments(ID, redis_server)
     if comments[len(comments) - 1 - index].get('likes'):
@@ -133,6 +141,7 @@ def like_comment(ID, index, username, redis_server):
         comments[len(comments) - 1 - index]['likes'] += 1
     comments[len(comments) - 1 - index].setdefault('lusers', []).append(username)
     redis_server.hset(ID, "comments", comments)
+
 
 def dislike_comment(ID, index, username, redis_server):
     comments = get_comments(ID, redis_server)
@@ -146,20 +155,25 @@ def dislike_comment(ID, index, username, redis_server):
     comments[len(comments) - 1 - index].setdefault('dusers', []).append(username)
     redis_server.hset(ID, "comments", comments)
 
+
 def nullify_comment(ID, index, username, redis_server):
     comments = get_comments(ID, redis_server)
     if comments[len(comments) - 1 - index].get('lusers') and username in comments[len(comments) - 1 - index]['lusers']:
         comments[len(comments) - 1 - index]['lusers'].remove(username)
         comments[len(comments) - 1 - index]['likes'] -= 1
-    elif comments[len(comments) - 1 - index].get('dusers') and username in comments[len(comments) - 1 - index]['dusers']:
+    elif comments[len(comments) - 1 - index].get('dusers') and username in comments[len(comments) - 1 - index][
+        'dusers']:
         comments[len(comments) - 1 - index]['dusers'].remove(username)
         comments[len(comments) - 1 - index]['likes'] += 1
     redis_server.hset(ID, "comments", comments)
-    
+
+
 def add_comment_reply(ID, index, comment, user, redis_server):
     comments = get_comments(ID, redis_server)
-    comments[len(comments) - 1 - index].setdefault('replies', []).insert(0, {'text': comment, 'user': user, 'time': get_time()})
+    comments[len(comments) - 1 - index].setdefault('replies', []).insert(0, {'text': comment, 'user': user,
+                                                                             'time': get_time()})
     redis_server.hset(ID, "comments", comments)
+
 
 def add_comment(ID, comment, user, redis_server):
     comments = get_comments(ID, redis_server)
@@ -168,8 +182,10 @@ def add_comment(ID, comment, user, redis_server):
     redis_server.hset(ID, "nextCommentIndex", index + 1)
     redis_server.hset(ID, "comments", comments)
 
+
 def get_preview(ID, redis_server):
     return redis_server.hget(ID, "pname")
+
 
 def edit_entry(ID, key, value, redis_server):
     """ Edit an existing hash entry in Redis..
@@ -183,6 +199,7 @@ def edit_entry(ID, key, value, redis_server):
     redis_server.hset(ID, key, value)
     redis_server.bgsave()
 
+
 def delete_entry(ID, redis_server):
     """ Remove entry from database.
 
@@ -192,6 +209,7 @@ def delete_entry(ID, redis_server):
     """
     redis_server.srem("entries", ID)
     redis_server.delete(ID)
+
 
 def get_entry(ID, redis_server):
     """ Retrieves Redis hash from database to return.
@@ -212,6 +230,7 @@ def get_entry(ID, redis_server):
     data['user'] = redis_server.hget(ID, 'user')
     data['comments'] = get_comments(ID, redis_server)
     return data
+
 
 def process_img_data(ID, redis_server):
     pname = redis_server.hget(ID, "pname")
@@ -234,11 +253,15 @@ def process_img_data(ID, redis_server):
         paths += [os.path.join('static', 'doc_data', ID, "{0:0>2}".format(i) + "_blur" + ext)]
     return paths
 
+
 def get_time():
-    return datetime.now().strftime('%y%m%d%H%M%S')
+    return datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
+
 
 def too_many_requests(redis_server, allowed=100, minutes=1):
-    return redis_server.llen('ipreq') == allowed and datetime.now() - datetime.strptime(redis_server.lrange('ipreq',-1,-1)[0],'%y%m%d%H%M%S') < timedelta(minutes=minutes)
+    return redis_server.llen('ipreq') == allowed and datetime.now() - datetime.strptime(
+        redis_server.lrange('ipreq', -1, -1)[0], '%y%m%d%H%M%S') < timedelta(minutes=minutes)
+
 
 def formatTime(time):
     now = get_time()
@@ -253,6 +276,7 @@ def formatTime(time):
             else:
                 return " {} {} ago".format(diff, unit)
     return " just now"
+
 
 def get_school(sid):
     for college, info in college_data.items():

@@ -21,7 +21,7 @@ from GradeTip.models.entries import (create_entry, edit_entry, delete_entry,
                                      get_comments, add_comment, dislike_comment,
                                      like_comment, nullify_comment, formatTime,
                                      get_matching_entries, get_time, too_many_requests)
-from GradeTip.models.posts import (get_posts_from_school)
+from GradeTip.content.posts import (get_posts_from_school)
 
 with open("static/txt/nouns.txt", "r") as f:
     nouns = [line.strip('\n') for line in f if line.strip('\n')]
@@ -47,7 +47,7 @@ def getusernames():
     return json.dumps(usernames)
 
 
-def getposts():
+def posts_by_sid():
     sid = request.form.get('sid')
     posts = get_posts_from_school(redis_server, sid)
     return json.dumps(posts)

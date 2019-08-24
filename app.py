@@ -9,8 +9,8 @@ from types import FunctionType
 from GradeTip.models.users import User
 from GradeTip import ajax
 from GradeTip import pages
-from GradeTip.actions import (loginpage, registerpage, logout, index,
-                              internal_server_error, page_not_found, school)
+from GradeTip.pages import (loginpage, registerpage, logout, index,
+                            internal_server_error, page_not_found, school)
 from GradeTip.models import redis_server
 from GradeTip.location import nearest
 

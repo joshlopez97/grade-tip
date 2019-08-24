@@ -1,25 +1,23 @@
-from flask import Flask, url_for, request, render_template, redirect, abort, session, send_from_directory
-from flask_login import logout_user, current_user, login_required
-from GradeTip.models import redis_server
-from GradeTip.models.entries import (create_entry, edit_entry, delete_entry,
-                                     set_fnames, get_fnames, set_preview,
-                                     get_preview, process_img_data, get_entry,
-                                     get_comments, add_comment, dislike_comment,
-                                     like_comment, nullify_comment,
-                                     get_matching_entries)
-from GradeTip.models.session import (validate_login, create_session,
-                                     get_session, delete_session)
-from GradeTip.config.errors import errors
-from PIL import Image
 import bcrypt
-import re
 import os
-import json
-import random
-from uuid import uuid4
+import re
+
+from PIL import Image
+from flask import url_for, request, render_template, redirect, abort, current_app as app
+from flask_login import current_user, logout_user
+
+from GradeTip.content.posts import validate_post_data, create_post
+from GradeTip.models import redis_server
+from GradeTip.models.entries import (create_entry, set_fnames, set_preview,
+                                     process_img_data, get_entry,
+                                     get_comments, add_comment, get_matching_entries, get_school)
+from GradeTip.models.session import delete_session, create_session, validate_login
+from GradeTip.models.users import create_user
+
 
 def account():
     return render_template('account.html')
+
 
 def sell():
     """ On POST, retrieves sell form info from template and generates unique uuid4 for new
@@ -40,6 +38,7 @@ def sell():
         return redirect(url_for('upload', ID=ID))
     return render_template('sell.html')
 
+
 def upload():
     ID = request.args.get('ID')
     if not ID:
@@ -56,7 +55,8 @@ def upload():
                 fnames += ["{0:0>2}".format(i) + ext]
                 file.save(os.path.join('static', 'doc_data', str(ID), "{0:0>2}".format(i) + ext))
             ext = re.findall('\.\w+$', files[preview_index].filename)[0]
-            preview = Image.open(os.path.join('static', 'doc_data', str(ID), "{0:0>2}".format(preview_index) + ext)).crop(coords)
+            preview = Image.open(
+                os.path.join('static', 'doc_data', str(ID), "{0:0>2}".format(preview_index) + ext)).crop(coords)
             pname = "preview{}".format(ext)
             preview.save(os.path.join('static', 'doc_data', str(ID), pname))
             set_fnames(ID, fnames, redis_server)
@@ -65,15 +65,13 @@ def upload():
     return render_template('upload.html')
 
 
-def game():
-    return render_template('index2.html')
-
 def search():
     query = request.args.get('q')
     if not query:
         abort(404)
     results = get_matching_entries(query, redis_server)
-    return render_template('search.html', query=query,results=results)
+    return render_template('search.html', query=query, results=results)
+
 
 def item():
     ID = request.args.get('ID')
@@ -86,3 +84,150 @@ def item():
         add_comment(ID, comment, "AnonymousUser", redis_server)
     comments = get_comments(ID, redis_server, format_times=True)
     return render_template('item.html', paths=paths, data=data, comments=comments, ID=ID, username="AnonymousUser")
+
+
+def loginpage():
+    """ Displays login page if not logged in and redirects to index page or
+    next page in request if already authenticated.
+
+    If user submits login request, check validation of username and password.
+    For valid login, create a user session and redirect to index or next page
+    in request. For invalid login, display login page with error.
+
+    If user is logged out in the middle of session, login should redirect to
+    page in prior session.
+
+    Returns:
+        Rendered page template from the templates folder.
+    """
+
+    # If next page has not been defined yet, default to None
+    try:
+        loginpage.next
+    except AttributeError:
+        loginpage.next = None
+
+    error = None
+    if request.method == 'POST':
+        # Obtain username and password from login request
+        email = request.form['username']
+        password = request.form['password']
+
+        # Create session in Redis if login is valid. Otherwise display error.
+        if validate_login(email, password, redis_server):
+            create_session(email, redis_server)
+            return redirect(url_for('index'))
+        else:
+            error = True
+    else:
+        # Record next page to redirect to (if available)
+        loginpage.next = request.values.get('next')
+
+        # Already logged users can go to index page
+        if current_user.is_authenticated:
+            return redirect_next(loginpage.next)
+    return render_template('login.html', error=error)
+
+
+def redirect_next(next_page):
+    """ Utility function to redirect to index if next_page is None, otherwise
+    redirect to next_page.
+
+    Args:
+        next_page: path to next page that user was trying to visit before
+            loginpage or None if user went directly to loginpage
+
+    Returns:
+        redirect to index or next_page
+    """
+
+    # Reset loginpage.next for next session
+    loginpage.next = None
+    if next_page:
+        return redirect(next_page)
+    else:
+        return redirect(url_for('index'))
+
+
+def index():
+    """ Main page of GradeTip with search bar for finding assignment entries.
+
+    Returns:
+        Rendered page template from the templates folder.
+    """
+
+    if request.method == 'POST':
+        query = request.form.get('squery')
+        return redirect(url_for('resultspage', q=query))
+    return render_template('index.html')
+
+
+def registerpage():
+    """ Page for new users to create an account. Nouns.txt and adjectives_names.txt contain
+    random words for generating usernames. They are passed as parameters to Jinja template.
+    In a post request, all required input fields are taken and a new user is created.
+    """
+    if request.method == 'POST':
+        school_name = request.form['element_1']
+        email = request.form['element_2']
+        password = request.form['element_3']
+        displayName = request.form['element_5']
+        passwordHash = bcrypt.hashpw(str.encode(password), bcrypt.gensalt())
+        create_user(redis_server, email, passwordHash, school_name, displayName)
+        create_session(email, redis_server)
+        return redirect(url_for('index'))
+
+    return render_template('register.html')
+
+
+def school(sid):
+    school_name = get_school(int(sid))
+    if not school_name:
+        abort(404)
+    if request.method == 'POST' and validate_post_data(request.form):
+        if not create_post(redis_server, sid, request.form):
+            app.logger.info("Could not create post")
+            abort(500)
+        app.logger.info("Created post " + str(request.form))
+
+    return render_template('school.html', school=school_name, sid=sid)
+
+
+def logout():
+    """ Defines logout route behavior and backend. Redirects to login page if
+    not logged in. Deletes user session entry from database and logs out User
+    session. User will have to log back in to access pages.
+
+    Returns:
+        Rendered page template from the templates folder.
+    """
+    if current_user.is_authenticated:
+        delete_session(redis_server)
+        logout_user()
+    return redirect(url_for('loginpage'))
+
+
+def internal_server_error(error):
+    """ Displays Internal Server Error message.
+
+    Args:
+        error: string representation of error message from application.
+
+    Returns:
+        Rendered error template from the templates folder.
+    """
+    return render_template('error.html',
+                           error="Our servers seem to be down. Please wait while we fix this problem!"), 500
+
+
+def page_not_found(error):
+    """ Displays Page Not Found Error message.
+
+    Args:
+        error: string representation of error message from application.
+
+    Returns:
+        Rendered error template from the templates folder.
+    """
+    return render_template('error.html', error="Sorry, that page doesn't exist!",
+                           error_message="If you entered the URL manually please check your spelling and try again."), 404

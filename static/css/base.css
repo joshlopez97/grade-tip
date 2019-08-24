@@ -10,6 +10,7 @@
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 body {
   font-family: 'Open Sans', sans-serif;
+  background: #f3f3f3;
 }
 a {
   text-decoration: none;
@@ -23,7 +24,10 @@ a {
 .header {
   text-align: center;
   font-weight: 600;
-  font-size: 35px;
+  font-size: 25pt !important;
+}
+.header > h1 {
+  font-size: 25pt;
 }
 .top-space {
   height: 60px;
@@ -66,8 +70,7 @@ a {
 /* div containing 'go back to home' button */
 .errorPage .row:last-child {
   width: 300px; /* match width of button */
-  margin: auto;
-  margin-top: 1em;
+  margin: 1em auto auto;
 }
 .errorPage a {
   margin-bottom: 2em;
@@ -108,12 +111,12 @@ a {
   margin: 0;
   width: 185px;
   display: inline-block;
+  padding: 0 10px;
 }
 #logo-link {
   position: absolute;
-  left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateY(-50%);
 }
 #logo {
   height: 35px;
@@ -257,13 +260,13 @@ a {
   left: -325px; top: 61px;
   background: white;
   color: white;
-  box-shadow: 5px 0 5px -5px grey;
+  border-right: 1px solid #ccc;
 }
 .sidebar.empty {
   height: 15px;
   top: 55px;
   z-index: 101;
-  box-shadow: none;
+  border: none;
 }
 
 @media screen and (max-width: 975px) {
@@ -285,6 +288,25 @@ a {
   }
   .navbar-brand {
     margin-left: 15px;
+  }
+  .navbar-brand {
+    height: 45px;
+    font-weight: 600;
+    text-decoration: none;
+    line-height: 5rem;
+    color: #000033;
+    font-size: 20px;
+    position: relative;
+    margin: 0;
+    width: 185px;
+    display: inline-block;
+    padding: 0 10px;
+  }
+  #logo-link {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
   .navbar-list {
     text-align: center;
