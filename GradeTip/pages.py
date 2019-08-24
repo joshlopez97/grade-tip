@@ -3,10 +3,12 @@ import os
 import re
 
 from PIL import Image
-from flask import url_for, request, render_template, redirect, abort, current_app as app
+from flask import url_for, request, render_template, redirect, abort, jsonify, current_app as app
 from flask_login import current_user, logout_user
 
-from GradeTip.content.posts import validate_post_data, create_post
+from GradeTip.admin.auth import is_admin
+from GradeTip.admin.monitoring import fetch_post_requests
+from GradeTip.content.posts import validate_post_data, create_post, request_post
 from GradeTip.models import redis_server
 from GradeTip.models.entries import (create_entry, set_fnames, set_preview,
                                      process_img_data, get_entry,
@@ -84,6 +86,12 @@ def item():
         add_comment(ID, comment, "AnonymousUser", redis_server)
     comments = get_comments(ID, redis_server, format_times=True)
     return render_template('item.html', paths=paths, data=data, comments=comments, ID=ID, username="AnonymousUser")
+
+
+def monitor():
+    if current_user.is_authenticated and is_admin(current_user):
+        return render_template('monitor.html')
+    return abort(404)
 
 
 def loginpage():
@@ -180,17 +188,21 @@ def registerpage():
     return render_template('register.html')
 
 
-def school(sid):
-    school_name = get_school(int(sid))
+def school(school_id):
+    school_name = get_school(int(school_id))
     if not school_name:
         abort(404)
-    if request.method == 'POST' and validate_post_data(request.form):
-        if not create_post(redis_server, sid, request.form):
-            app.logger.info("Could not create post")
-            abort(500)
-        app.logger.info("Created post " + str(request.form))
 
-    return render_template('school.html', school=school_name, sid=sid)
+    # user submitted request for post to be created
+    if request.method == 'POST' and validate_post_data(request.form):
+        # log & return json indicating if request was successfully submitted
+        if not request_post(redis_server, school_id, request.form):
+            app.logger.info("Could not create request with {}".format(str(request.form)))
+            return jsonify({"requested": False, "created": False})
+        app.logger.info("Created request for post " + str(request.form))
+        return jsonify({"requested": True, "created": False})
+
+    return render_template('school.html', school=school_name, sid=school_id)
 
 
 def logout():

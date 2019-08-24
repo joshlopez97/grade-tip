@@ -6,11 +6,13 @@ from datetime import datetime
 import os
 import re
 from types import FunctionType
+
+from GradeTip.admin.monitoring import fetch_post_requests
 from GradeTip.models.users import User
 from GradeTip import ajax
 from GradeTip import pages
 from GradeTip.pages import (loginpage, registerpage, logout, index,
-                            internal_server_error, page_not_found, school)
+                            internal_server_error, page_not_found, school, monitor)
 from GradeTip.models import redis_server
 from GradeTip.location import nearest
 
@@ -30,6 +32,7 @@ def create_app():
     app.config.update(DEBUG=True, SECRET_KEY=os.urandom(24),
                       SESSION_COOKIE_SECURE=True, SEND_FILE_MAX_AGE_DEFAULT=0)
     register_routes(app)
+    admin_routes(app)
     register_error_handlers(app)
     setup_login_manager(app)
     app.add_template_filter(bust_cache)
@@ -48,7 +51,7 @@ def register_routes(app):
                      methods=['GET', 'POST'])
     app.add_url_rule('/register', 'registerpage', registerpage,
                      methods=['GET', 'POST'])
-    app.add_url_rule('/school/<sid>', 'school', school,
+    app.add_url_rule('/school/<school_id>', 'school', school,
                      methods=['GET', 'POST'])
     app.add_url_rule('/logout', 'logout', logout)
 
@@ -62,6 +65,13 @@ def register_routes(app):
 
     # Geolocation routes
     app.add_url_rule('/nearest', 'nearest', nearest, methods=['POST'])
+
+
+def admin_routes(app):
+    app.add_url_rule('/monitor', 'monitor', monitor,
+                     methods=['GET', 'POST'])
+    app.add_url_rule('/admin/requests', '/admin/requests', fetch_post_requests,
+                     methods=['GET'])
 
 
 def register_error_handlers(app):

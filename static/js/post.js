@@ -21,7 +21,7 @@ function displayBackBtnInBanner()
   backBtn.click(() => {
     let path = location.pathname;
     window.history.pushState({"school": "school"}, "", "/school/" + $("#sid")[0].value);
-    showSchoolPage();
+    showMonitoringPage();
   });
 }
 

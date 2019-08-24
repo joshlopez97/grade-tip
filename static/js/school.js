@@ -3,8 +3,7 @@ $(document).ready(function() {
   showSchoolPage();
   window.onpopstate = function(e){
     if(e.state){
-        document.getElementById("content").innerHTML = e.state.html;
-        document.title = e.state.pageTitle;
+      console.log(e.state);
     }
   };
 });
