@@ -59,7 +59,7 @@ img.close-notice
 {
   font-size: 12pt;
   font-weight: 100;
-  margin: 25px 0;
+  margin: 15px 0;
 }
 .popup-form-field-label
 {
@@ -86,4 +86,9 @@ input[type="number"].popup-form-field-input
   color: #b72626;
   font-size: 10pt;
   margin-top: 5px;
+}
+@media (max-width: 975px) {
+  .popup {
+    width: 90%;
+  }
 }

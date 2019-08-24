@@ -244,9 +244,9 @@ a {
 }
 
 .usearch-bar {
-  margin: 0px !important; 
+  margin: 0 !important;
   font-size: 16pt;
-  border-radius: 0px 10px 10px 10px;
+  border-radius: 0 10px 10px 10px;
   border: 2px solid #cc0066 !important;
   width: 400px;
   height: 45px !important;
@@ -270,20 +270,7 @@ a {
 }
 
 @media screen and (max-width: 975px) {
-  .navbar-holder {
-/*    visibility: hidden;
-    clear: both;
-    float: left;
-    margin: 10px auto 5px 20px;
-    width: 0%;*/
-    display: none;
-  }
-  .navbar-login {
-/*    visibility: hidden;
-    clear: both;
-    float: left;
-    margin: 10px auto 5px 20px;
-    width: 0%;*/
+  .navbar-holder, .navbar-login {
     display: none;
   }
   .navbar-brand {
