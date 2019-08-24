@@ -7,7 +7,6 @@ from flask import url_for, request, render_template, redirect, abort, jsonify, c
 from flask_login import current_user, logout_user
 
 from GradeTip.admin.auth import is_admin
-from GradeTip.admin.monitoring import fetch_post_requests
 from GradeTip.content.posts import validate_post_data, create_post, request_post
 from GradeTip.models import redis_server
 from GradeTip.models.entries import (create_entry, set_fnames, set_preview,
@@ -203,6 +202,13 @@ def school(school_id):
         return jsonify({"requested": True, "created": False})
 
     return render_template('school.html', school=school_name, sid=school_id)
+
+
+def details(school_id, post_id):
+    school_name = get_school(int(school_id))
+    if not school_name:
+        abort(404)
+    return render_template('school.html', school=school_name, sid=school_id, pid=post_id)
 
 
 def logout():

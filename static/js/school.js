@@ -1,15 +1,32 @@
 let url = [location.protocol, '//', location.host, location.pathname].join('');
 $(document).ready(function() {
-  showSchoolPage();
-  window.onpopstate = function(e){
-    if(e.state){
-      console.log(e.state);
-    }
-  };
+  show_school_page(true);
 });
 
-function showSchoolPage() {
-  let sid = $("#sid")[0].value;
+window.onpopstate = function(e){
+  console.log(e);
+  console.log(e.state);
+  if (!!e.state && e.state.page === 'school') {
+    show_school_page();
+  }
+  else if (!!e.state && e.state.page === 'details') {
+    show_post(e.state.post_data, e.state.pid, false);
+  }
+
+};
+
+function get_school_id() {
+  return $("#sid")[0].value;
+}
+
+function changeUrlToSchool(sid) {
+  window.history.pushState({"page": "school"}, "", `/school/${sid}`);
+}
+
+function show_school_page(pushState=false) {
+  let sid = get_school_id();
+  if (pushState)
+    changeUrlToSchool(sid);
   ensurePostsAndBannerAreVisible();
   attachEventListeners();
   showPosts(sid);
@@ -42,7 +59,6 @@ function non_empty(data) {
 function showPosts(sid) {
   let postsHolder = $("ul.posts");
   $.post("/posts_by_sid", {"sid":sid}, function(data) {
-    console.log(data);
     let posts = $.parseJSON(data);
     postsHolder.empty();
     for (let [pid, post_data] of Object.entries(posts))
@@ -50,6 +66,11 @@ function showPosts(sid) {
       if (validate_post_data(post_data)) {
         postsHolder.append(createPostHolder(post_data, pid));
       }
+    }
+    if (location.pathname.match("/[0-9]*/[0-9]*")) {
+      let path = location.pathname;
+      let pid = path.substring(path.lastIndexOf('/') + 1);
+      show_post(posts[pid], pid);
     }
   });
 }
@@ -79,7 +100,7 @@ function createPostHolder(post_data, pid) {
       </div>
     </li>
   `);
-  post.click(() => showPost(post_data, pid)).on("click", `#like-${pid}`, (e)=>{
+  post.click(() => show_post(post_data, pid)).on("click", `#like-${pid}`, (e)=>{
     e.stopPropagation();
     likePost(pid);
   });
@@ -107,7 +128,7 @@ function showNewPostPopup()
       console.log(window.location);
       $.post(window.location, parsedFormData, (res, status, xhr) => {
         destroyPopup();
-        notice("Your request has been received and will be processed by our moderators shortly.", 5500)
+        notice("Your request has been received and will be processed by our moderators shortly.", 4000)
       });
     }
     else

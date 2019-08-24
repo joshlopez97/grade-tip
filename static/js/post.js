@@ -1,15 +1,17 @@
-function showPost(post_data, pid)
+function show_post(post_data, pid, pushState=true)
 {
   console.log(post_data);
   $(".school-page-controls").css("display", "none");
   $("ul.posts").css("display", "none");
-  changeURLtoPost(pid);
-  displayBackBtnInBanner();
+  if (pushState)
+    changeURLtoPost(post_data, pid);
+  displayBackBtnInBanner(post_data, pid);
   populatePostData(post_data);
 }
 
-function changeURLtoPost(pid){
-   window.history.pushState({"state": "post"}, "", location.pathname + "/" + pid);
+function changeURLtoPost(post_data, pid){
+  let sid = get_school_id();
+  window.history.pushState({"page": "details", "pid": pid, "post_data": post_data}, "", `/school/${sid}/${pid}`);
 }
 
 function displayBackBtnInBanner()
@@ -19,8 +21,9 @@ function displayBackBtnInBanner()
   let backBtn = $(".back-btn");
   backBtn.css("display", "table-cell");
   backBtn.click(() => {
-    window.history.pushState({"school": "school"}, "", "/school/" + $("#sid")[0].value);
-    showSchoolPage();
+    let sid = get_school_id();
+    window.history.pushState({"page": "school"}, "", `/school/${sid}`);
+    show_school_page(false);
   });
 }
 

@@ -12,7 +12,7 @@ from GradeTip.models.users import User
 from GradeTip import ajax
 from GradeTip import pages
 from GradeTip.pages import (loginpage, registerpage, logout, index,
-                            internal_server_error, page_not_found, school, monitor)
+                            internal_server_error, page_not_found, school, monitor, details)
 from GradeTip.models import redis_server
 from GradeTip.location import nearest
 
@@ -52,6 +52,8 @@ def register_routes(app):
     app.add_url_rule('/register', 'registerpage', registerpage,
                      methods=['GET', 'POST'])
     app.add_url_rule('/school/<school_id>', 'school', school,
+                     methods=['GET', 'POST'])
+    app.add_url_rule('/school/<school_id>/<post_id>', 'details', details,
                      methods=['GET', 'POST'])
     app.add_url_rule('/logout', 'logout', logout)
 

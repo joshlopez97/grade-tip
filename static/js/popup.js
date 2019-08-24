@@ -9,10 +9,10 @@ function createPopup(titleText, submitText)
   $(".popup").remove();
   const popup = $(`
     <div class="popup">
-      <div class="popup-header">${titleText}</div>
       <div class="close-icon-holder">
         <img class="close-icon" src="/img/close.png" alt="close">
       </div>
+      <div class="popup-header">${titleText}</div>
       <form class="popup-form">
         <div class="popup-fields">
         </div>

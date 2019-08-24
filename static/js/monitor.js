@@ -15,9 +15,9 @@ function showRequests() {
     postsHolder.append(createRequestHolder("Title", "Description preview goes here", "User", new Date()));
     for (let [pid, post_data] of Object.entries(posts))
     {
-      console.log(post_data)
+      console.log(post_data);
       let post = createRequestHolder(post_data, pid);
-      post.click(() => showPost(post_data, pid));
+      post.click(() => show_post(post_data, pid));
       postsHolder.append(post);
     }
   });
