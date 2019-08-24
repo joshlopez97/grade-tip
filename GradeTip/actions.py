@@ -4,9 +4,9 @@ from flask_login import logout_user, current_user
 
 from GradeTip.models import redis_server
 from GradeTip.models.entries import (get_school)
-from GradeTip.models.session import (validate_login, create_session,
-                                     delete_session)
-from GradeTip.models.users import create_user
+from GradeTip.models.sessions import (validate_login, create_session,
+                                      delete_session)
+from GradeTip.models.User import create_user
 
 
 def loginpage():

@@ -1,10 +1,13 @@
-from flask import current_app as app, jsonify
+from flask import current_app as app, jsonify, request
 
+from GradeTip.admin.auth import validate_headers
 from GradeTip.content.posts import create_post, delete_request
 from GradeTip.models import redis_server
 
 
 def fetch_post_requests():
+    if not validate_headers(redis_server, request.headers):
+        return jsonify({}), 404
     request_ids = redis_server.smembers("requests")
     requests = {}
     for request_id in request_ids:

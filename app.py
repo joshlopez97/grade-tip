@@ -8,7 +8,7 @@ import re
 from types import FunctionType
 
 from GradeTip.admin.requests import fetch_post_requests
-from GradeTip.models.users import User
+from GradeTip.models.User import User
 from GradeTip import ajax
 from GradeTip import pages
 from GradeTip.pages import (loginpage, registerpage, logout, index,
@@ -99,10 +99,11 @@ def setup_login_manager(app):
 
 
 def bust_cache(url, sid=None):
+    # TODO: Configure cache busting for dev environment only
+    # if sid:
+    #     return re.sub(r'(\.[^\.]+)$', r'.' + sid + r'\1', url)
+    # return re.sub(r'(\.[^\.]+)$', r'.' + datetime.now().strftime("%m%d%y%H%M%S") + r'\1', url)
     return url
-    if sid:
-        return re.sub(r'(\.[^\.]+)$', r'.' + sid + r'\1', url)
-    return re.sub(r'(\.[^\.]+)$', r'.' + datetime.now().strftime("%m%d%y%H%M%S") + r'\1', url)
 
 
 @login_manager.user_loader
@@ -115,3 +116,4 @@ def load_user(username):
     """
 
     return User.get(username, redis_server)
+

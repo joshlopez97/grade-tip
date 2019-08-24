@@ -12,8 +12,8 @@ from GradeTip.models import redis_server
 from GradeTip.models.entries import (create_entry, set_fnames, set_preview,
                                      process_img_data, get_entry,
                                      get_comments, add_comment, get_matching_entries, get_school)
-from GradeTip.models.session import delete_session, create_session, validate_login
-from GradeTip.models.users import create_user
+from GradeTip.models.sessions import delete_session, create_session, validate_login
+from GradeTip.models.User import create_user
 
 
 def account():
@@ -89,7 +89,7 @@ def item():
 
 def monitor():
     if current_user.is_authenticated and is_admin(current_user):
-        return render_template('monitor.html')
+        return render_template('monitor.html', email=current_user.id, sessionID=current_user.session_id)
     return abort(404)
 
 

@@ -1,24 +1,25 @@
 import uuid
 import bcrypt
-import redis
+from flask import current_app as app
 from flask_login import login_user, current_user
-from GradeTip.models.users import User
-from GradeTip.config.ldap import ldap as ldapConfig
+from GradeTip.models.User import User
 
 
 def validate_login(login, password, redis_server):
     try:
         hashed = str.encode(redis_server.get("hash: {}".format(login)))
         return bcrypt.hashpw(str.encode(password), hashed) == hashed
-    except:
+    except Exception as e:
+        app.logger.error(e)
         return False
+
 
 def create_session(email, redis_server):
     """ Create a volatile Redis database entry with expiration time
     EXPIRE_TIME_SEC, create User object, and login User to Flask-Login.
 
     Args:
-        username: string representation of username to create a session with.
+        email: string representation of username to create a session with.
         redis_server: instance of Strict Redis server
     """
     redis_server.setnx("usersession: {}".format(email), str(uuid.uuid4()))
