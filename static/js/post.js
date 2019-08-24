@@ -19,9 +19,8 @@ function displayBackBtnInBanner()
   let backBtn = $(".back-btn");
   backBtn.css("display", "table-cell");
   backBtn.click(() => {
-    let path = location.pathname;
     window.history.pushState({"school": "school"}, "", "/school/" + $("#sid")[0].value);
-    showMonitoringPage();
+    showSchoolPage();
   });
 }
 

@@ -289,6 +289,10 @@ li.post-holder:hover {
   margin-right: 10px;
   cursor: pointer;
 }
+.post-btn:active, .post-btn.clicked {
+  color: #993366;
+  font-weight: bold;
+}
 .post-time {
 }
 .post-content {

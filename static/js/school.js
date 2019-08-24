@@ -45,34 +45,53 @@ function showPosts(sid) {
     console.log(data);
     let posts = $.parseJSON(data);
     postsHolder.empty();
-    postsHolder.append(createPostHolder("Title", "Description preview goes here", "User", new Date()));
     for (let [pid, post_data] of Object.entries(posts))
     {
-      let post = createPostHolder(post_data["title"], post_data["description"], post_data["uid"], new Date(post_data["time"]), pid);
-      post.click(() => showPost(post_data, pid));
-      postsHolder.append(post);
+      if (validate_post_data(post_data)) {
+        postsHolder.append(createPostHolder(post_data, pid));
+      }
     }
   });
 }
 
-function createPostHolder(title, description, user, time, pid) {
-  return $(`
+function validate_post_data(post_data) {
+  return non_empty(post_data["title"]) && non_empty(post_data["time"]) && valid_date(new Date(post_data["time"])) && non_empty(post_data["uid"])
+}
+
+function valid_date(d) {
+  return d instanceof Date && !isNaN(d);
+}
+
+function createPostHolder(post_data, pid) {
+  let post = $(`
     <li class='post-holder' id="${pid}">
       <div class="post-info">
-        <span class="post-user">Posted by ${user}</span>
-        <span class="post-time">${moment(time).fromNow()}</span>
+        <span class="post-user">Posted by ${post_data["uid"]}</span>
+        <span class="post-time">${moment(new Date(post_data["time"])).fromNow()}</span>
       </div>
       <div class="post-content">
-        <div class="post-title">${title}</div>
-        <div class="post-description">${description}</div>
+        <div class="post-title">${post_data["title"]}</div>
+        <div class="post-description">${post_data["description"]}</div>
       </div>
       <div class="post-controls">
-        <a class="post-btn">Like</a>
-        <a class="post-btn">Reply</a>
+        <a id="like-${pid}" class="post-btn">Like</a>
+        <a id="reply-${pid}" class="post-btn">Reply</a>
       </div>
     </li>
   `);
+  post.click(() => showPost(post_data, pid)).on("click", `#like-${pid}`, (e)=>{
+    e.stopPropagation();
+    likePost(pid);
+  });
+  return post;
 }
+
+function likePost(pid)
+{
+  $(`#like-${pid}`).toggleClass("clicked");
+}
+
+
 function showNewPostPopup()
 {
   let popup = createPopup("Create Text Post", "Submit");
