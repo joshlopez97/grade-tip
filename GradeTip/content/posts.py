@@ -1,3 +1,5 @@
+import traceback
+
 from flask_login import current_user
 from flask import current_app as app
 
@@ -22,7 +24,7 @@ def request_post(redis_server, school_id, form_data):
     """ Request to create a post in a school's page. """
     try:
         # get new request_id from key 'requests' set
-        request_id = get_new_id(redis_server, "requests")
+        request_id = get_new_id(redis_server, "request_id")
 
         # add new request_id to set
         redis_server.sadd("requests", request_id)
@@ -47,6 +49,7 @@ def request_post(redis_server, school_id, form_data):
     except Exception as e:
         app.logger.error("Something went wrong trying to store {} in Redis".format(str(form_data)))
         app.logger.error(e)
+        traceback.print_exc()
     return False
 
 

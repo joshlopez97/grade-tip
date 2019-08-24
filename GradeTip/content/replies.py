@@ -1,3 +1,5 @@
+import traceback
+
 from flask import current_app as app
 
 from GradeTip.content.posts import get_username
@@ -38,6 +40,7 @@ def request_reply(redis_server, school_id, form_data):
     except Exception as e:
         app.logger.error("Something went wrong trying to store {} in Redis".format(str(form_data)))
         app.logger.error(e)
+        traceback.print_exc()
     return False
 
 

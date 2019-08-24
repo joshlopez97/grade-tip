@@ -3,4 +3,6 @@ def get_new_id(redis_server, key_name):
     if new_id is None:
         new_id = 1
     redis_server.incrby(key_name, 1)
-    return new_id
+    print("new_id = {}".format(new_id))
+    print(type(new_id))
+    return str(new_id)
