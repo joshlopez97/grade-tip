@@ -25,7 +25,6 @@ function showRequests() {
   adminRequest("/admin/requests", "GET", function(posts) {
     console.log(posts);
     postsHolder.empty();
-    postsHolder.append(createRequestHolder("Title", "Description preview goes here", "User", new Date()));
     for (let [pid, post_data] of Object.entries(posts))
     {
       console.log(post_data);
@@ -35,22 +34,31 @@ function showRequests() {
   });
 }
 
-function createRequestHolder(post_data, pid) {
-  return $(`
-    <li class='post-holder' id="${pid}">
+function createRequestHolder(request_data, rid) {
+  let request = $(`
+    <li class='post-holder' id="${rid}">
       <div class="post-info">
-        <span class="post-user">Posted by ${post_data["uid"]}</span>
-        <span class="post-time">${moment(new Date(post_data["time"])).fromNow()}</span>
-        <span>to SID ${post_data["sid"]}</span>
+        <span class="post-user">Posted by ${request_data["uid"]}</span>
+        <span class="post-time">${moment(new Date(request_data["time"])).fromNow()}</span>
+        <span>to SID ${request_data["sid"]}</span>
       </div>
       <div class="post-content">
-        <div class="post-title">${post_data["title"]}</div>
-        <div class="post-description">${post_data["description"]}</div>
+        <div class="post-title">${request_data["title"]}</div>
+        <div class="post-description">${request_data["description"]}</div>
       </div>
       <div class="post-controls">
-        <a class="post-btn" id="approve-${pid}">Approve</a>
-        <a class="post-btn" id="deny-${pid}">Deny</a>
+        <a class="post-btn" id="approve-${rid}">Approve</a>
+        <a class="post-btn" id="deny-${rid}">Deny</a>
       </div>
     </li>
   `);
+  request.on("click", `#approve-${rid}`, ()=>{
+    console.log("Approved " + rid);
+    adminRequest(`/admin/approve/${rid}`, "GET", (res) => console.log(res));
+  });
+  request.on("click", `#deny-${rid}`, ()=>{
+    console.log("Deny " + rid);
+    adminRequest(`/admin/deny/${rid}`, "GET", (res) => console.log(res));
+  });
+  return request;
 }

@@ -11,13 +11,20 @@ def fetch_post_requests():
     request_ids = redis_server.smembers("requests")
     requests = {}
     for request_id in request_ids:
-        requests[request_id] = redis_server.hgetall("request/{}".format(request_id))
+        requests[request_id] = get_request(request_id)
     app.logger.debug("fetched {} requests".format(len(requests)))
     return jsonify(requests)
 
 
-def approve_request(request):
-    return jsonify({"result": create_post(redis_server, request)})
+def get_request(request_id):
+    return redis_server.hgetall("request/{}".format(request_id))
+
+
+def approve_request(request_id):
+    request_data = get_request(request_id)
+    if request_data is not None:
+        return jsonify({"result": create_post(redis_server, request_data)})
+    return jsonify({"result": False})
 
 
 def deny_request(request_id):

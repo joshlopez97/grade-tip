@@ -58,7 +58,7 @@ def create_post(redis_server, request):
     try:
         school_id = request["sid"]
         # get new post_id from key 'posts/sid' set
-        post_id = get_new_id(redis_server, "posts/{}".format(school_id))
+        post_id = get_new_id(redis_server, "post_ids/{}".format(school_id))
 
         # add new post_id to set
         redis_server.sadd("posts/{}".format(school_id), post_id)
@@ -80,6 +80,7 @@ def create_post(redis_server, request):
     except Exception as e:
         app.logger.error("Something went wrong trying to store {} in Redis".format(str(request)))
         app.logger.error(e)
+        traceback.print_exc()
     return False
 
 

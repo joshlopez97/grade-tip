@@ -7,7 +7,7 @@ import os
 import re
 from types import FunctionType
 
-from GradeTip.admin.requests import fetch_post_requests
+from GradeTip.admin.requests import fetch_post_requests, approve_request, deny_request
 from GradeTip.models.User import User
 from GradeTip import ajax
 from GradeTip import pages
@@ -73,6 +73,10 @@ def admin_routes(app):
     app.add_url_rule('/monitor', 'monitor', monitor,
                      methods=['GET', 'POST'])
     app.add_url_rule('/admin/requests', '/admin/requests', fetch_post_requests,
+                     methods=['GET'])
+    app.add_url_rule('/admin/approve/<request_id>', '/admin/approve', approve_request,
+                     methods=['GET'])
+    app.add_url_rule('/admin/deny/<request_id>', '/admin/deny', deny_request,
                      methods=['GET'])
 
 
