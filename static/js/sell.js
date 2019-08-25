@@ -1,4 +1,4 @@
-let course_data = {}
+let course_data = {};
 $.get("/getcolleges", function(data) {
   course_data = $.parseJSON(data);
 });

@@ -105,8 +105,7 @@ div.hp {
   #cv-search {
     text-align: center;
     margin: 110px auto auto;
-    height: 200px;
-    width: 800px;
+    width: 100%;
   }
   .cv-holder {
     text-align: center;
