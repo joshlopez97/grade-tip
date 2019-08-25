@@ -16,7 +16,7 @@
 {{ super () }}
 
 <div id="form_container">
-  <form id="form_49549" class="appnitro"  enctype="multipart/form-data" method="post" action="">
+  <form class="gt-form" enctype="multipart/form-data" method="post" action="">
     <div class="header">
       <h1 align="left">Sell An Assignment</h1>
     </div>
@@ -28,13 +28,13 @@
       <li>
           <label class="description" for="school">School <font color="red">* </font></label>
           <div id="school-holder">
-              <input id="school" name="school" class="element text large" type="text" maxlength="255" value=""/> 
+              <input id="school" name="school" class="element text large" type="text" maxlength="255" value="" required/>
           </div>
       </li>
       <li>
           <label class="description" for="cid">Course Code <font color="red">* </font><p class="notice">(e.g. ENG 131)</p></label>
           <div id="course-holder">
-              <input id="cid" name="cid" class="element text large" type="text" maxlength="255" value=""/> 
+              <input id="cid" name="cid" class="element text large" type="text" maxlength="255" value="" required/>
           </div>
       </li>
       <li>
@@ -65,12 +65,17 @@
       <li>
           <label class="description" for="title">Document Title <font color="red">* </font><p class="notice"></p></label>
           <div>
-              <input id="title" name="title" class="element text large" type="text" maxlength="255" value=""/> 
+              <input id="title" name="title" class="element text large" type="text" maxlength="255" value="" required/>
           </div>
       </li>
+      <li>
+        <label class="description" for="file">PDF Document <font color="red">* </font><p class="notice">Maximum upload size: 2 MB</p></label>
+        <div>
+          <input type="file" name="file" id="file" required>
+        </div>
+      </li>
       <li class="buttons">
-          <input type="hidden" name="form_id" value="49549" />
-          <input id="saveForm" class="button_text" type="submit" name="submit" value="Submit" />
+          <input id="saveForm" class="button_text" type="submit" value="Submit"/>
       </li>
     </ul>
   </form>

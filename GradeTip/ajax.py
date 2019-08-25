@@ -1,27 +1,17 @@
 import json
+import os
 import random
 import re
-import os
-import requests
-import time
-import requests
-import traceback
-import ipaddress
-from bisect import insort
-from GradeTip.models import redis_server
-from GradeTip.models.utilities import distance_between
-from flask import request
-from PIL import Image
 from pathlib import Path
+
+from flask import request
 from pdf2image import convert_from_bytes
+
 from GradeTip import college_data, hsdata
-from GradeTip.models.entries import (create_entry, edit_entry, delete_entry,
-                                     set_fnames, get_fnames, set_preview,
-                                     get_preview, process_img_data, get_entry,
-                                     get_comments, add_comment, dislike_comment,
-                                     like_comment, nullify_comment, formatTime,
-                                     get_matching_entries, get_time, too_many_requests)
 from GradeTip.content.posts import (get_posts_from_school)
+from GradeTip.models import redis_server
+from GradeTip.models.entries import (get_comments, add_comment, dislike_comment,
+                                     like_comment, nullify_comment)
 
 with open("static/txt/nouns.txt", "r") as f:
     nouns = [line.strip('\n') for line in f if line.strip('\n')]
@@ -39,7 +29,7 @@ def gethighschools():
 
 def getusernames():
     usernames = []
-    while (len(usernames) < 50):
+    while len(usernames) < 50:
         un = random.choice(adjectives) + random.choice(nouns)
         if not redis_server.sismember('displayNames', un):
             usernames += [un]
@@ -109,7 +99,7 @@ def toimages():
 
     # store in cache
     for i, img in enumerate(imgs):
-        path = dr + '/' + str(i) + '.jpg'
+        path = dr + '/' + str(i) + '.png'
         img.save(path)
         paths += [path]
 

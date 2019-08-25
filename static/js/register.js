@@ -172,7 +172,7 @@ $(document).ready(function() {
         if (check !== "school" && !is_valid[check])
           all_valid = false;
       if (all_valid)
-        $("form.appnitro").submit();
+        $("form.gt-form").submit();
     });
 
     function getUsername(){

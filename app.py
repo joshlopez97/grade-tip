@@ -8,7 +8,7 @@ import re
 from types import FunctionType
 
 from GradeTip.admin.requests import fetch_post_requests, approve_request, deny_request
-from GradeTip.models.User import User
+from GradeTip.models.users import User
 from GradeTip import ajax
 from GradeTip import pages
 from GradeTip.pages import (loginpage, registerpage, logout, index,
@@ -29,8 +29,11 @@ def create_app():
 
     app = Flask(__name__, static_folder='static',
                 static_url_path='')
-    app.config.update(DEBUG=True, SECRET_KEY=os.urandom(24),
-                      SESSION_COOKIE_SECURE=True, SEND_FILE_MAX_AGE_DEFAULT=0)
+    app.config.update(DEBUG=True,
+                      SECRET_KEY=os.urandom(24),
+                      SESSION_COOKIE_SECURE=True,
+                      SEND_FILE_MAX_AGE_DEFAULT=0,
+                      MAX_CONTENT_LENGTH=2 * 1024 * 1024)
     register_routes(app)
     admin_routes(app)
     register_error_handlers(app)

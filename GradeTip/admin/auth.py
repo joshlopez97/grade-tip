@@ -1,4 +1,4 @@
-from GradeTip.models.User import User
+from GradeTip.models.users import User
 from flask import current_app as app
 
 

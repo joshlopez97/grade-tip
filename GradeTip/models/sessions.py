@@ -2,7 +2,7 @@ import uuid
 import bcrypt
 from flask import current_app as app
 from flask_login import login_user, current_user
-from GradeTip.models.User import User
+from GradeTip.models.users import User
 
 
 def validate_login(login, password, redis_server):

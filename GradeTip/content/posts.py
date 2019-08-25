@@ -3,7 +3,7 @@ import traceback
 from flask_login import current_user
 from flask import current_app as app
 
-from GradeTip.content.redis import get_new_id
+from GradeTip.content.redis import get_new_id, store_hash
 from GradeTip.models.entries import get_time, formatTime
 
 
@@ -23,28 +23,19 @@ def get_username():
 def request_post(redis_server, school_id, form_data):
     """ Request to create a post in a school's page. """
     try:
-        # get new request_id from key 'requests' set
-        request_id = get_new_id(redis_server, "request_id")
+        # get new request_id
+        request_id = get_new_id(redis_server, "request_id", "requests")
 
-        # add new request_id to set
-        redis_server.sadd("requests", request_id)
-
+        # store data into map with 'request/request_id' as the key
         username = get_username()
-
-        # create dict with relevant request data
-        post_data = {
+        identifier = "request/{}".format(request_id)
+        store_hash(redis_server, identifier, {
             "sid": school_id,
             "title": form_data["title"],
             "description": form_data["description"],
             "uid": username,
             "time": get_time()
-        }
-
-        # store data into map with 'request/request_id' as the key
-        identifier = "request/{}".format(request_id)
-        redis_server.hmset(identifier, post_data)
-        redis_server.bgsave()
-        app.logger.debug("Stored {} in key {}".format(str(post_data), identifier))
+        })
         return True
     except Exception as e:
         app.logger.error("Something went wrong trying to store {} in Redis".format(str(form_data)))
@@ -57,25 +48,18 @@ def create_post(redis_server, request):
     """ Create a post for a school's page. """
     try:
         school_id = request["sid"]
-        # get new post_id from key 'posts/sid' set
-        post_id = get_new_id(redis_server, "post_ids/{}".format(school_id))
-
-        # add new post_id to set
-        redis_server.sadd("posts/{}".format(school_id), post_id)
-
-        # create dict with relevant post data
-        post_data = {
-            "title": request["title"],
-            "description": request["description"],
-            "uid": request["uid"],
-            "time": request["time"]
-        }
+        # get new post_id
+        post_id = get_new_id(redis_server, "post_ids/{}".format(school_id), "posts/{}".format(school_id))
 
         # store data into map with 'sid/post_id' as the key
         identifier = "{}/{}".format(school_id, post_id)
-        redis_server.hmset(identifier, post_data)
-        redis_server.bgsave()
-        app.logger.debug("Stored {} in key {}".format(str(post_data), identifier))
+        store_hash(redis_server, identifier, {
+            "title": request["title"],
+            "description": request["description"],
+            "uid": request["uid"],
+            "time": request["time"],
+            "requestType": "textpost"
+        })
         return True
     except Exception as e:
         app.logger.error("Something went wrong trying to store {} in Redis".format(str(request)))

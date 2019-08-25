@@ -7,13 +7,14 @@ from flask import url_for, request, render_template, redirect, abort, jsonify, c
 from flask_login import current_user, logout_user
 
 from GradeTip.admin.auth import is_admin
+from GradeTip.content.listings import request_listing
 from GradeTip.content.posts import validate_post_data, create_post, request_post
 from GradeTip.models import redis_server
 from GradeTip.models.entries import (create_entry, set_fnames, set_preview,
                                      process_img_data, get_entry,
                                      get_comments, add_comment, get_matching_entries, get_school)
 from GradeTip.models.sessions import delete_session, create_session, validate_login
-from GradeTip.models.User import create_user
+from GradeTip.models.users import create_user
 
 
 def account():
@@ -29,14 +30,9 @@ def sell():
     On GET, loads sell form to user.
     """
     if request.method == 'POST':
-        school = request.form['school'].strip(' \t\n\r')
-        course = request.form['cid'].strip(' \t\n\r')
-        name = request.form['title'].strip(' \t\n\r')
-        kind = request.form['kind'].strip(' \t\n\r')
+        file = request.files.get('file')
+        request_listing(redis_server, request.form, file)
 
-        ID = create_entry(school, course, kind, name, redis_server)
-        print(ID)
-        return redirect(url_for('upload', ID=ID))
     return render_template('sell.html')
 
 
