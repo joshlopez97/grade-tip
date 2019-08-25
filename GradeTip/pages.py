@@ -73,20 +73,6 @@ def search():
     results = get_matching_entries(query, redis_server)
     return render_template('search.html', query=query, results=results)
 
-
-def item():
-    ID = request.args.get('ID')
-    if not ID:
-        abort(404)
-    paths = process_img_data(ID, redis_server)
-    data = get_entry(ID, redis_server)
-    if request.method == 'POST':
-        comment = request.form['comment']
-        add_comment(ID, comment, "AnonymousUser", redis_server)
-    comments = get_comments(ID, redis_server, format_times=True)
-    return render_template('item.html', paths=paths, data=data, comments=comments, ID=ID, username="AnonymousUser")
-
-
 def monitor():
     if current_user.is_authenticated and is_admin(current_user):
         return render_template('monitor.html', email=current_user.id, sessionID=current_user.session_id)

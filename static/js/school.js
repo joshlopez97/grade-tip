@@ -61,7 +61,11 @@ function showPosts(sid) {
   $.post("/posts_by_sid", {"sid":sid}, function(data) {
     let posts = $.parseJSON(data);
     postsHolder.empty();
-    for (let [pid, post_data] of Object.entries(posts))
+    let sortedPosts = Object.entries(posts);
+    sortedPosts.sort(function(a, b){
+      return new Date(b[1].time) - new Date(a[1].time);
+    });
+    for (let [pid, post_data] of sortedPosts)
     {
       if (validate_post_data(post_data)) {
         postsHolder.append(createPostHolder(post_data, pid));
