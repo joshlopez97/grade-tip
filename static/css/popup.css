@@ -81,15 +81,11 @@ img.close-notice
   margin-bottom: 5px;
 }
 
-.popup-form-field-input
-{
-  border: 1px solid #ddd;
-}
-
 .popup-form-field-input,
 .popup-form-field-input:hover
 {
-  width: 75%;
+  border: 1px solid #ddd;
+  width: 90%;
 }
 input[type="number"].popup-form-field-input
 {
