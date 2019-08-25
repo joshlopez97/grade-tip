@@ -16,7 +16,7 @@ def get_username():
     # TODO: Disable Anonymous user posts
     displayName = "Anonymous"
     if current_user.is_authenticated:
-        displayName = current_user.displayName
+        displayName = current_user.display_name
     return displayName
 
 

@@ -255,7 +255,11 @@ def process_img_data(ID, redis_server):
 
 
 def get_time():
-    return datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
+    return json.dumps(datetime.now(), default=lambda obj: (
+        obj.isoformat()
+        if isinstance(obj, (datetime, datetime.date))
+        else None
+    )).strip("\"")
 
 
 def too_many_requests(redis_server, allowed=100, minutes=1):
