@@ -8,7 +8,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   display: none;
-  border: 1px solid #41425a;
+  box-shadow: grey 0px 0px 5px 0px;
 }
 .popup.loading
 {
