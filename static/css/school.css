@@ -296,7 +296,21 @@ li.post-holder:hover {
 .post-time {
 }
 .post-content {
-
+  display: inline-block;
+  vertical-align: top;
+  padding: 5px;
+}
+.post_thumbnail-holder {
+  display: inline-block;
+}
+.post-thumbnail {
+  height: 75px;
+}
+.post-preview-holder {
+}
+.post-preview {
+  height: unset;
+  width: 100%;
 }
 .noposts {
   background: white;

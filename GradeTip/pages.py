@@ -1,18 +1,16 @@
-import bcrypt
 import os
 import re
 
+import bcrypt
 from PIL import Image
 from flask import url_for, request, render_template, redirect, abort, jsonify, current_app as app
 from flask_login import current_user, logout_user
 
 from GradeTip.admin.auth import is_admin
-from GradeTip.content.listings import request_listing
-from GradeTip.content.posts import validate_post_data, create_post, request_post
+from GradeTip.content import listing_manager, request_manager
 from GradeTip.models import redis_server
-from GradeTip.models.entries import (create_entry, set_fnames, set_preview,
-                                     process_img_data, get_entry,
-                                     get_comments, add_comment, get_matching_entries, get_school)
+from GradeTip.models.entries import (set_fnames, set_preview,
+                                     get_matching_entries, get_school)
 from GradeTip.models.sessions import delete_session, create_session, validate_login
 from GradeTip.models.users import create_user
 
@@ -31,7 +29,7 @@ def sell():
     """
     if request.method == 'POST':
         file = request.files.get('file')
-        request_listing(redis_server, request.form, file)
+        listing_manager.request_listing(request.form, file)
 
     return render_template('sell.html')
 
@@ -69,9 +67,12 @@ def search():
     results = get_matching_entries(query, redis_server)
     return render_template('search.html', query=query, results=results)
 
+
 def monitor():
-    if current_user.is_authenticated and is_admin(current_user):
-        return render_template('monitor.html', email=current_user.id, sessionID=current_user.session_id)
+    if is_admin(current_user):
+        email = "email@email.com" #current_user.id
+        sessionID = "1" #current_user.session_id
+        return render_template('monitor.html', email=email, sessionID=sessionID)
     return abort(404)
 
 
@@ -175,9 +176,9 @@ def school(school_id):
         abort(404)
 
     # user submitted request for post to be created
-    if request.method == 'POST' and validate_post_data(request.form):
+    if request.method == 'POST':
         # log & return json indicating if request was successfully submitted
-        if not request_post(redis_server, school_id, request.form):
+        if not request_manager.request_post(redis_server, school_id, request.form):
             app.logger.info("Could not create request with {}".format(str(request.form)))
             return jsonify({"requested": False, "created": False})
         app.logger.info("Created request for post " + str(request.form))

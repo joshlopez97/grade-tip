@@ -57,6 +57,16 @@ class User(UserMixin):
         if session_id and user_data:
             return User(user_data['school'], email, user_data['displayName'], session_id)
 
+    @classmethod
+    def get(cls, email):
+        """ Return a User session if session has not expired.
+
+        Args:
+            email: string representation of User's username.
+            redis_server: instance of Strict Redis server
+        """
+        return User("", email, "Anonymous", "")
+
 
 def create_user(redis_server, email, passwordHash, school, displayName):
     redis_server.sadd('users', email)

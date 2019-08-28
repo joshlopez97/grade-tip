@@ -8,6 +8,7 @@ gtenv/
 .idea/
 *.rdb
 well-known/
+previews/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

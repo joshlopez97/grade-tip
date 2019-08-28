@@ -35,30 +35,12 @@ function showRequests() {
 }
 
 function createRequestHolder(request_data, rid) {
-  let request = $(`
-    <li class='post-holder' id="${rid}">
-      <div class="post-info">
-        <span class="post-user">Posted by ${request_data["uid"]}</span>
-        <span class="post-time">${moment(new Date(request_data["time"])).fromNow()}</span>
-        <span>to SID ${request_data["sid"]}</span>
-      </div>
-      <div class="post-content">
-        <div class="post-title">${request_data["title"]}</div>
-        <div class="post-description">${request_data["description"]}</div>
-      </div>
-      <div class="post-controls">
-        <a class="post-btn" id="approve-${rid}">Approve</a>
-        <a class="post-btn" id="deny-${rid}">Deny</a>
-      </div>
-    </li>
-  `);
-  request.on("click", `#approve-${rid}`, ()=>{
-    console.log("Approved " + rid);
-    adminRequest(`/admin/approve/${rid}`, "GET", (res) => console.log(res));
-  });
-  request.on("click", `#deny-${rid}`, ()=>{
-    console.log("Deny " + rid);
-    adminRequest(`/admin/deny/${rid}`, "GET", (res) => console.log(res));
-  });
+  let request;
+  if (request_data["requestType"] === "listing")
+    request = getListingHolder(request_data, rid);
+  else
+    request = getTextPostHolder(request_data, rid);
+  request.find(".post-info").append(`<span>to SID ${request_data["sid"]}</span>`);
+  request.append(getApproveDenyControls(rid));
   return request;
 }

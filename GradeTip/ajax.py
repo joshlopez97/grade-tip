@@ -8,6 +8,7 @@ from flask import request
 from pdf2image import convert_from_bytes
 
 from GradeTip import college_data, hsdata
+from GradeTip.content.listings import get_listings_from_school
 from GradeTip.content.posts import (get_posts_from_school)
 from GradeTip.models import redis_server
 from GradeTip.models.entries import (get_comments, add_comment, dislike_comment,
@@ -40,6 +41,8 @@ def getusernames():
 def posts_by_sid():
     sid = request.form.get('sid')
     posts = get_posts_from_school(redis_server, sid)
+    listings = get_listings_from_school(redis_server, sid)
+    posts.update(listings)
     return json.dumps(posts)
 
 
@@ -50,9 +53,7 @@ def mockdata():
 
 
 def validate_email():
-    print(dict(request.form))
     email = request.form.get('email')
-    print(email)
     return json.dumps(not redis_server.exists(email))
 
 

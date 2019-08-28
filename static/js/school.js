@@ -58,7 +58,7 @@ function non_empty(data) {
 
 function showPosts(sid) {
   let postsHolder = $("ul.posts");
-  $.post("/posts_by_sid", {"sid":sid}, function(data) {
+  $.post("/school/posts", {"sid":sid}, function(data) {
     let posts = $.parseJSON(data);
     postsHolder.empty();
     let sortedPosts = Object.entries(posts);
@@ -67,6 +67,7 @@ function showPosts(sid) {
     });
     for (let [pid, post_data] of sortedPosts)
     {
+      console.log(post_data)
       if (validate_post_data(post_data)) {
         postsHolder.append(createPostHolder(post_data, pid));
       }
@@ -88,26 +89,14 @@ function valid_date(d) {
 }
 
 function createPostHolder(post_data, pid) {
-  let post = $(`
-    <li class='post-holder' id="${pid}">
-      <div class="post-info">
-        <span class="post-user">Posted by ${post_data["uid"]}</span>
-        <span class="post-time">${moment(new Date(post_data["time"])).fromNow()}</span>
-      </div>
-      <div class="post-content">
-        <div class="post-title">${post_data["title"]}</div>
-        <div class="post-description">${post_data["description"]}</div>
-      </div>
-      <div class="post-controls">
-        <a id="like-${pid}" class="post-btn">Like</a>
-        <a id="reply-${pid}" class="post-btn">Reply</a>
-      </div>
-    </li>
-  `);
-  post.click(() => show_post(post_data, pid)).on("click", `#like-${pid}`, (e)=>{
-    e.stopPropagation();
-    likePost(pid);
-  });
+  let post;
+  if (post_data["postType"] === "textpost") {
+    post = getTextPostHolder(post_data, pid);
+  }
+  else
+    post = getListingHolder(post_data, pid);
+  post.append(getLikeReplyControls(pid));
+  post.click(() => show_post(post_data, pid));
   return post;
 }
 
@@ -115,7 +104,6 @@ function likePost(pid)
 {
   $(`#like-${pid}`).toggleClass("clicked");
 }
-
 
 function showNewPostPopup()
 {

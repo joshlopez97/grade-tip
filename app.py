@@ -1,20 +1,18 @@
-from flask import Flask
-from flask_login import LoginManager
-from jinja2 import contextfilter
-from werkzeug.exceptions import default_exceptions
-from datetime import datetime
 import os
-import re
 from types import FunctionType
 
-from GradeTip.admin.requests import fetch_post_requests, approve_request, deny_request
-from GradeTip.models.users import User
+from flask import Flask
+from flask_login import LoginManager
+
 from GradeTip import ajax
 from GradeTip import pages
+
+from GradeTip.content.resources import posts_by_sid, fetch_post_requests, approve_request, deny_request
+from GradeTip.location import nearest
+from GradeTip.models import redis_server
+from GradeTip.models.users import User
 from GradeTip.pages import (loginpage, registerpage, logout, index,
                             internal_server_error, page_not_found, school, monitor, details)
-from GradeTip.models import redis_server
-from GradeTip.location import nearest
 
 """ Flask login manager. """
 login_manager = LoginManager()
@@ -27,22 +25,21 @@ def create_app():
         app: created application
     """
 
-    app = Flask(__name__, static_folder='static',
-                static_url_path='')
+    app = Flask(__name__, static_folder='static', static_url_path='')
     app.config.update(DEBUG=True,
                       SECRET_KEY=os.urandom(24),
                       SESSION_COOKIE_SECURE=True,
                       SEND_FILE_MAX_AGE_DEFAULT=0,
                       MAX_CONTENT_LENGTH=2 * 1024 * 1024)
-    register_routes(app)
-    admin_routes(app)
+    register_page_routes(app)
+    register_ajax_routes(app)
     register_error_handlers(app)
     setup_login_manager(app)
     app.add_template_filter(bust_cache)
     return app
 
 
-def register_routes(app):
+def register_page_routes(app):
     """ Register application routes from pages with appropriate methods.
 
     Args:
@@ -58,6 +55,8 @@ def register_routes(app):
                      methods=['GET', 'POST'])
     app.add_url_rule('/school/<school_id>/<post_id>', 'details', details,
                      methods=['GET', 'POST'])
+    app.add_url_rule('/monitor', 'monitor', monitor,
+                     methods=['GET', 'POST'])
     app.add_url_rule('/logout', 'logout', logout)
 
     # All functions in ajax.py and pages.py are registered as routes
@@ -72,15 +71,15 @@ def register_routes(app):
     app.add_url_rule('/nearest', 'nearest', nearest, methods=['POST'])
 
 
-def admin_routes(app):
-    app.add_url_rule('/monitor', 'monitor', monitor,
-                     methods=['GET', 'POST'])
+def register_ajax_routes(app):
     app.add_url_rule('/admin/requests', '/admin/requests', fetch_post_requests,
                      methods=['GET'])
     app.add_url_rule('/admin/approve/<request_id>', '/admin/approve', approve_request,
                      methods=['GET'])
     app.add_url_rule('/admin/deny/<request_id>', '/admin/deny', deny_request,
                      methods=['GET'])
+    app.add_url_rule('/school/posts', '/school/posts', posts_by_sid,
+                     methods=['POST'])
 
 
 def register_error_handlers(app):

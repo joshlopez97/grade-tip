@@ -49,7 +49,7 @@ def create_post(redis_server, request):
     try:
         school_id = request["sid"]
         # get new post_id
-        post_id = get_new_id(redis_server, "post_ids/{}".format(school_id), "posts/{}".format(school_id))
+        post_id = "p" + get_new_id(redis_server, "post_ids/{}".format(school_id), "posts/{}".format(school_id))
 
         # store data into map with 'sid/post_id' as the key
         identifier = "{}/{}".format(school_id, post_id)
@@ -77,16 +77,3 @@ def get_posts_from_school(redis_server, school_id):
     app.logger.debug("fetched {} posts for sid {}".format(len(posts), school_id))
     return posts
 
-
-def delete_request(redis_server, request_id):
-    app.logger.info("deleting request with id: {}".format(request_id))
-    id_deleted = redis_server.srem("requests", request_id) <= 0
-    hash_deleted = redis_server.delete("request/{}".format(request_id)) <= 0
-
-    if not id_deleted:
-        app.logger.info("non-existent request id: {}".format(request_id))
-
-    if not hash_deleted:
-        app.logger.info("no data found for request with id: {}".format(id))
-
-    return id_deleted and hash_deleted
