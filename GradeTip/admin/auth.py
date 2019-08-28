@@ -12,7 +12,7 @@ def validate_headers(redis_server, headers):
     email = headers.get("email")
     sessionID = headers.get("sessionID")
     if email and sessionID:
-        user = User.get(email, redis_server)
+        user = User.get(email)
         if user is None:
             app.logger.debug("User with email {} not found".format(email))
             return False

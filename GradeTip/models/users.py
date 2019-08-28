@@ -1,5 +1,7 @@
 from flask_login import UserMixin
 
+from GradeTip.redis import redis_manager
+
 
 class User(UserMixin):
     """ This object inherits from UserMixin class and keeps track of User
@@ -45,19 +47,6 @@ class User(UserMixin):
         return False
 
     @classmethod
-    def get(cls, email, redis_server):
-        """ Return a User session if session has not expired.
-
-        Args:
-            email: string representation of User's username.
-            redis_server: instance of Strict Redis server
-        """
-        session_id = redis_server.get("usersession: {}".format(email))
-        user_data = redis_server.hgetall(email)
-        if session_id and user_data:
-            return User(user_data['school'], email, user_data['displayName'], session_id)
-
-    @classmethod
     def get(cls, email):
         """ Return a User session if session has not expired.
 
@@ -65,7 +54,10 @@ class User(UserMixin):
             email: string representation of User's username.
             redis_server: instance of Strict Redis server
         """
-        return User("", email, "Anonymous", "")
+        session_id = redis_manager.get_value("usersession: {}".format(email))
+        user_data = redis_manager.get_hash(email)
+        if session_id and user_data:
+            return User(user_data['school'], email, user_data['displayName'], session_id)
 
 
 def create_user(redis_server, email, passwordHash, school, displayName):

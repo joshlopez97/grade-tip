@@ -98,3 +98,13 @@ class RedisManager:
             app.logger.error(e)
             traceback.print_exc()
         return {}
+
+    def get_value(self, key_name):
+        try:
+            value = self.redis_server.get(key_name)
+            app.logger.debug("Retrieved {} from key {}".format(value, key_name))
+            return value
+        except Exception as e:
+            app.logger.error(e)
+            traceback.print_exc()
+        return None

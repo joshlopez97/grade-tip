@@ -121,5 +121,5 @@ def load_user(username):
         username: string represenation of User's username.
     """
 
-    return User.get(username, redis_server)
+    return User.get(username)
 

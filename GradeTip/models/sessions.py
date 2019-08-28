@@ -25,7 +25,7 @@ def create_session(email, redis_server):
     redis_server.setnx("usersession: {}".format(email), str(uuid.uuid4()))
     redis_server.expire('usersession: {}'.format(email), 4 * 60 * 60)
     redis_server.exists('usersession: {}'.format(email))
-    user = User.get(email, redis_server)
+    user = User.get(email)
     login_user(user, remember=True)
 
 
