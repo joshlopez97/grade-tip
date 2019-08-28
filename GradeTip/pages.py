@@ -6,7 +6,7 @@ from PIL import Image
 from flask import url_for, request, render_template, redirect, abort, jsonify, current_app as app
 from flask_login import current_user, logout_user
 
-from GradeTip.admin.auth import is_admin
+from GradeTip.admin import admin_authenticator
 from GradeTip.content import listing_manager, request_manager
 from GradeTip.models import redis_server
 from GradeTip.models.entries import (set_fnames, set_preview,
@@ -69,7 +69,7 @@ def search():
 
 
 def monitor():
-    if is_admin(current_user):
+    if admin_authenticator.is_admin(current_user):
         email = "email@email.com" #current_user.id
         sessionID = "1" #current_user.session_id
         return render_template('monitor.html', email=email, sessionID=sessionID)

@@ -2,7 +2,7 @@ from GradeTip.models.users import User
 from flask import current_app as app
 
 
-class AuthManager:
+class AdminAuthenticator:
     def __init__(self, redis_manager):
         self.redis = redis_manager
 
