@@ -6,7 +6,8 @@ class AdminAuthenticator:
     def __init__(self, redis_manager):
         self.redis = redis_manager
 
-    def is_admin(self, user):
+    @staticmethod
+    def is_admin(user):
         return user.is_authenticated and user.id == "joshlopez97@gmail.com"
 
     def validate_headers(self, headers):
