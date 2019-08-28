@@ -7,11 +7,9 @@ class AdminAuthenticator:
         self.redis = redis_manager
 
     def is_admin(self, user):
-        return True
         return user.is_authenticated and user.id == "joshlopez97@gmail.com"
 
     def validate_headers(self, headers):
-        return True
         email = headers.get("email")
         sessionID = headers.get("sessionID")
         if email and sessionID:

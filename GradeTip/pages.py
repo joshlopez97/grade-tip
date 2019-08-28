@@ -70,8 +70,8 @@ def search():
 
 def monitor():
     if admin_authenticator.is_admin(current_user):
-        email = "email@email.com" #current_user.id
-        sessionID = "1" #current_user.session_id
+        email = current_user.id
+        sessionID = current_user.session_id
         return render_template('monitor.html', email=email, sessionID=sessionID)
     return abort(404)
 
