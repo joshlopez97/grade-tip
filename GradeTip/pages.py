@@ -5,7 +5,7 @@ from flask import url_for, request, render_template, redirect, abort, jsonify, c
 from flask_login import current_user, logout_user
 
 from GradeTip.admin import admin_authenticator
-from GradeTip.content import listing_manager, request_manager
+from GradeTip.content import listing_manager, request_manager, post_manager
 from GradeTip.models import redis_server
 from GradeTip.models.entries import (get_school)
 from GradeTip.models.sessions import delete_session, create_session, validate_login
@@ -145,7 +145,7 @@ def school(school_id):
     # user submitted request for post to be created
     if request.method == 'POST':
         # log & return json indicating if request was successfully submitted
-        if not request_manager.request_post(school_id, request.form):
+        if not post_manager.request_post(school_id, request.form):
             app.logger.info("Could not create request with {}".format(str(request.form)))
             return jsonify({"requested": False, "created": False})
         app.logger.info("Created request for post " + str(request.form))
