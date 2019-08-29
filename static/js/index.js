@@ -4,10 +4,12 @@ $(document).ready(function() {
   });
   let schools = [];
   let last = [];
-  $("#cv-searchbar").autocomplete({
+  let searchbar = $("#cv-searchbar");
+  searchbar.autocomplete({
     source: get_res, 
     select: linkToSchool
   });
+  focusField(searchbar);
   
   $("#cv-searchbtn").click(function(e){
     e.preventDefault();

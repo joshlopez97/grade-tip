@@ -81,8 +81,9 @@ div.container
   border: 1px solid #ccc;
   cursor: pointer;
 }
-.post-type:hover {
+.create-post:hover, .post-type:hover {
   background: #fbfbfb;
+  color: #CC0066;
 }
 .post-type:last-child {
   border-top: none;

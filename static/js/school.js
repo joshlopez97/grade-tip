@@ -135,4 +135,5 @@ function showNewPostPopup()
     }
     return false;
   });
+  focusField($("input[name='Title']"));
 }

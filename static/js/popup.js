@@ -21,6 +21,7 @@ function createPopup(titleText, submitText)
     </div>
   `);
   $("body").append(popup);
+  darkenPage();
   popup.fadeIn(200);
   $(".close-icon-holder").click(destroyPopup);
   return popup;
@@ -135,6 +136,7 @@ function changeCloseAction(popup, closeaction)
 
 function destroyPopup()
 {
+  lightenPage();
   $(".popup").fadeOut(200, "swing", () => $(this).remove());
 }
 

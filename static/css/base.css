@@ -95,9 +95,10 @@ a {
   position: absolute;
   height: 49px;
 }
-.sidenav-list {
+.sidebar-list {
   list-style: none;
   position: absolute;
+  margin-top: 50px;
 }
 .navbar-brand {
   line-height: 5rem;
@@ -192,13 +193,14 @@ a {
   top: 0;
   right: 0;
 }
-.sidebar-mobile-icon-holder {
+.sidebar-icon-holder {
   display: none;
   cursor: pointer;
-  padding: 7px 0 0 0;
+  padding: 10px;
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 1000;
 }
 
 .navcolor {
@@ -251,9 +253,10 @@ a {
   position: fixed;
   height: 100%;
   width: 185px;
-  left: -325px; top: 55px;
+  left: -325px;
+  top: 0px;
   background: white;
-  color: white;
+  z-index: 950;
   border-right: 1px solid #ccc;
 }
 .sidebar.empty {
@@ -287,11 +290,8 @@ a {
     display: inline-block;
     z-index: 500;
   }
-  .sidebar-mobile-icon-holder {
+  .sidebar-icon-holder {
     display: inline-block;
-    z-index: 500;
-    height: 50px;
-    width: 50px;
   }
 }
 
@@ -333,4 +333,14 @@ a {
 .icon.close .middle, .icon.close .bottom {
   transform:rotate(-45deg);
   top:48%;
+}
+#darken {
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: #00000055;
+  z-index: 100;
+  top: 0;
+  left: 0;
 }
