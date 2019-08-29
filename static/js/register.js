@@ -11,7 +11,7 @@ $(document).ready(function() {
     /* Specific validators for each field */
     function validate_school() {
       let school = $("#school").val();
-      return college_list.includes(school);
+      return school === "" || college_list.includes(school);
     }
     function validate_email() {
       console.log('validate_email')
@@ -62,7 +62,7 @@ $(document).ready(function() {
                       "password": "Password must be at least 8 characters",
                       "confirmpassword": "Passwords do not match"
     }
-    let is_valid   = {"school": false,
+    let is_valid   = {"school": true,
                       "email": false,
                       "password": false,
                       "confirmpassword": false
@@ -109,11 +109,9 @@ $(document).ready(function() {
       is_valid[field.attr('id')] = true;
     }
     function typing(field) {
-      console.log("typing")
       let elem = field.parent().parent();
       let icon = elem.find(".ok");
       let error = elem.find(".error");
-      console.log(error);
       if (field.val().length !== 0 && validators[field.attr('id')]())
         valid(field);
       else {
@@ -135,8 +133,7 @@ $(document).ready(function() {
     $("input.element").change( function() {
       if (validators[$(this).attr('id')]())
         valid($(this));
-    });
-    $("input.element").on("input focus", function() {
+    }).on("input focus", function() {
       typing($(this));
       let finished = true;
       for (let check in is_valid)
@@ -146,8 +143,7 @@ $(document).ready(function() {
         $("#saveForm").prop("disabled",false);
       else if ($("#saveForm").is(":disabled"))
         $("#saveForm").prop("disabled",true);
-    });
-    $("input.element").on("blur", function() {
+    }).on("blur", function() {
       if (validators[$(this).attr('id')]())
         valid($(this));
       else if ($(this).val().length > 0)
