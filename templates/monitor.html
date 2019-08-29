@@ -8,14 +8,10 @@
 <link rel="stylesheet" type="text/css"
       href="{{ url_for('static', filename='css/school.css') }}">
 <link rel="stylesheet" type="text/css"
-      href="{{ url_for('static', filename='css/jquery.timepicker.min.css') }}">
-<link rel="stylesheet" type="text/css"
       href="{{ url_for('static', filename='css/popup.css') }}">
 {% endblock %}
 {% block javascript %}
 {{ super() }}
-<script type="text/javascript"
-  src="{{ url_for('static', filename='js/jquery.timepicker.min.js') }}">
 </script>
 <script type="text/javascript"
   src="{{ url_for('static', filename='js/popup.js') }}">
