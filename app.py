@@ -6,10 +6,8 @@ from flask_login import LoginManager
 
 from GradeTip import ajax
 from GradeTip import pages
-
 from GradeTip.content.resources import posts_by_sid, fetch_post_requests, approve_request, deny_request
 from GradeTip.location import nearest
-from GradeTip.models import redis_server
 from GradeTip.models.users import User
 from GradeTip.pages import (loginpage, registerpage, logout, index,
                             internal_server_error, page_not_found, school, monitor, details)

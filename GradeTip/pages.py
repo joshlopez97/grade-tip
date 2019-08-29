@@ -20,52 +20,17 @@ def account():
 
 
 def sell():
-    """ On POST, retrieves sell form info from template and generates unique uuid4 for new
-    item listing. Entry is then created in redis with info about item. User is redirected to
-    upload page with ID as URL parameter
-    (Example: GradeTip.com/upload?ID=467c15cc-bd1f-4f59-a5c7-afc1ef39d886)
+    """ On POST, retrieves sell form info and file upload and creates a request
+    to be approved by moderators.
 
     On GET, loads sell form to user.
     """
+    school_id = request.args.get("sid")
     if request.method == 'POST':
         file = request.files.get('file')
         listing_manager.request_listing(request.form, file)
 
-    return render_template('sell.html')
-
-
-def upload():
-    ID = request.args.get('ID')
-    if not ID:
-        abort(404)
-    if request.method == 'POST':
-        coords = (int(request.form['x1']), int(request.form['y1']), int(request.form['x2']), int(request.form['y2']))
-        files = request.files.getlist('file')
-        preview_index = int(request.form['preview_index'])
-        if not os.path.exists(os.path.join('static', 'doc_data', str(ID))):
-            fnames = []
-            os.makedirs(os.path.join('static', 'doc_data', str(ID)))
-            for i, file in enumerate(files):
-                ext = re.findall('\.\w+$', file.filename)[0]
-                fnames += ["{0:0>2}".format(i) + ext]
-                file.save(os.path.join('static', 'doc_data', str(ID), "{0:0>2}".format(i) + ext))
-            ext = re.findall('\.\w+$', files[preview_index].filename)[0]
-            preview = Image.open(
-                os.path.join('static', 'doc_data', str(ID), "{0:0>2}".format(preview_index) + ext)).crop(coords)
-            pname = "preview{}".format(ext)
-            preview.save(os.path.join('static', 'doc_data', str(ID), pname))
-            set_fnames(ID, fnames, redis_server)
-            set_preview(ID, pname, preview_index, (coords[0], coords[1]), redis_server)
-        return redirect(url_for('index'))
-    return render_template('upload.html')
-
-
-def search():
-    query = request.args.get('q')
-    if not query:
-        abort(404)
-    results = get_matching_entries(query, redis_server)
-    return render_template('search.html', query=query, results=results)
+    return render_template('sell.html', sid=school_id)
 
 
 def monitor():
@@ -146,9 +111,6 @@ def index():
         Rendered page template from the templates folder.
     """
 
-    if request.method == 'POST':
-        query = request.form.get('squery')
-        return redirect(url_for('resultspage', q=query))
     return render_template('index.html')
 
 

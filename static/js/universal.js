@@ -46,7 +46,7 @@ function get_res(request, response) {
     else if ( terms.length > 1 && acronym.startsWith(terms[0]) ) {
       let parsed_college = college.toLowerCase().match(/\b(\w+)/g);
       let shift_parsed = parsed_college.slice();
-      for (i=0; i<terms[0].length;) {
+      for (let i=0; i<terms[0].length;) {
         if (shift_parsed.length === 0)
           break;
         if ( !stopwords.includes(shift_parsed[0]) )

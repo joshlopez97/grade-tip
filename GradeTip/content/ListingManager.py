@@ -4,13 +4,13 @@ from flask import current_app as app
 from flask_login import current_user
 
 from GradeTip.models.entries import get_time
-from GradeTip.schools.schools import get_school_id
 
 
 class ListingManager:
-    def __init__(self, redis_manager, upload_manager):
+    def __init__(self, redis_manager, upload_manager, school_manager):
         self.redis = redis_manager
         self.upload = upload_manager
+        self.school = school_manager
 
     def request_listing(self, form_data, file):
         """ Request to create a listing in a school's page. """
@@ -33,7 +33,7 @@ class ListingManager:
         username = self.display_name
         identifier = "request/{}".format(request_id)
         return self.redis.store_hash(identifier, {
-            "sid": get_school_id(form_data["school"]),
+            "sid": self.school.get_school_id(form_data["school"]),
             "title": form_data["title"],
             "course": form_data["cid"],
             "kind": form_data["kind"],
