@@ -35,8 +35,7 @@ a {
 .footer {
   top: 1000px;
   position: absolute;
-  margin-left: auto;
-  margin-right: auto;
+  margin: auto;
   left: 0;
   right: 0;
   font-size: 11px;
@@ -252,14 +251,14 @@ a {
   position: fixed;
   height: 100%;
   width: 185px;
-  left: -325px; top: 61px;
+  left: -325px; top: 55px;
   background: white;
   color: white;
   border-right: 1px solid #ccc;
 }
 .sidebar.empty {
   height: 15px;
-  top: 55px;
+  top: 46px;
   z-index: 101;
   border: none;
 }
