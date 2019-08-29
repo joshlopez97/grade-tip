@@ -43,7 +43,13 @@ function ensurePostsAndBannerAreVisible() {
 }
 
 function attachEventListeners() {
-  $("#create-post").click(showNewPostPopup);
+  $("#create-post").click(showPostTypesDropDown);
+  $("#create-text-post").click(showNewPostPopup);
+  $("#sell-document").click(()=>window.location = '/sell')
+}
+
+function showPostTypesDropDown() {
+  $(".post-types-list").toggleClass("show");
 }
 
 function validate_form_data(form_data) {

@@ -61,8 +61,39 @@ div.container
 /* Create post button */
 .create-post
 {
-  padding: 5px;
+  padding: 5px 10px;
   cursor: pointer;
+  background: white;
+  display: inline-block;
+  box-shadow: 0 0 2px #ababab;
+}
+.create-post-icon {
+  display: inline-block;
+  height: 20px;
+  margin-left: 35px;
+  vertical-align: bottom;
+  padding: 2px 0;
+}
+
+/* Drop down for post-types */
+.post-type {
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+.post-type:hover {
+  background: #fbfbfb;
+}
+.post-type:last-child {
+  border-top: none;
+}
+.post-types-list {
+  display: none;
+  background: white;
+  width: 250px;
+}
+.post-types-list.show {
+  display: block;
 }
 
 
