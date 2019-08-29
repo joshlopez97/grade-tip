@@ -46,7 +46,6 @@ $(document).ready(function() {
 
   function fetchSchools(end=function(){}, heightAdjust=0, firstCall=false) {
     let ipGeoLocationUsed = false;
-    console.log(firstCall);
     let onComplete = function(data) {
       const nearest = $.parseJSON(data);
       if (nearest.length === 0 || nearest['schools'].length === 0)

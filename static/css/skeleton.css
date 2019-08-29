@@ -175,7 +175,7 @@ input[type="button"] {
 	top: 2px;
 	left: 150px;
 	color: white;
-	background: #e0839f;
+	background: #df79ac;
 	border: none;
 	line-height: 15px;
   height: 38px;
@@ -216,7 +216,7 @@ button.button-primary:focus,
 input[type="submit"].button-primary:focus,
 input[type="reset"].button-primary:focus,
 input[type="button"].button-primary:focus {
-	background: #c3778e; }
+	background: #cb6698; }
 button.ready {
   color: #CC0066;
   border-color: #CC0066;
