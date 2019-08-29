@@ -108,7 +108,7 @@ div.hp {
   }
   #cv-search {
     text-align: center;
-    margin: 110px auto auto !important;
+    margin: 110px auto auto;
     width: 100%;
   }
   .cv-holder {
