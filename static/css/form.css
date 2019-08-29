@@ -579,10 +579,10 @@ img.ok
 	z-index:1000;
 }
 /* The container */
-label.container {
+label.kind-holder {
     display: inline-block;
     position: relative;
-    margin: 5px 10px 5px 0px;
+    margin: 5px 10px 5px 0;
     cursor: pointer;
     font-size: 22px;
     -webkit-user-select: none;
@@ -594,7 +594,7 @@ label.container {
 }
 
 /* Hide the browser's default radio button */
-label.container input.aradio {
+label.kind-holder input.aradio {
     position: absolute;
     opacity: 0;
     cursor: pointer;
@@ -616,12 +616,12 @@ span.checkmark {
 }
 
 /* On mouse-over, add a grey background color */
-label.container:hover input.aradio ~ span.checkmark {
+label.kind-holder:hover input.aradio ~ span.checkmark {
     background-color: #bbb;
 }
 
 /* When the radio button is checked, add a blue background */
-label.container input.aradio:checked ~ span.checkmark {
+label.kind-holder input.aradio:checked ~ span.checkmark {
     background-color: #ff99cc;
 }
 
@@ -633,12 +633,12 @@ span.checkmark:after {
 }
 
 /* Show the indicator (dot/circle) when checked */
-label.container input.radio:checked ~ span.checkmark:after {
+label.kind-holder input.radio:checked ~ span.checkmark:after {
     display: inline-block;
 }
 
 /* Style the indicator (dot/circle) */
-label.container .checkmark:after {
+label.kind-holder .checkmark:after {
 	background: transparent;
 }
 span.rnotice
