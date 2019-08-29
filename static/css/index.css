@@ -49,6 +49,7 @@ div.hp {
   left:0;
   right:0;
   margin:auto;
+  padding: 0 5px;
 }
 .nschool, #more {
   color: black;
@@ -60,8 +61,11 @@ div.hp {
   text-decoration: underline;
 }
 #more {
-  font-size: 12pt;
-  margin-top: 10px;
+  background: url(/img/downward_caret.png) no-repeat center center;
+  width: 100px;
+  height: 25px;
+  background-size: 25px;
+  display: inline-block;
 }
 
 /* Background image */
@@ -104,22 +108,24 @@ div.hp {
   }
   #cv-search {
     text-align: center;
-    margin: 110px auto auto;
+    margin: 110px auto auto !important;
     width: 100%;
   }
   .cv-holder {
     text-align: center;
   }
   #cv-searchbar {
-    display:inline-block;
-    border: 2px solid #9a9a9a;
-    border-radius:25px;
-    width:320px;
-    height:40px;
+    width: unset;
+    height: 40px;
     font-size: 20px;
   }
   #cv-searchbtn {
-    display:none;
+    height: 36px;
+    width: 50px;
+  }
+  #cv-searchbtn-icon {
+    width: 25px;
+    padding: 1px;
   }
   .cv {
     margin: auto !important;
@@ -128,7 +134,7 @@ div.hp {
     font-size: 13pt;
   }
   #more {
-    font-size: 11pt;
+    margin-top:8px;
   }
 }
 .lds-ring {

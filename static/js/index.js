@@ -2,8 +2,8 @@ $(document).ready(function() {
   $(window).resize(function() {
     sizer();
   });
-  var schools = [];
-  var last = [];
+  let schools = [];
+  let last = [];
   $("#cv-searchbar").autocomplete({
     source: get_res, 
     select: linkToSchool
@@ -33,7 +33,7 @@ $(document).ready(function() {
     );
     let createLoadMoreBtn = function() {
       if ($("#more").length === 0) {
-        $("#cv-search").append("<div id='more'>LOAD MORE</div>");
+        $("#cv-search").append("<div id='more'></div>");
         $("#more").click(generateMore);
         $(".schools-holder").height($(".schools").height());
       }
@@ -126,7 +126,7 @@ $(document).ready(function() {
     if ($("#" + sid).length === 0) {
       let newSchool = $("<li class='ns'><a class='nschool' id=" + sid + ">" + school + "</a></li>")
       $(".schools").append(newSchool);
-      newSchool.click(function(){window.location = ("/school/" + sid);})
+      newSchool.on("click", "a.nschool", () => window.location = ("/school/" + sid));
     }
   }
   $(window).on('load', function() {
