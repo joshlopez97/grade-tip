@@ -1,5 +1,6 @@
 let url = [location.protocol, '//', location.host, location.pathname].join('');
 $(document).ready(function() {
+  checkIfUserCreatedPost();
   show_school_page(true);
 });
 
@@ -15,6 +16,16 @@ window.onpopstate = function(e){
 
 };
 
+function checkIfUserCreatedPost()
+{
+  let created = $("#created")
+  if (created[0].value === "1")
+  {
+    showRequestProcessedNotice();
+    created[0].value = "0";
+  }
+}
+
 function get_school_id() {
   return $("#sid")[0].value;
 }
@@ -28,7 +39,7 @@ function show_school_page(pushState=false) {
   if (pushState)
     changeUrlToSchool(sid);
   ensurePostsAndBannerAreVisible();
-  attachEventListeners();
+  attachEventListeners(sid);
   showPosts(sid);
 }
 
@@ -42,10 +53,10 @@ function ensurePostsAndBannerAreVisible() {
   $("ul.posts").css("display", "block");
 }
 
-function attachEventListeners() {
+function attachEventListeners(sid) {
   $("#create-post").click(showPostTypesDropDown);
   $("#create-text-post").click(showNewPostPopup);
-  $("#sell-document").click(()=>window.location = '/sell')
+  $("#sell-document").click(()=>window.location = `/sell?sid=${sid}`)
 }
 
 function showPostTypesDropDown() {
@@ -126,7 +137,7 @@ function showNewPostPopup()
       console.log(window.location);
       $.post(window.location, parsedFormData, (res, status, xhr) => {
         destroyPopup();
-        notice("Your request has been received and will be processed by our moderators shortly.", 4000)
+        showRequestProcessedNotice();
       });
     }
     else

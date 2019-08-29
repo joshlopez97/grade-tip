@@ -12,4 +12,4 @@ class SchoolManager:
         for school_name, school_data in college_data.items():
             if school_data.get("sid") == school_id:
                 return school_name
-        return None
+        return ""

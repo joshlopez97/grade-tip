@@ -13,6 +13,7 @@ from GradeTip.models.entries import (set_fnames, set_preview,
                                      get_matching_entries, get_school)
 from GradeTip.models.sessions import delete_session, create_session, validate_login
 from GradeTip.models.users import create_user
+from GradeTip.schools import school_manager
 
 
 def account():
@@ -25,12 +26,16 @@ def sell():
 
     On GET, loads sell form to user.
     """
+    school_name = ""
     school_id = request.args.get("sid")
+    if school_id is not None and re.match(r'\d+', school_id):
+        school_name = school_manager.get_school_name(int(school_id))
     if request.method == 'POST':
         file = request.files.get('file')
-        listing_manager.request_listing(request.form, file)
+        if listing_manager.request_listing(request.form, file):
+            return redirect("/school/{}?created=1".format(school_manager.get_school_id(request.form.get("school"))))
 
-    return render_template('sell.html', sid=school_id)
+    return render_template('sell.html', sid=school_id, school_name=school_name)
 
 
 def monitor():
@@ -136,6 +141,9 @@ def school(school_id):
     school_name = get_school(int(school_id))
     if not school_name:
         abort(404)
+    created = request.args.get("created")
+    if created is None:
+        created = "0"
 
     # user submitted request for post to be created
     if request.method == 'POST':
@@ -146,7 +154,7 @@ def school(school_id):
         app.logger.info("Created request for post " + str(request.form))
         return jsonify({"requested": True, "created": False})
 
-    return render_template('school.html', school=school_name, sid=school_id)
+    return render_template('school.html', school=school_name, sid=school_id, created=created)
 
 
 def details(school_id, post_id):

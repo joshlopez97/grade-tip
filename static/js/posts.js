@@ -62,3 +62,7 @@ function getApproveDenyControls(pid) {
   });
   return controls;
 }
+
+function showRequestProcessedNotice() {
+  notice("Your request has been received and will be processed by our moderators shortly.", 4000);
+}
