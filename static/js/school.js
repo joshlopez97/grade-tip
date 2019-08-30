@@ -56,7 +56,7 @@ function ensurePostsAndBannerAreVisible() {
 function attachEventListeners(sid) {
   $("#create-post").click(showPostTypesDropDown);
   $("#create-text-post").click(showNewPostPopup);
-  $("#sell-document").click(()=>window.location = `/sell?sid=${sid}`)
+  $("#sell-document").click(()=>window.location = `/upload?sid=${sid}`)
 }
 
 function showPostTypesDropDown() {

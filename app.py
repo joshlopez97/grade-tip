@@ -10,7 +10,7 @@ from GradeTip.content.resources import posts_by_sid, fetch_post_requests, approv
 from GradeTip.location import nearest
 from GradeTip.models.users import User
 from GradeTip.pages import (loginpage, registerpage, logout, index,
-                            internal_server_error, page_not_found, school, monitor, details)
+                            internal_server_error, page_not_found, school, monitor, details, sell)
 
 """ Flask login manager. """
 login_manager = LoginManager()
@@ -49,6 +49,8 @@ def register_page_routes(app):
                      methods=['GET', 'POST'])
     app.add_url_rule('/register', 'registerpage', registerpage,
                      methods=['GET', 'POST'])
+    app.add_url_rule('/upload', 'uploadpage', sell,
+                     methods=['GET', 'POST'])
     app.add_url_rule('/school/<school_id>', 'school', school,
                      methods=['GET', 'POST'])
     app.add_url_rule('/school/<school_id>/<post_id>', 'details', details,
@@ -58,7 +60,7 @@ def register_page_routes(app):
     app.add_url_rule('/logout', 'logout', logout)
 
     # All functions in ajax.py and pages.py are registered as routes
-    for resource in [ajax, pages]:
+    for resource in [ajax]:
         for fxn in dir(resource):
             fxn = resource.__dict__.get(fxn)
             if isinstance(fxn, FunctionType):
