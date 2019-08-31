@@ -5,9 +5,10 @@ from GradeTip.content.utility import get_time
 
 
 class PostManager:
-    def __init__(self, redis_manager):
+    def __init__(self, redis_manager, user_manager):
         # TODO: Disable Anonymous posts
         self.redis = redis_manager
+        self.user = user_manager
 
     @staticmethod
     def validate_post_data(post_data):
@@ -17,12 +18,6 @@ class PostManager:
                 app.logger.debug("Field {} cannot have value {}".format(field, value))
                 return False
         return True
-
-    @property
-    def display_name(self):
-        if current_user is not None and current_user.is_authenticated:
-            return current_user.display_name
-        return "Anon"
 
     def request_post(self, school_id, form_data):
         """ Request to create a post in a school's page. """
@@ -35,11 +30,13 @@ class PostManager:
 
         # store data into map with 'request/request_id' as the key
         identifier = "request/{}".format(request_id)
+        self.user.made_request(self.user_email, identifier)
         return self.redis.set_hash(identifier, {
             "sid": school_id,
             "title": form_data["title"],
             "description": form_data["description"],
             "uid": self.display_name,
+            "email": self.user_email,
             "time": get_time()
         })
 
@@ -47,16 +44,16 @@ class PostManager:
         """ Create a post for a school's page. """
         # get new post_id
         school_id = request["sid"]
-        post_id = "p" + self.redis.get_new_id("post_ids/{}".format(school_id), "posts/{}".format(school_id))
-        if post_id is None:
-            return False
+        post_id = "p{}".format(self.redis.get_new_id("post_ids/{}".format(school_id), "posts/{}".format(school_id)))
 
         # store data into map with 'sid/post_id' as the key
         identifier = "{}/{}".format(school_id, post_id)
+        self.user.made_post(request["email"], identifier)
         return self.redis.set_hash(identifier, {
             "title": request["title"],
             "description": request["description"],
             "uid": request["uid"],
+            "email": request["email"],
             "time": request["time"],
             "requestType": "textpost"
         })
@@ -69,3 +66,15 @@ class PostManager:
             posts[post_id] = self.redis.get_hash("{}/{}".format(school_id, post_id))
         app.logger.debug("fetched {} posts for sid {}".format(len(posts), school_id))
         return posts
+
+    @property
+    def display_name(self):
+        if current_user is not None and current_user.is_authenticated:
+            return current_user.display_name
+        return "Anon"
+
+    @property
+    def user_email(self):
+        if current_user is not None and current_user.is_authenticated:
+            return current_user.id
+        return "anon@anon.com"

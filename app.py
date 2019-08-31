@@ -7,7 +7,7 @@ from GradeTip.content.resources import posts_by_sid, fetch_post_requests, approv
 from GradeTip.pages import (loginpage, registerpage, logout, index,
                             internal_server_error, page_not_found, school, monitor, details, sell)
 from GradeTip.schools.resources import nearest, colleges
-from GradeTip.user import user_factory
+from GradeTip.user import user_manager
 from GradeTip.user.resources import usernames, validate_email
 
 """ Flask login manager. """
@@ -120,5 +120,5 @@ def load_user(email):
     :return: User object containing user data
     """
 
-    return user_factory.create_user(email)
+    return user_manager.create_user(email)
 

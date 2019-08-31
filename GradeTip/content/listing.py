@@ -7,10 +7,11 @@ from GradeTip.content.utility import get_time
 
 
 class ListingManager:
-    def __init__(self, redis_manager, upload_manager, school_manager):
+    def __init__(self, redis_manager, upload_manager, school_manager, user_manager):
         self.redis = redis_manager
         self.upload = upload_manager
         self.school = school_manager
+        self.user = user_manager
 
     def request_listing(self, form_data, file):
         """ Request to create a listing in a school's page. """
@@ -30,14 +31,15 @@ class ListingManager:
             return False
 
         # store data into map with 'request/request_id' as the key
-        username = self.display_name
         identifier = "request/{}".format(request_id)
+        self.user.made_request(self.user_email, identifier)
         return self.redis.set_hash(identifier, {
             "sid": self.school.get_school_id(form_data["school"]),
             "title": form_data["title"],
             "course": form_data["cid"],
             "kind": form_data["kind"],
-            "uid": username,
+            "uid": self.display_name,
+            "email": self.user_email,
             "upload_id": upload_id,
             "numPages": numPages,
             "time": get_time(),
@@ -45,30 +47,30 @@ class ListingManager:
             "requestType": "listing"
         })
 
-    def create_listing(self, request_data):
+    def create_listing(self, request):
         """ Create a listing for a school's page. """
-        school_id = request_data["sid"]
+        school_id = request["sid"]
         # get new listing_id
         listing_id = "l{}".format(self.redis.get_new_id("listing_ids/{}".format(school_id),
                                                         "listings/{}".format(school_id)))
-        if listing_id is None:
-            return False
 
         # upload files
         new_upload_id = "u{}".format(listing_id)
-        filepaths = self.upload.move_files_to_listing(request_data["upload_id"], new_upload_id)
+        filepaths = self.upload.move_files_to_listing(request["upload_id"], new_upload_id)
         self.redis.add_to_set(new_upload_id, filepaths)
 
         # store data into map with 'sid/listing_id' as the key
         identifier = "{}/{}".format(school_id, listing_id)
+        self.user.made_post(request["email"], identifier)
         return self.redis.set_hash(identifier, {
             "sid": school_id,
-            "title": request_data["title"],
-            "course": request_data["course"],
-            "kind": request_data["kind"],
-            "uid": request_data["uid"],
+            "title": request["title"],
+            "course": request["course"],
+            "kind": request["kind"],
+            "uid": request["uid"],
+            "email": request["email"],
             "upload_id": new_upload_id,
-            "time": request_data["time"],
+            "time": request["time"],
             "postType": "listing"
         })
 
@@ -116,3 +118,9 @@ class ListingManager:
         if current_user is not None and current_user.is_authenticated:
             return current_user.display_name
         return "Anon"
+
+    @property
+    def user_email(self):
+        if current_user is not None and current_user.is_authenticated:
+            return current_user.id
+        return "anon@anon.com"

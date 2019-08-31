@@ -45,9 +45,10 @@ class User(UserMixin):
         return False
 
 
-class UserFactory:
+class UserManager:
     def __init__(self, redis_manager):
         self.redis = redis_manager
+        self.requests_prefix = "req/{}"
 
     def create_user(self, email):
         session_id = self.redis.get_value("usersession: {}".format(email))
@@ -62,3 +63,18 @@ class UserFactory:
         user_data = {'school': school, 'displayName': display_name}
         self.redis.set_hash(email, user_data)
         self.redis.set_value("hash: {}".format(email), password_hash)
+
+    def made_request(self, email, request_id):
+        return self.redis.add_to_set("req/{}".format(email), [request_id])
+
+    def remove_request(self, email, request_id):
+        return self.redis.remove_from_set("req/{}".format(email), request_id)
+
+    def made_post(self, email, post_id):
+        return self.redis.add_to_set("posts/{}".format(email), post_id)
+
+    def get_requests(self, email):
+        return self.redis.get_set("req/{}".format(email))
+
+    def get_posts(self, email):
+        return self.redis.get_set("posts/{}".format(email))

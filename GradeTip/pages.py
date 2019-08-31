@@ -7,7 +7,7 @@ from flask_login import current_user, logout_user
 from GradeTip.admin import admin_authenticator
 from GradeTip.content import listing_manager, post_manager
 from GradeTip.schools import school_manager
-from GradeTip.user import session_manager, user_factory
+from GradeTip.user import session_manager, user_manager
 
 
 def account():
@@ -124,7 +124,7 @@ def registerpage():
         password = request.form['password']
         displayName = request.form['displayname']
         passwordHash = bcrypt.hashpw(str.encode(password), bcrypt.gensalt())
-        user_factory.store_user_in_redis(email, passwordHash, school_name, displayName)
+        user_manager.store_user_in_redis(email, passwordHash, school_name, displayName)
         session_manager.create_session(email)
         return redirect(url_for('index'))
 
