@@ -498,6 +498,7 @@ Sparkling
 Spiritual
 Splendid
 Spotless
+Spotted
 Sprinting
 Squealing
 Stealthy
@@ -507,6 +508,7 @@ Stormy
 Strange
 Stressed
 Strident
+Striped
 Strong
 Stunned
 Stunning
