@@ -72,9 +72,9 @@ class UploadManager:
         """ Blurs part of image. """
         preview_image = Image.open(filepath)
         width, height = preview_image.size
-        preview_image = preview_image.crop((0, round(height / 2), width, height))
+        preview_image = preview_image.crop((0, 0, width, round(height / 2)))
         blurred_image = Image.open(filepath).filter(ImageFilter.GaussianBlur(12))
-        blurred_image.paste(preview_image, (0, round(height / 2)))
+        blurred_image.paste(preview_image, (0, 0))
         blurred_image.save(filepath)
         app.logger.debug("Blurred image {}".format(filepath))
 

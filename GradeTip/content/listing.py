@@ -77,7 +77,7 @@ class ListingManager:
         listings = {}
         for listing_id in listing_ids:
             try:
-                listing_data = self.redis.get_hash("{}/{}".format(school_id, listing_id))
+                listing_data = self.redis.get_hash("{}/l{}".format(school_id, listing_id))
                 listing_data["preview"] = self.upload.get_preview_from_listing(listing_data["upload_id"])
                 del listing_data["upload_id"]
                 listings[listing_id] = listing_data
