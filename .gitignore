@@ -7,7 +7,7 @@ gtenv/
 *.ini
 .idea/
 *.rdb
-well-known/
+.well-known/
 previews/
 
 # Byte-compiled / optimized / DLL files
