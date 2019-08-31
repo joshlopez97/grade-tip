@@ -1,7 +1,7 @@
 /* Get college and high school data */
 let college_list = [];
 let college_data = {};
-$.get("/getcolleges", function (data) {
+$.get("/colleges", function (data) {
   college_data = $.parseJSON(data);
   college_list = Object.keys(college_data);
 });

@@ -4,7 +4,7 @@ from GradeTip.models import redis_server
 from flask import current_app as app
 
 
-class RedisManager:
+class RedisDao:
     def __init__(self):
         self.redis_server = redis_server
 
@@ -26,17 +26,17 @@ class RedisManager:
             traceback.print_exc()
         return None
 
-    def add_to_set(self, key_name, values):
+    def get_hash(self, hash_name):
         try:
-            self.redis_server.sadd(key_name, *values)
-            app.logger.debug("Stored {} in key {}".format(str(values), key_name))
-            return True
+            hash_data = self.redis_server.hgetall(hash_name)
+            app.logger.debug("Retrieved {} from hash {}".format(hash_data, hash_name))
+            return hash_data
         except Exception as e:
             app.logger.error(e)
             traceback.print_exc()
-        return False
+        return {}
 
-    def store_hash(self, hash_name, data):
+    def set_hash(self, hash_name, data):
         try:
             self.redis_server.hmset(hash_name, data)
             self.redis_server.bgsave()
@@ -47,23 +47,19 @@ class RedisManager:
             traceback.print_exc()
         return False
 
-    def remove(self, key_name):
+    def set_hash_value(self, hash_name, key_name, value):
         try:
-            self.redis_server.delete(key_name)
-            app.logger.debug("Stored key {}".format(key_name))
-            return True
+            return self.redis_server.hset(hash_name, key_name, value)
         except Exception as e:
             app.logger.error(e)
             traceback.print_exc()
         return False
 
-    def remove_from_set(self, set_name, value):
+    def remove(self, key_name):
         try:
-            id_deleted = self.redis_server.srem(set_name, value) <= 0
-            if id_deleted:
-                app.logger.debug("Removed {} from set {}".format(value, set_name))
-                return True
-            app.logger.debug("No instance of {} found in set {}".format(value, set_name))
+            self.redis_server.delete(key_name)
+            app.logger.debug("Stored key {}".format(key_name))
+            return True
         except Exception as e:
             app.logger.error(e)
             traceback.print_exc()
@@ -89,15 +85,27 @@ class RedisManager:
             traceback.print_exc()
         return []
 
-    def get_hash(self, hash_name):
+    def remove_from_set(self, set_name, value):
         try:
-            hash_data = self.redis_server.hgetall(hash_name)
-            app.logger.debug("Retrieved {} from hash {}".format(hash_data, hash_name))
-            return hash_data
+            id_deleted = self.redis_server.srem(set_name, value) <= 0
+            if id_deleted:
+                app.logger.debug("Removed {} from set {}".format(value, set_name))
+                return True
+            app.logger.debug("No instance of {} found in set {}".format(value, set_name))
         except Exception as e:
             app.logger.error(e)
             traceback.print_exc()
-        return {}
+        return False
+
+    def add_to_set(self, key_name, values):
+        try:
+            self.redis_server.sadd(key_name, *values)
+            app.logger.debug("Stored {} in key {}".format(str(values), key_name))
+            return True
+        except Exception as e:
+            app.logger.error(e)
+            traceback.print_exc()
+        return False
 
     def get_value(self, key_name):
         try:
@@ -108,3 +116,45 @@ class RedisManager:
             app.logger.error(e)
             traceback.print_exc()
         return None
+
+    def set_value(self, key_name, value):
+        try:
+            return self.redis_server.setnx(key_name, value)
+        except Exception as e:
+            app.logger.error(e)
+            traceback.print_exc()
+        return False
+
+    def set_expiring_value(self, key_name, value, ttl_in_seconds):
+        try:
+            self.set_value(key_name, value)
+            self.redis_server.expire(key_name, ttl_in_seconds)
+            return True
+        except Exception as e:
+            app.logger.error(e)
+            traceback.print_exc()
+        return False
+
+    def exists_in_set(self, set_name, value):
+        try:
+            return self.redis_server.sismember(set_name, value)
+        except Exception as e:
+            app.logger.error(e)
+            traceback.print_exc()
+        return False
+
+    def exists(self, key_name):
+        try:
+            return self.redis_server.exists(key_name)
+        except Exception as e:
+            app.logger.error(e)
+            traceback.print_exc()
+        return False
+
+    def exists_in_hash(self, hash_name, value):
+        try:
+            return self.redis_server.hexists(hash_name, value)
+        except Exception as e:
+            app.logger.error(e)
+            traceback.print_exc()
+        return False

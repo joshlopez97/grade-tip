@@ -253,36 +253,3 @@ def process_img_data(ID, redis_server):
         paths += [os.path.join('static', 'doc_data', ID, "{0:0>2}".format(i) + "_blur" + ext)]
     return paths
 
-
-def get_time():
-    return json.dumps(datetime.now(), default=lambda obj: (
-        obj.isoformat()
-        if isinstance(obj, (datetime, datetime.date))
-        else None
-    )).strip("\"")
-
-
-def too_many_requests(redis_server, allowed=100, minutes=1):
-    return redis_server.llen('ipreq') == allowed and datetime.now() - datetime.strptime(
-        redis_server.lrange('ipreq', -1, -1)[0], '%y%m%d%H%M%S') < timedelta(minutes=minutes)
-
-
-def formatTime(time):
-    now = get_time()
-    diff = 0
-    unit = ""
-    for i in range(0, len(time), 2):
-        if int(time[i: i + 2]) < int(now[i: i + 2]):
-            unit = timeunits[i // 2]
-            diff = abs(int(time[i: i + 2]) - int(now[i: i + 2]))
-            if diff != 1:
-                return " {} {}s ago".format(diff, unit)
-            else:
-                return " {} {} ago".format(diff, unit)
-    return " just now"
-
-
-def get_school(sid):
-    for college, info in college_data.items():
-        if info['sid'] == sid:
-            return college

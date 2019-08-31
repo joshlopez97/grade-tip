@@ -84,7 +84,7 @@ function showPosts(sid) {
     });
     for (let [pid, post_data] of sortedPosts)
     {
-      console.log(post_data)
+      console.log(post_data);
       if (validate_post_data(post_data)) {
         postsHolder.append(createPostHolder(post_data, pid));
       }

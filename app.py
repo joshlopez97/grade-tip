@@ -5,12 +5,11 @@ from flask import Flask
 from flask_login import LoginManager
 
 from GradeTip import ajax
-from GradeTip import pages
 from GradeTip.content.resources import posts_by_sid, fetch_post_requests, approve_request, deny_request
-from GradeTip.location import nearest
-from GradeTip.models.users import User
+from GradeTip.schools.location import nearest
 from GradeTip.pages import (loginpage, registerpage, logout, index,
                             internal_server_error, page_not_found, school, monitor, details, sell)
+from GradeTip.user import user_factory
 
 """ Flask login manager. """
 login_manager = LoginManager()
@@ -113,13 +112,12 @@ def bust_cache(url, sid=None):
 
 
 @login_manager.user_loader
-def load_user(username):
-    """ Called every time a request is made by the user. Load User session for
-    each request.
-
-    Args:
-        username: string represenation of User's username.
+def load_user(email):
+    """
+    Return User object matching user with provided email address
+    :param email: user email
+    :return: User object containing user data
     """
 
-    return User.get(username)
+    return user_factory.create_user(email)
 

@@ -1,3 +1,3 @@
-from GradeTip.redis.redisDao import RedisManager
+from GradeTip.redis.dao import RedisDao
 
-redis_manager = RedisManager()
+redis_manager = RedisDao()

@@ -1,7 +1,5 @@
 from flask_login import UserMixin
 
-from GradeTip.redis import redis_manager
-
 
 class User(UserMixin):
     """ This object inherits from UserMixin class and keeps track of User
@@ -46,23 +44,21 @@ class User(UserMixin):
         """
         return False
 
-    @classmethod
-    def get(cls, email):
-        """ Return a User session if session has not expired.
 
-        Args:
-            email: string representation of User's username.
-            redis_server: instance of Strict Redis server
-        """
-        session_id = redis_manager.get_value("usersession: {}".format(email))
-        user_data = redis_manager.get_hash(email)
+class UserFactory:
+    def __init__(self, redis_manager):
+        self.redis = redis_manager
+
+    def create_user(self, email):
+        session_id = self.redis.get_value("usersession: {}".format(email))
+        user_data = self.redis.get_hash(email)
         if session_id and user_data:
             return User(user_data['school'], email, user_data['displayName'], session_id)
+        return None
 
-
-def create_user(redis_server, email, passwordHash, school, displayName):
-    redis_server.sadd('users', email)
-    redis_server.sadd('displayNames', displayName)
-    user_data = {'school': school, 'displayName': displayName}
-    redis_server.hmset(email, user_data)
-    redis_server.setnx("hash: {}".format(email), passwordHash)
+    def store_user_in_redis(self, email, password_hash, school, display_name):
+        self.redis.add_to_set('users', email)
+        self.redis.add_to_set('displayNames', display_name)
+        user_data = {'school': school, 'displayName': display_name}
+        self.redis.set_hash(email, user_data)
+        self.redis.set_value("hash: {}".format(email), password_hash)

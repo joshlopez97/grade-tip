@@ -1,5 +1,6 @@
-from GradeTip.models.users import User
 from flask import current_app as app
+
+from GradeTip.user import user_factory
 
 
 class AdminAuthenticator:
@@ -14,7 +15,7 @@ class AdminAuthenticator:
         email = headers.get("email")
         sessionID = headers.get("sessionID")
         if email and sessionID:
-            user = User.get(email)
+            user = user_factory.create_user(email)
             if user is None:
                 app.logger.debug("User with email {} not found".format(email))
                 return False

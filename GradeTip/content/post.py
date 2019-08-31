@@ -1,7 +1,7 @@
 from flask import current_app as app
 from flask_login import current_user
 
-from GradeTip.models.entries import get_time
+from GradeTip.content.utility import get_time
 
 
 class PostManager:
@@ -35,7 +35,7 @@ class PostManager:
 
         # store data into map with 'request/request_id' as the key
         identifier = "request/{}".format(request_id)
-        return self.redis.store_hash(identifier, {
+        return self.redis.set_hash(identifier, {
             "sid": school_id,
             "title": form_data["title"],
             "description": form_data["description"],
@@ -53,7 +53,7 @@ class PostManager:
 
         # store data into map with 'sid/post_id' as the key
         identifier = "{}/{}".format(school_id, post_id)
-        return self.redis.store_hash(identifier, {
+        return self.redis.set_hash(identifier, {
             "title": request["title"],
             "description": request["description"],
             "uid": request["uid"],

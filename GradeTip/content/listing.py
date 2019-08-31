@@ -3,7 +3,7 @@ import traceback
 from flask import current_app as app
 from flask_login import current_user
 
-from GradeTip.models.entries import get_time
+from GradeTip.content.utility import get_time
 
 
 class ListingManager:
@@ -32,7 +32,7 @@ class ListingManager:
         # store data into map with 'request/request_id' as the key
         username = self.display_name
         identifier = "request/{}".format(request_id)
-        return self.redis.store_hash(identifier, {
+        return self.redis.set_hash(identifier, {
             "sid": self.school.get_school_id(form_data["school"]),
             "title": form_data["title"],
             "course": form_data["cid"],
@@ -60,7 +60,7 @@ class ListingManager:
 
         # store data into map with 'sid/listing_id' as the key
         identifier = "{}/{}".format(school_id, listing_id)
-        return self.redis.store_hash(identifier, {
+        return self.redis.set_hash(identifier, {
             "sid": school_id,
             "title": request_data["title"],
             "course": request_data["course"],

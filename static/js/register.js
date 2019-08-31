@@ -3,7 +3,7 @@ $(document).ready(function() {
     let un_index = 0;
     let usernames = [];
     let ondeck = [];
-    $.get("/getusernames", function(data) {
+    $.get("/usernames", function(data) {
       usernames = $.parseJSON(data);
       getUsername();
     });
@@ -181,13 +181,13 @@ $(document).ready(function() {
       }
 
       if (un_index === 25) {
-        $.get("/getusernames", function(data) {
+        $.get("/usernames", function(data) {
           ondeck = $.parseJSON(data);
         });
         console.log(ondeck);
       }
       $("#userholder").empty().append("<span id=\"username\">" + username + "</span>");
-      $("#displayname")[0].value = username
+      $("#displayname")[0].value = username;
       return false;
     }
   });

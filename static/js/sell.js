@@ -1,7 +1,3 @@
-let course_data = {};
-$.get("/getcolleges", function(data) {
-  course_data = $.parseJSON(data);
-});
 $(document).ready(function() {
   $(window).on('load',function(){
     setSchoolValue();
@@ -26,8 +22,8 @@ $(document).ready(function() {
         source: function(request, response) {
           let entered_college = $("#school").val();
           let query = request.term.toUpperCase().trim();
-          if (query.length > 0 && college_list.includes(entered_college) && Array.isArray(course_data[entered_college]['courses'])) {
-            let course_list = course_data[entered_college]['courses'];
+          if (query.length > 0 && college_list.includes(entered_college) && Array.isArray(college_data[entered_college]['courses'])) {
+            let course_list = college_data[entered_college]['courses'];
             let results = new Set();
             let priority = {};
             for (let course of course_list) {

@@ -1,8 +1,8 @@
 from GradeTip.admin import admin_authenticator
-from GradeTip.content.listings import ListingManager
-from GradeTip.content.posts import PostManager
-from GradeTip.content.requests import RequestManager
-from GradeTip.content.uploads import UploadManager
+from GradeTip.content.listing import ListingManager
+from GradeTip.content.post import PostManager
+from GradeTip.content.request import RequestManager
+from GradeTip.content.upload import UploadManager
 from GradeTip.redis import redis_manager
 from GradeTip.schools import school_manager
 

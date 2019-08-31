@@ -5,12 +5,9 @@ from flask import url_for, request, render_template, redirect, abort, jsonify, c
 from flask_login import current_user, logout_user
 
 from GradeTip.admin import admin_authenticator
-from GradeTip.content import listing_manager, request_manager, post_manager
-from GradeTip.models import redis_server
-from GradeTip.models.entries import (get_school)
-from GradeTip.models.sessions import delete_session, create_session, validate_login
-from GradeTip.models.users import create_user
+from GradeTip.content import listing_manager, post_manager
 from GradeTip.schools import school_manager
+from GradeTip.user import session_manager, user_factory
 
 
 def account():
@@ -71,8 +68,8 @@ def loginpage():
         password = request.form['password']
 
         # Create session in Redis if login is valid. Otherwise display error.
-        if validate_login(email, password, redis_server):
-            create_session(email, redis_server)
+        if session_manager.validate_login(email, password):
+            session_manager.create_session(email)
             return redirect(url_for('index'))
         else:
             error = True
@@ -127,15 +124,15 @@ def registerpage():
         password = request.form['password']
         displayName = request.form['displayname']
         passwordHash = bcrypt.hashpw(str.encode(password), bcrypt.gensalt())
-        create_user(redis_server, email, passwordHash, school_name, displayName)
-        create_session(email, redis_server)
+        user_factory.store_user_in_redis(email, passwordHash, school_name, displayName)
+        session_manager.create_session(email)
         return redirect(url_for('index'))
 
     return render_template('register.html')
 
 
 def school(school_id):
-    school_name = get_school(int(school_id))
+    school_name = school_manager.get_school_name(int(school_id))
     if not school_name:
         abort(404)
     created = request.args.get("created")
@@ -155,7 +152,7 @@ def school(school_id):
 
 
 def details(school_id, post_id):
-    school_name = get_school(int(school_id))
+    school_name = school_manager.get_school_name(int(school_id))
     if not school_name:
         abort(404)
     return render_template('school.html', school=school_name, sid=school_id, pid=post_id)
@@ -170,7 +167,7 @@ def logout():
         Rendered page template from the templates folder.
     """
     if current_user.is_authenticated:
-        delete_session(redis_server)
+        session_manager.delete_session(current_user.id)
         logout_user()
     return redirect(url_for('loginpage'))
 
