@@ -6,7 +6,7 @@ from flask_login import LoginManager
 
 from GradeTip import ajax
 from GradeTip.content.resources import posts_by_sid, fetch_post_requests, approve_request, deny_request
-from GradeTip.schools.location import nearest
+from GradeTip.schools.resources import nearest, colleges
 from GradeTip.pages import (loginpage, registerpage, logout, index,
                             internal_server_error, page_not_found, school, monitor, details, sell)
 from GradeTip.user import user_factory
@@ -66,9 +66,6 @@ def register_page_routes(app):
                 name = fxn.__name__
                 app.add_url_rule('/' + name, name, fxn, methods=['GET', 'POST'])
 
-    # Geolocation routes
-    app.add_url_rule('/nearest', 'nearest', nearest, methods=['POST'])
-
 
 def register_ajax_routes(app):
     app.add_url_rule('/admin/requests', '/admin/requests', fetch_post_requests,
@@ -79,6 +76,10 @@ def register_ajax_routes(app):
                      methods=['GET'])
     app.add_url_rule('/school/posts', '/school/posts', posts_by_sid,
                      methods=['POST'])
+    app.add_url_rule('/nearest', 'nearest', nearest,
+                     methods=['POST'])
+    app.add_url_rule('/colleges', 'colleges', colleges,
+                     methods=['GET'])
 
 
 def register_error_handlers(app):
