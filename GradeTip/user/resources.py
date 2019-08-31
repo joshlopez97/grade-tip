@@ -1,5 +1,4 @@
 import json
-
 from flask import request
 
 from GradeTip.redis import redis_manager
@@ -15,4 +14,3 @@ def validate_email():
     if email is None:
         return json.dumps(False)
     return json.dumps(not redis_manager.exists(email))
-

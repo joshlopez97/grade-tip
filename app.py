@@ -1,15 +1,14 @@
 import os
-from types import FunctionType
 
 from flask import Flask
 from flask_login import LoginManager
 
-from GradeTip import ajax
 from GradeTip.content.resources import posts_by_sid, fetch_post_requests, approve_request, deny_request
-from GradeTip.schools.resources import nearest, colleges
 from GradeTip.pages import (loginpage, registerpage, logout, index,
                             internal_server_error, page_not_found, school, monitor, details, sell)
+from GradeTip.schools.resources import nearest, colleges
 from GradeTip.user import user_factory
+from GradeTip.user.resources import usernames, validate_email
 
 """ Flask login manager. """
 login_manager = LoginManager()
@@ -29,7 +28,7 @@ def create_app():
                       SEND_FILE_MAX_AGE_DEFAULT=0,
                       MAX_CONTENT_LENGTH=2 * 1024 * 1024)
     register_page_routes(app)
-    register_ajax_routes(app)
+    register_api_routes(app)
     register_error_handlers(app)
     setup_login_manager(app)
     app.add_template_filter(bust_cache)
@@ -58,16 +57,9 @@ def register_page_routes(app):
                      methods=['GET', 'POST'])
     app.add_url_rule('/logout', 'logout', logout)
 
-    # All functions in ajax.py and pages.py are registered as routes
-    for resource in [ajax]:
-        for fxn in dir(resource):
-            fxn = resource.__dict__.get(fxn)
-            if isinstance(fxn, FunctionType):
-                name = fxn.__name__
-                app.add_url_rule('/' + name, name, fxn, methods=['GET', 'POST'])
 
-
-def register_ajax_routes(app):
+def register_api_routes(app):
+    # Content-related endpoints
     app.add_url_rule('/admin/requests', '/admin/requests', fetch_post_requests,
                      methods=['GET'])
     app.add_url_rule('/admin/approve/<request_id>', '/admin/approve', approve_request,
@@ -76,10 +68,18 @@ def register_ajax_routes(app):
                      methods=['GET'])
     app.add_url_rule('/school/posts', '/school/posts', posts_by_sid,
                      methods=['POST'])
+
+    # School-related endpoints
     app.add_url_rule('/nearest', 'nearest', nearest,
                      methods=['POST'])
     app.add_url_rule('/colleges', 'colleges', colleges,
                      methods=['GET'])
+
+    # User-related endpoints
+    app.add_url_rule('/usernames', 'usernames', usernames,
+                     methods=['GET'])
+    app.add_url_rule('/validate_email', 'validate_email', validate_email,
+                     methods=['POST'])
 
 
 def register_error_handlers(app):
