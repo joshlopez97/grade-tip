@@ -1,6 +1,6 @@
 import traceback
 
-from GradeTip.models import redis_server
+from GradeTip.redis import redis_server
 from flask import current_app as app
 
 

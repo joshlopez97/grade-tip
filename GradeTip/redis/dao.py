@@ -1,11 +1,10 @@
 import traceback
 
-from GradeTip.models import redis_server
 from flask import current_app as app
 
 
 class RedisDao:
-    def __init__(self):
+    def __init__(self, redis_server):
         self.redis_server = redis_server
 
     def get_new_id(self, id_source, id_destination):
