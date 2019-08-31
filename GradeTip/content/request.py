@@ -44,7 +44,7 @@ class RequestManager:
         request_data = self.pop_request(request_id)
         result = False
         if request_data is not None:
-            if request_data["requestType"] == "textpost":
+            if request_data.get("requestType") == "textpost":
                 result = self.post.create_post(request_data)
             else:
                 result = self.listing.create_listing(request_data)
@@ -53,6 +53,6 @@ class RequestManager:
     def deny_request(self, request_id):
         app.logger.debug("denying request with id: {}".format(request_id))
         request_data = self.pop_request(request_id)
-        if request_data is not None and request_data["requestType"] == "listing":
+        if request_data is not None and request_data.get("requestType") == "listing":
             return jsonify({"result": self.redis.remove(request_data["upload_id"])})
         return jsonify({"result": False})
