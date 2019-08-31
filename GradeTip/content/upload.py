@@ -41,12 +41,12 @@ class UploadManager:
         app.logger.debug("Saving file: {}".format(pdf_path))
         file.save(pdf_path)
         filepaths += [pdf_path]
-        preview_path = self.add_preview(upload_id, pdf_path)
+        preview_path, numPages = self.add_preview(upload_id, pdf_path)
         if preview_path is not None:
             filepaths += [preview_path]
 
         # return path to PDF and path to preview
-        return filepaths
+        return filepaths, numPages
 
     def get_preview_from_listing(self, upload_id):
         """ Return filepath to preview image for listing with upload_id. """
@@ -58,14 +58,15 @@ class UploadManager:
     def add_preview(self, upload_id, pdf_path):
         """ Creates PNG preview of first page of PDF file. """
         imgs = convert_from_path(pdf_path)
-        if len(imgs) == 0:
+        numPages = len(imgs)
+        if numPages == 0:
             app.logger.error("No images could be extracted from file")
             return None
         filepath = self.create_filepath(self.get_static_filepath_for_preview(upload_id), "preview.png")
         app.logger.debug("Saving file: {}".format(filepath))
         imgs[0].save(filepath)
         self.partial_blur_image(filepath)
-        return filepath
+        return filepath, numPages
 
     @staticmethod
     def partial_blur_image(filepath):
@@ -77,9 +78,6 @@ class UploadManager:
         blurred_image.paste(preview_image, (0, 0))
         blurred_image.save(filepath)
         app.logger.debug("Blurred image {}".format(filepath))
-
-    def migrate_filepaths(self, src_upload_id, dest_upload_id):
-        self.move_files_to_listing(src_upload_id, dest_upload_id)
 
     def move_files_to_listing(self, src_upload_id, dest_upload_id):
         """ Move files from directory associated with old_upload_id

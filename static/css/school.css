@@ -89,6 +89,8 @@ div.container
   border-top: none;
 }
 .post-types-list {
+  position: absolute;
+  box-shadow: 0 3px 6px -2px #cecccc;
   display: none;
   background: white;
   width: 250px;
@@ -378,6 +380,9 @@ div.large-post-holder {
   height: 50px;
   font-size: 13pt;
   cursor: pointer;
+}
+.school-page-controls {
+  margin-bottom: 20px;
 }
 
 /* Mobile support */

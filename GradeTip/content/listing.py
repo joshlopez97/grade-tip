@@ -23,7 +23,7 @@ class ListingManager:
 
         # upload files
         upload_id = "ur{}".format(request_id)
-        filepaths = self.upload.add_file_to_listing(file, upload_id)
+        filepaths, numPages = self.upload.add_file_to_listing(file, upload_id)
         if len(filepaths) == 0:
             return False
         if not self.redis.add_to_set(upload_id, filepaths):
@@ -39,6 +39,7 @@ class ListingManager:
             "kind": form_data["kind"],
             "uid": username,
             "upload_id": upload_id,
+            "numPages": numPages,
             "time": get_time(),
             "requestId": request_id,
             "requestType": "listing"
@@ -48,8 +49,8 @@ class ListingManager:
         """ Create a listing for a school's page. """
         school_id = request_data["sid"]
         # get new listing_id
-        listing_id = "l" + self.redis.get_new_id("listing_ids/{}".format(school_id),
-                                                 "listings/{}".format(school_id))
+        listing_id = "l{}".format(self.redis.get_new_id("listing_ids/{}".format(school_id),
+                                                        "listings/{}".format(school_id)))
         if listing_id is None:
             return False
 

@@ -13,19 +13,29 @@ function getTextPostHolder(post_data, pid) {
   `);
 }
 
+function getNumPagesLabel(numPages)
+{
+  if (typeof numPages === 'undefined' || numPages === null || numPages === 0)
+    return "";
+  if (numPages === "1")
+    return "1 page";
+  return numPages + " pages";
+}
+
 function getListingHolder(post_data, pid) {
   return $(`
     <li class='post-holder' id="${pid}">
       <div class="post-info">
         <span class="post-user">Posted by ${post_data["uid"]}</span>
         <span class="post-time">${moment(new Date(post_data["time"])).fromNow()}</span>
-      </div>
+      </div
       <div class="post-thumbnail-holder">
         <img class="post-thumbnail" src="${post_data["preview"]}"
       </div>
       <div class="post-content">
         <div class="post-title">${post_data["title"]}</div>
         <div class="post-description">Course: <i>${post_data["course"]}</i></div>
+        <div class="post-description">${getNumPagesLabel(post_data["numPages"])}</div>
       </div>
     </li>
   `);
