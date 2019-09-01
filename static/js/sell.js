@@ -11,7 +11,7 @@ $(document).ready(function() {
       },
       source: get_res,
       appendTo: '#school-holder'
-    });
+    }).focus();
     $("#cid").on("focus", function() {
       $(this).autocomplete("search");
     }).autocomplete({
@@ -90,6 +90,7 @@ function setSchoolValue() {
     let schoolInput = $("#school");
     let targetSid = parseInt(sid);
     console.log(targetSid);
+    focusField($("#cid"));
     for (let college of college_list) {
       console.log(college_data[college]["sid"]);
       if (college_data[college]["sid"] === targetSid)

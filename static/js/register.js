@@ -1,5 +1,6 @@
 $(document).ready(function() {
   $(window).on('load',function(){
+    focusField($("#school"));
     let un_index = 0;
     let usernames = [];
     let ondeck = [];

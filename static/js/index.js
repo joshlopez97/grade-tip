@@ -9,8 +9,7 @@ $(document).ready(function() {
     source: get_res, 
     select: linkToSchool
   });
-  focusField(searchbar);
-  
+
   $("#cv-searchbtn").click(function(e){
     e.preventDefault();
     return false;
