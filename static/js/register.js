@@ -95,7 +95,7 @@ $(document).ready(function() {
       let elem = field.parent().parent();
       let icon = elem.find(".ok");
       let error = elem.find(".error");
-      if (icon.length === 0 && field[0].id !== "read")
+      if (icon.length === 0 && field[0].id !== "read" && field[0].id !== "school")
         $("<img src=\"/img/confirm.png\" class=\"ok\">").appendTo(elem);
       else
         icon.attr("src","/img/confirm.png");

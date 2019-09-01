@@ -43,7 +43,7 @@ class GeolocationClient:
                 resp = json.loads(georeq.content.decode('utf-8'))
                 lon = float(resp['lon'])
                 lat = float(resp['lat'])
-                self.redis.set_hash_value('cached_ips', str(user_ip), "{},{}".format(lon, lat))
+                self.redis.set_hash_value('cached_ips', str(user_ip), "{},{}".format(lat, lon))
             return lat, lon
         else:
             # default coordinates to return on failure
