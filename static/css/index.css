@@ -32,11 +32,6 @@
   padding-top: 10px;
   padding-bottom: 10px;
 }
-div.hp {
-  width:100%;
-  position: absolute;
-  text-align: justify;
-}
 
 /* Schools near you list */
 .schools-holder {

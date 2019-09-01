@@ -4,8 +4,9 @@ from flask import Flask
 from flask_login import LoginManager
 
 from GradeTip.content.resources import posts_by_sid, fetch_post_requests, approve_request, deny_request
-from GradeTip.pages import (loginpage, registerpage, logout, index,
-                            internal_server_error, page_not_found, school, monitor, details, sell)
+from GradeTip.pages import (loginpage, registerpage, logout, indexpage,
+                            internal_server_error, page_not_found, schoolpage, monitorpage, detailspage, sellpage,
+                            aboutpage, termspage, privacypage)
 from GradeTip.schools.resources import nearest, colleges
 from GradeTip.user import user_manager
 from GradeTip.user.resources import usernames, validate_email
@@ -43,18 +44,24 @@ def register_page_routes(app):
     """
     app.add_url_rule('/login', 'loginpage', loginpage,
                      methods=['GET', 'POST'])
-    app.add_url_rule('/', 'index', index,
+    app.add_url_rule('/', 'index', indexpage,
                      methods=['GET', 'POST'])
     app.add_url_rule('/register', 'registerpage', registerpage,
                      methods=['GET', 'POST'])
-    app.add_url_rule('/upload', 'uploadpage', sell,
+    app.add_url_rule('/upload', 'uploadpage', sellpage,
                      methods=['GET', 'POST'])
-    app.add_url_rule('/school/<school_id>', 'school', school,
+    app.add_url_rule('/school/<school_id>', 'school', schoolpage,
                      methods=['GET', 'POST'])
-    app.add_url_rule('/school/<school_id>/<post_id>', 'details', details,
+    app.add_url_rule('/school/<school_id>/<post_id>', 'details', detailspage,
                      methods=['GET', 'POST'])
-    app.add_url_rule('/monitor', 'monitor', monitor,
+    app.add_url_rule('/monitor', 'monitor', monitorpage,
                      methods=['GET', 'POST'])
+    app.add_url_rule('/about', 'about', aboutpage,
+                     methods=['GET'])
+    app.add_url_rule('/terms', 'terms', termspage,
+                     methods=['GET'])
+    app.add_url_rule('/privacy', 'privacy', privacypage,
+                     methods=['GET'])
     app.add_url_rule('/logout', 'logout', logout)
 
 

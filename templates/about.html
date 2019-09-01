@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}GradeTip - Share your old tests, homework, or notes. {% endblock %}
+{% block page_description %}
+  <meta name="description" content="Share your old tests, homework or notes to other students.">
+{% endblock %}
+{% block css %}
+  {{ super() }}
+  <link rel="stylesheet" type="text/css"
+        href="{{ url_for('static', filename='css/index.css') }}">
+  <link rel="stylesheet" type="text/css"
+        href="{{ url_for('static', filename='css/about.css') }}">
+{% endblock %}
+{% block javascript %}
+  {{ super() }}
+
+{% endblock %}
+{% block extended_content %}
+  {{ super() }}
+  <div class="main-holder">
+    <div class="big-text-holder">
+      <div class="big-text">Ace your <span id="big-text-swap">exams</span></div>
+    </div>
+    <div class="learn-more-btn">
+      <div class="learn-more-text">LEARN MORE</div>
+      <img class="learn-more-icon" src="/img/downward_caret.png">
+    </div>
+    <div class="home-background bg"></div>
+    <div class='home-background fg'></div>
+  </div>
+  <div class="main-holder white">
+    <div class="section">
+      <div class="header-holder">
+        <h2><span style="color: #cc2f54">GradeTip</span> is a learning platform made <b>by students for students</b>.
+        </h2>
+      </div>
+      <div>
+        <p>
+          We created this platform for students to exchange study materials for their college courses.
+          Preparing for college can be incredibly stressful and finding reliable study resources can be very expensive.
+          GradeTip
+          is designed to put all the control in the hands of students.
+        </p>
+      </div>
+    </div>
+    <div class="section">
+      <h3><i>No subscription needed</i></h3>
+      <p>
+        While this site is still under construction, the idea behind GradeTip is to allow students to sell documents to
+        other students. Instead of making students to pay an expensive monthly subscription fee, GradeTip would be an open
+        marketplace for students to literally profit off of the hard work they've done. We'd also cap the price to something
+        under a dollar per download, to keep GradeTip as accessible as possible. All sales will have to comply
+        with our <a href="/terms">Terms and Conditions</a>.
+      </p>
+      <p>
+        This site is open-source! Check out the code <a href="https://github.com/joshlopez97/grade-tip">here.</a> For more
+        information, please reach out to <a href="mailto:contact@gradetip.com">contact@gradetip.com</a>.
+      </p>
+    </div>
+  </div>
+  <script type="text/javascript"
+          src="{{ url_for('static', filename='js/index.js') }}">
+  </script>
+  <script type="text/javascript"
+          src="{{ url_for('static', filename='js/about.js') }}">
+  </script>
+{% endblock %}

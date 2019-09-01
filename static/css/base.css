@@ -344,3 +344,61 @@ a {
   top: 0;
   left: 0;
 }
+
+/* Checkmarks */
+.checkbox {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 13pt;
+  font-weight: 100;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.checkbox input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.gt-checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 22px;
+  width: 22px;
+  background-color: #fdfdfd;
+  padding: 0;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+.gt-checkmark:hover {
+  background-color: #f3f3f3;
+}
+.checkbox input:checked ~ .gt-checkmark {
+  background-color: #f9f9f9;
+}
+.gt-checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.checkbox input:checked ~ .gt-checkmark:after {
+  display: block;
+}
+.checkbox .gt-checkmark:after {
+  left: 8px;
+  top: 3px;
+  width: 4px;
+  height: 10px;
+  border: solid #333;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}

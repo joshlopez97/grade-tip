@@ -14,7 +14,7 @@ def account():
     return render_template('account.html')
 
 
-def sell():
+def sellpage():
     """ On POST, retrieves sell form info and file upload and creates a request
     to be approved by moderators.
 
@@ -32,7 +32,11 @@ def sell():
     return render_template('sell.html', sid=school_id, school_name=school_name)
 
 
-def monitor():
+def monitorpage():
+    """
+    Admin-only page for viewing post and listing requests submitted. On this page, admins
+    can approve or deny these requests.
+    """
     if admin_authenticator.is_admin(current_user):
         email = current_user.id
         sessionID = current_user.session_id
@@ -50,9 +54,6 @@ def loginpage():
 
     If user is logged out in the middle of session, login should redirect to
     page in prior session.
-
-    Returns:
-        Rendered page template from the templates folder.
     """
 
     # If next page has not been defined yet, default to None
@@ -83,16 +84,20 @@ def loginpage():
     return render_template('login.html', error=error)
 
 
+def termspage():
+    return render_template('terms.html')
+
+
+def privacypage():
+    return render_template('privacy.html')
+
+
 def redirect_next(next_page):
-    """ Utility function to redirect to index if next_page is None, otherwise
+    """
+    Utility function to redirect to index if next_page is None, otherwise
     redirect to next_page.
-
-    Args:
-        next_page: path to next page that user was trying to visit before
-            loginpage or None if user went directly to loginpage
-
-    Returns:
-        redirect to index or next_page
+    :param next_page: URL of next page to redirect to (or None)
+    :return: redirect to next page
     """
 
     # Reset loginpage.next for next session
@@ -103,20 +108,24 @@ def redirect_next(next_page):
         return redirect(url_for('index'))
 
 
-def index():
-    """ Main page of GradeTip with search bar for finding assignment entries.
-
-    Returns:
-        Rendered page template from the templates folder.
+def indexpage():
+    """
+    Homepage of GradeTip with search bar for finding schools.
     """
 
     return render_template('index.html')
 
 
+def aboutpage():
+    """
+    Simple page explaining what gradetip is and how it works.
+    """
+    return render_template('about.html')
+
+
 def registerpage():
-    """ Page for new users to create an account. Nouns.txt and adjectives_names.txt contain
-    random words for generating usernames. They are passed as parameters to Jinja template.
-    In a post request, all required input fields are taken and a new user is created.
+    """
+    Page for new users to create an account.
     """
     if request.method == 'POST':
         school_name = request.form['school']
@@ -131,7 +140,11 @@ def registerpage():
     return render_template('register.html')
 
 
-def school(school_id):
+def schoolpage(school_id):
+    """
+    School page for displaying all posts/content published to that school's page.
+    :param school_id: the school_id for the school's page to be shown
+    """
     school_name = school_manager.get_school_name(int(school_id))
     if not school_name:
         abort(404)
@@ -151,7 +164,13 @@ def school(school_id):
     return render_template('school.html', school=school_name, sid=school_id, created=created)
 
 
-def details(school_id, post_id):
+def detailspage(school_id, post_id):
+    """
+    Displays a specific post on a school's page. The styling/content of this page will vary based
+    on the postType.
+    :param school_id: ID of school that this post was made to
+    :param post_id: ID of post being viewed
+    """
     school_name = school_manager.get_school_name(int(school_id))
     if not school_name:
         abort(404)
@@ -162,9 +181,6 @@ def logout():
     """ Defines logout route behavior and backend. Redirects to login page if
     not logged in. Deletes user session entry from database and logs out User
     session. User will have to log back in to access pages.
-
-    Returns:
-        Rendered page template from the templates folder.
     """
     if current_user.is_authenticated:
         session_manager.delete_session(current_user.id)
@@ -173,26 +189,16 @@ def logout():
 
 
 def internal_server_error(error):
-    """ Displays Internal Server Error message.
-
-    Args:
-        error: string representation of error message from application.
-
-    Returns:
-        Rendered error template from the templates folder.
+    """
+    Displays Internal Server Error message.
     """
     return render_template('error.html',
                            error="Our servers seem to be down. Please wait while we fix this problem!"), 500
 
 
 def page_not_found(error):
-    """ Displays Page Not Found Error message.
-
-    Args:
-        error: string representation of error message from application.
-
-    Returns:
-        Rendered error template from the templates folder.
+    """
+    Displays Page Not Found Error message.
     """
     return render_template('error.html', error="Sorry, that page doesn't exist!",
                            error_message="If you entered the URL manually please check your spelling and try again."), 404

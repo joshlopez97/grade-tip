@@ -1,65 +1,75 @@
 {% extends "base.html" %}
 {% block title %}Register{% endblock %}
 {% block css %}
-<!-- Bootstrap styles -->
-{{ super() }}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
+  <!-- Bootstrap styles -->
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
 {% endblock %}
 {% block javascript %}
-{{ super() }}
+  {{ super() }}
 
-<script type="text/javascript"
-  src="{{url_for('static', filename='js/register.js') }}">
-</script>
+  <script type="text/javascript"
+          src="{{ url_for('static', filename='js/register.js') }}">
+  </script>
 {% endblock %}
 {% block extended_content %}
-{{ super () }}
-<div id="form_container">
+  {{ super () }}
+  <div id="form_container">
     <form class="gt-form" enctype="multipart/form-data" method="post" action="">
-        <div class="header">
-            <h1 align="left">Create an account</h1>
-        </div>
-        <div class="header-sub">
-            <p>Already have an account? Sign in <a href="/login">here</a>.</p>
-        </div>
-        <ul>
-            <li id="li_1" class="ritem">
-                <label class="description" for="school">School <p class="notice">(Optional)</p></label>
-                <div id="school-holder">
-                    <input id="school" name="school" class="element text large" type="text" maxlength="255" value="" />
-                </div>
-            </li>
-            <li id="li_2" class="ritem">
-                <label class="description" for="email">Email <font color="red">*</font></label>
-                <div>
-                    <input id="email" name="email" class="element text large" type="text" maxlength="255" value="" />
-                </div>
-            </li>
-            <li id="li_3" class="ritem">
-                <label class="description" for="password">Password <font color="red">* </font><p class="notice">(At least 8 characters)</p></label>
-                <div>
-                    <input id="password" name="password" class="element text large" maxlength="255" value="" type="password" disabled/>
-                </div>
-            </li>
-            <li id="li_4" class="ritem">
-                <label class="description" for="confirmpassword">Confirm Password <font color="red">*</font></label>
-                <div>
-                    <input id="confirmpassword" name="confirmpassword" class="element text large" maxlength="255" value="" type="password" disabled/>
-                </div>
+      <div class="header">
+        <h1 align="left">Create an account</h1>
+      </div>
+      <div class="header-sub">
+        <p>Already have an account? Sign in <a href="/login">here</a>.</p>
+      </div>
+      <ul>
+        <li id="li_1" class="ritem">
+          <label class="description" for="school">School <p class="notice">(Optional)</p></label>
+          <div id="school-holder">
+            <input id="school" name="school" class="element text large" type="text" maxlength="255" value=""/>
+          </div>
+        </li>
+        <li id="li_2" class="ritem">
+          <label class="description" for="email">Email <font color="red">*</font></label>
+          <div>
+            <input id="email" name="email" class="element text large" type="text" maxlength="255" value=""/>
+          </div>
+        </li>
+        <li id="li_3" class="ritem">
+          <label class="description" for="password">Password <font color="red">* </font>
+            <p class="notice">(At least 8 characters)</p></label>
+          <div>
+            <input id="password" name="password" class="element text large" maxlength="255" value="" type="password"
+                   disabled/>
+          </div>
+        </li>
+        <li id="li_4" class="ritem">
+          <label class="description" for="confirmpassword">Confirm Password <font color="red">*</font></label>
+          <div>
+            <input id="confirmpassword" name="confirmpassword" class="element text large" maxlength="255" value=""
+                   type="password" disabled/>
+          </div>
 
-            </li>
-            <li style="margin-top:15px">
-              <label class="description" for="displayname">Display Name <font color="red">*</font></label>
-                <div id="userholder"></div>
-                <input id="displayname" name="displayname" type="hidden" value="">
-                <button id="get-username">New Name</button>
-            </li>
-            <li class="buttons">
-                <button id="saveForm" disabled class="button_text" name="submit">Continue</button>
-            </li>
-        </ul>
+        </li>
+        <li style="margin-top:15px">
+          <label class="description" for="displayname">Display Name <font color="red">*</font></label>
+          <div id="userholder"></div>
+          <input id="displayname" name="displayname" type="hidden" value="">
+          <button id="get-username">New Name</button>
+        </li>
+        <li>
+          <label style="margin: 5px" class="checkbox">I have read and accept the <a href="/terms">Terms and Conditions</a>
+            and <a href="/privacy">Privacy Policy</a>.
+            <input type="checkbox" id="read" name="read">
+            <span class="gt-checkmark"></span>
+          </label>
+        </li>
+        <li class="buttons">
+          <button id="saveForm" disabled class="button_text" name="submit">Continue</button>
+        </li>
+      </ul>
     </form>
-</div>
+  </div>
 
 {% endblock %}

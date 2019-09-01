@@ -1,0 +1,151 @@
+html, body
+{
+  height: 100%;
+  will-change: scroll-position;
+}
+.top-space
+{
+  height: 0;
+}
+.big-text-holder
+{
+  top: 45%;
+  transform: translateY(-45%);
+  position: absolute;
+  width: 100%;
+}
+.big-text
+{
+  margin-left: 15%;
+  display: inline-block;
+  font-weight: 100;
+  font-size: 50pt;
+  overflow: hidden;
+  padding: 80px 0;
+}
+#big-text-swap
+{
+  display: inline-block;
+  color: #be46a2;
+}
+#big-text-swap.disappear
+{
+  animation: disappear 0.2s cubic-bezier(1, -0.08, 1, 1) forwards;
+}
+#big-text-swap.appear
+{
+  animation: appear 0.2s cubic-bezier(0, 0.94, 1, 1) forwards;
+}
+@keyframes appear {
+  0% {
+    -webkit-filter: blur(5px);
+    transform: translateY(-700px) scaleY(2);
+    opacity: 50;
+  }
+  100% {
+    -webkit-filter: none;
+    transform: translateY(0px);
+    opacity: 100;
+  }
+}
+@keyframes disappear {
+  0% {
+    -webkit-filter: none;
+    transform: none;
+    opacity: 100;
+  }
+  99% {
+    -webkit-filter: blur(15px);
+    transform: translateY(1000px);
+    opacity: 50;
+  }
+  100% {
+    -webkit-filter: blur(15px);
+    transform: translateY(1000px);
+    display: none;
+  }
+}
+.main-holder
+{
+  height: 100%;
+  width: 100%;
+}
+.main-holder.white
+{
+  background: #f3f3f3;
+  width: unset;
+  margin: 10px;
+  padding: 15px;
+}
+.home-background
+{
+  height: 90%;
+}
+.learn-more-btn
+{
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+}
+.learn-more-icon
+{
+  display: inline-block;
+  width: 25px;
+}
+
+.header-holder
+{
+  padding: 50px 10px 0;
+  max-width: 500px;
+}
+.section
+{
+  margin-bottom: 50px;
+}
+.doc-animation
+{
+  height: 100px;
+  overflow: hidden;
+  width: 200%;
+  left: 0;
+  animation: slide 30s linear forwards;
+}
+.doc-icon
+{
+  width: 100px;
+  height: 100px;
+  background: url(/img/doc.png) no-repeat center;
+  background-size: 60px;
+  display: inline-block;
+}
+@media (min-width: 850px) {
+  .big-text
+  {
+    margin-left: 20%;
+  }
+}
+@media (max-width: 700px) and (min-width: 535px){
+  .big-text
+  {
+    margin-left: 7%;
+    font-size: 40pt;
+  }
+}
+@media (max-width: 535px) {
+  .big-text
+  {
+    margin-left: 5%;
+    font-size: 30pt;
+  }
+}
+@media (max-width: 400px) {
+  .big-text
+  {
+    margin-left: 5%;
+    font-size: 26pt;
+  }
+}
