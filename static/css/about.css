@@ -100,11 +100,11 @@ html, body
 .header-holder
 {
   padding: 50px 10px 0;
-  max-width: 500px;
 }
 .section
 {
   margin-bottom: 50px;
+  max-width: 500px;
 }
 .doc-animation
 {
