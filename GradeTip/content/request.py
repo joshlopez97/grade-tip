@@ -67,6 +67,11 @@ class RequestManager:
         return RedisHash("request/{}".format(request_id)).to_dict()
 
     def approve_request(self, request_id):
+        """
+        Deletes request and promotes request data to a public post.
+        :param request_id:
+        :return: JSON with result of operation
+        """
         app.logger.debug("approving request with id: {}".format(request_id))
         request_data = self.pop_request(request_id)
         result = False
@@ -78,6 +83,11 @@ class RequestManager:
         return jsonify({"result": result})
 
     def deny_request(self, request_id):
+        """
+        Deletes request and takes no further action
+        :param request_id:
+        :return: JSON with result of operation
+        """
         app.logger.debug("denying request with id: {}".format(request_id))
         request_data = self.pop_request(request_id)
         if request_data is not None and request_data.get("requestType") == "listing":

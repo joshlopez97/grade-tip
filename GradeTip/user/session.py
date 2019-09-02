@@ -30,7 +30,7 @@ class SessionManager:
         Creates new session for user with provided email
         :param email: email of user
         """
-        self.redis.set_expiring_value("usersession: {}".format(email), str(uuid.uuid4()), 4 * 60 * 60)
+        self.redis.set_expiring("usersession: {}".format(email), str(uuid.uuid4()), 4 * 60 * 60)
         user = self.user.create_user(email)
         login_user(user, remember=True)
 

@@ -23,11 +23,8 @@ def create_app():
     """
 
     app = Flask(__name__, static_folder='static', static_url_path='')
-    app.config.update(DEBUG=True,
-                      SECRET_KEY=os.urandom(24),
-                      SESSION_COOKIE_SECURE=True,
-                      SEND_FILE_MAX_AGE_DEFAULT=0,
-                      MAX_CONTENT_LENGTH=2 * 1024 * 1024)
+    app.config.from_pyfile("config/settings.cfg")
+    app.config.update(SECRET_KEY=os.urandom(24))
     register_page_routes(app)
     register_api_routes(app)
     register_error_handlers(app)

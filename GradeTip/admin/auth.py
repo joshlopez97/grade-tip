@@ -4,14 +4,22 @@ from GradeTip.user import user_manager
 
 
 class AdminAuthenticator:
-    def __init__(self, redis_manager):
-        self.redis = redis_manager
-
     @staticmethod
     def is_admin(user):
-        return user.is_authenticated and user.id == "joshlopez97@gmail.com"
+        """
+        Checks is user is an admin account
+        :param user: Flask user object to check
+        :return: boolean indicating whether user is authenticated and id matches admin acct
+        """
+        return user.is_authenticated and user.id == app.config.get('ADMIN')
 
     def validate_headers(self, headers):
+        """
+        Validates request headers contain user email and sessionID for accessing
+        privileged admin endpoints.
+        :param headers: http headers to check
+        :return: boolean indicating validation result
+        """
         email = headers.get("email")
         sessionID = headers.get("sessionID")
         if email and sessionID:

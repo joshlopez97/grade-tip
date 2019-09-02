@@ -14,34 +14,59 @@ class UploadManager:
         pass
 
     @staticmethod
-    def get_file_extension(filename):
+    def _get_file_extension(filename):
+        """
+        Gets file extension string
+        :param filename: full filename to extract extension from
+        :return: file extension as string
+        """
         return re.findall('\.\w+$', filename)[0]
 
     @staticmethod
-    def get_static_filepath_for_preview(upload_id):
+    def _get_static_filepath_for_preview(upload_id):
+        """
+        Gets static filepath for preview image using upload_id
+        :param upload_id: ID of upload to create path for
+        :return: string containing path
+        """
         return os.path.join('static', 'previews', upload_id)
 
     @staticmethod
-    def get_filepath_for_document(upload_id):
+    def _get_filepath_for_document(upload_id):
+        """
+        Get non-static filepath for PDF document using upload_id
+        :param upload_id: ID of upload to create path for
+        :return: string containing path
+        """
         return os.path.join('doc_data', upload_id)
 
-    def create_filepath(self, directory, filename, i=0):
-        """ Create filepath at directory, return filepath + revised filename. """
+    def _create_filepath(self, directory_path, filename):
+        """
+        Create filepath at directory, return filepath + revised filename.
+        :param directory_path: full path to directory to create, and to make final filepath
+        :param filename: name of file to add to directory
+        :return: string containing new filepath
+        """
         filename = secure_filename(filename)
-        ext = self.get_file_extension(filename)
-        new_filename = "{0:0>2}".format(i) + ext
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-        return os.path.join(directory, new_filename)
+        ext = self._get_file_extension(filename)
+        new_filename = "preview" + ext
+        if not os.path.exists(directory_path):
+            os.makedirs(directory_path)
+        return os.path.join(directory_path, new_filename)
 
     def add_file_to_listing(self, file, upload_id):
-        """ Save PDF file for listing with upload_id. """
+        """
+        Save PDF file for listing with upload_id.
+        :param file: flask file object to add
+        :param upload_id: ID of upload
+        :return: tuple containing list of filepaths and number of pages in PDF
+        """
         filepaths = []
-        pdf_path = self.create_filepath(self.get_filepath_for_document(upload_id), file.filename)
+        pdf_path = self._create_filepath(self._get_filepath_for_document(upload_id), file.filename)
         app.logger.debug("Saving file: {}".format(pdf_path))
         file.save(pdf_path)
         filepaths += [pdf_path]
-        preview_path, numPages = self.add_preview(upload_id, pdf_path)
+        preview_path, numPages = self._add_preview(upload_id, pdf_path)
         if preview_path is not None:
             filepaths += [preview_path]
 
@@ -49,28 +74,40 @@ class UploadManager:
         return filepaths, numPages
 
     def get_preview_from_listing(self, upload_id):
-        """ Return filepath to preview image for listing with upload_id. """
-        raw_path = os.path.join(self.get_static_filepath_for_preview(upload_id), "00.png")
+        """
+        Return filepath to preview image for listing with upload_id.
+        :param upload_id: ID of upload to look for
+        :return:
+        """
+        raw_path = os.path.join(self._get_static_filepath_for_preview(upload_id), "00.png")
 
         # must crop '/static/' from path because jinja needs paths relative to static root foler
         return "/" + str(pathlib.Path(*pathlib.Path(raw_path).parts[1:]))
 
-    def add_preview(self, upload_id, pdf_path):
-        """ Creates PNG preview of first page of PDF file. """
+    def _add_preview(self, upload_id, pdf_path):
+        """
+        Creates PNG preview of first page of PDF file. Also counts number of pages in PDF.
+        :param upload_id: ID of upload to add preview to
+        :param pdf_path: path of PDF file
+        :return: path to preview file and number of pages in PDF
+        """
         imgs = convert_from_path(pdf_path)
         numPages = len(imgs)
         if numPages == 0:
             app.logger.error("No images could be extracted from file")
             return None
-        filepath = self.create_filepath(self.get_static_filepath_for_preview(upload_id), "preview.png")
+        filepath = self._create_filepath(self._get_static_filepath_for_preview(upload_id), "preview.png")
         app.logger.debug("Saving file: {}".format(filepath))
         imgs[0].save(filepath)
-        self.partial_blur_image(filepath)
+        self._partial_blur_image(filepath)
         return filepath, numPages
 
     @staticmethod
-    def partial_blur_image(filepath):
-        """ Blurs part of image. """
+    def _partial_blur_image(filepath):
+        """
+        Blurs part of image.
+        :param filepath: path to file that will be blurred
+        """
         preview_image = Image.open(filepath)
         width, height = preview_image.size
         preview_image = preview_image.crop((0, 0, width, round(height / 2)))
@@ -80,15 +117,19 @@ class UploadManager:
         app.logger.debug("Blurred image {}".format(filepath))
 
     def move_files_to_listing(self, src_upload_id, dest_upload_id):
-        """ Move files from directory associated with old_upload_id
-            to directory associated with new_upload_id.
         """
-        src_preview_path = self.get_static_filepath_for_preview(src_upload_id)
-        dest_preview_path = self.get_static_filepath_for_preview(dest_upload_id)
+        Move files from directory associated with old_upload_id
+        to directory associated with new_upload_id.
+        :param src_upload_id: upload ID of request
+        :param dest_upload_id: upload ID of new post
+        :return:
+        """
+        src_preview_path = self._get_static_filepath_for_preview(src_upload_id)
+        dest_preview_path = self._get_static_filepath_for_preview(dest_upload_id)
         shutil.move(src_preview_path, dest_preview_path)
 
-        src_doc_path = self.get_filepath_for_document(src_upload_id)
-        dest_doc_path = self.get_filepath_for_document(dest_upload_id)
+        src_doc_path = self._get_filepath_for_document(src_upload_id)
+        dest_doc_path = self._get_filepath_for_document(dest_upload_id)
         shutil.move(src_doc_path, dest_doc_path)
 
         return [dest_preview_path, dest_doc_path]

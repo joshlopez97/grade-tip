@@ -10,15 +10,24 @@ from GradeTip.redis.set import RedisSet
 
 
 class ListingManager:
-    def __init__(self, redis_manager, upload_manager, school_manager, user_manager):
-        self.redis = redis_manager
+    """
+    Class manages listing data. Listings are posts that contain PDF uploads of documents
+    that are uploaded for a specific course at a specific school. Each listing must be approved
+    by moderators before being submitted.
+    """
+    def __init__(self, upload_manager, school_manager, user_manager):
         self.upload = upload_manager
         self.school = school_manager
         self.user = user_manager
         self.id_generator = IDGenerator()
 
     def request_listing(self, form_data, file):
-        """ Request to create a listing in a school's page. """
+        """
+        Request to create a listing in a school's page.
+        :param form_data: raw form data submitted by user
+        :param file: flask file object for uploaded PDF document
+        :return: boolean indicating success of operation
+        """
         if not self.validate_listing_data(form_data):
             return False
         # get new request_id
@@ -55,11 +64,14 @@ class ListingManager:
         })
 
     def create_listing(self, request):
-        """ Create a listing for a school's page. """
+        """
+        Create a listing for a school's page.
+        :param request: request data to promote to listing
+        :return: boolean indicating success of operation
+        """
         school_id = request["sid"]
         # get new listing_id
-        listing_id = "l{}".format(self.redis.get_new_id("listing_ids/{}".format(school_id),
-                                                        "listings/{}".format(school_id)))
+        listing_id = self.id_generator.generate("l-", self.user_email, "listings/{}".format(school_id))
 
         # upload files
         new_upload_id = "u{}".format(listing_id)
@@ -82,7 +94,11 @@ class ListingManager:
         })
 
     def get_listings_from_school(self, school_id):
-        """ Get all existing listings for school. """
+        """
+        Get all existing listings for school.
+        :param school_id: ID of school to get listings from
+        :return: dict containing all listing data for school
+        """
         listing_ids = RedisSet("listings/{}".format(school_id)).values()
         listings = {}
         for listing_id in listing_ids:
@@ -100,21 +116,32 @@ class ListingManager:
 
     @staticmethod
     def validate_listing_data(listing_data):
+        """
+        Ensure all fields exist, are non-empty, and not too long.
+        :param listing_data: raw form data submitted for listing
+        :return: boolean result of validation
+        """
         for field in ["school", "title", "cid", "kind"]:
             value = listing_data.get(field)
-            if not isinstance(value, str) or len(value) == 0:
+            if not isinstance(value, str) or len(value) == 0 or len(value) > 2000:
                 app.logger.debug("Field {} cannot have value {}".format(field, value))
                 return False
         return True
 
     @property
     def display_name(self):
+        """
+        Gets display name of current user
+        """
         if current_user is not None and current_user.is_authenticated:
             return current_user.display_name
         return "Anon"
 
     @property
     def user_email(self):
+        """
+        Gets email of current user
+        """
         if current_user is not None and current_user.is_authenticated:
             return current_user.id
         return "anon@anon.com"
