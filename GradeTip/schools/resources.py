@@ -29,6 +29,8 @@ def nearest():
             latitude, longitude = (float(latitude), float(longitude))
         exclude = json.loads(request.form.get('last'))
         quantity = int(request.form.get('quantity', 5))
+        app.logger.debug("exclude={}".format(exclude))
+        app.logger.debug("quantity={}".format(quantity))
         mapper = LocationMapper(latitude, longitude)
         response = mapper.closest_schools(quantity, exclude)
     except Exception as e:

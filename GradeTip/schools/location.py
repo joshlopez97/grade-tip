@@ -46,6 +46,7 @@ class GeolocationClient:
                 self.redis.set_hash_value('cached_ips', str(user_ip), "{},{}".format(lat, lon))
             return lat, lon
         else:
+            app.logger.info("Using default coordinates 37.8719, 122.2585")
             # default coordinates to return on failure
             return 37.8719, 122.2585
 
