@@ -10,10 +10,6 @@ from GradeTip.schools import school_manager
 from GradeTip.user import session_manager, user_manager
 
 
-def account():
-    return render_template('account.html')
-
-
 def sellpage():
     """ On POST, retrieves sell form info and file upload and creates a request
     to be approved by moderators.
