@@ -1,3 +1,4 @@
+[![GitHub version](https://badge.fury.io/gh/joshlopez97%2Fgrade-tip.svg)](https://badge.fury.io/gh/joshlopez97%2Fgrade-tip)
 # GradeTip
 ## Overview
 [GradeTip](https://gradetip.com) is a document-sharing platform and forum for college students. It allows users to create text posts and PDF document posts on their school's GradeTip page. This is to help students gain access to study resources and collaborate with one another.  
