@@ -1,27 +1,12 @@
-html, body
-{
-  height: 100%;
-  will-change: scroll-position;
-}
-.top-space
-{
-  height: 0;
-}
 .big-text-holder
 {
-  top: 45%;
-  transform: translateY(-45%);
-  position: absolute;
-  width: 100%;
 }
 .big-text
 {
-  margin-left: 15%;
   display: inline-block;
   font-weight: 100;
-  font-size: 50pt;
   overflow: hidden;
-  padding: 80px 0;
+  padding: 20px 0;
 }
 #big-text-swap
 {
@@ -68,18 +53,8 @@ html, body
 .main-holder
 {
   height: 100%;
-  width: 100%;
-}
-.main-holder.white
-{
-  background: #f3f3f3;
-  width: unset;
   margin: 10px;
   padding: 15px;
-}
-.home-background
-{
-  height: 90%;
 }
 .learn-more-btn
 {
@@ -99,7 +74,7 @@ html, body
 
 .header-holder
 {
-  padding: 50px 10px 0;
+  padding: 10px 0;
 }
 .section
 {
@@ -121,31 +96,4 @@ html, body
   background: url(/img/doc.png) no-repeat center;
   background-size: 60px;
   display: inline-block;
-}
-@media (min-width: 850px) {
-  .big-text
-  {
-    margin-left: 20%;
-  }
-}
-@media (max-width: 700px) and (min-width: 535px){
-  .big-text
-  {
-    margin-left: 7%;
-    font-size: 40pt;
-  }
-}
-@media (max-width: 535px) {
-  .big-text
-  {
-    margin-left: 5%;
-    font-size: 30pt;
-  }
-}
-@media (max-width: 400px) {
-  .big-text
-  {
-    margin-left: 5%;
-    font-size: 26pt;
-  }
 }
