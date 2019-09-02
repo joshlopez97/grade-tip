@@ -1,5 +1,8 @@
 from flask_login import UserMixin
 
+from GradeTip.redis.hash import RedisHash
+from GradeTip.redis.set import RedisSet
+
 
 class User(UserMixin):
     """ This object inherits from UserMixin class and keeps track of User
@@ -49,32 +52,34 @@ class UserManager:
     def __init__(self, redis_manager):
         self.redis = redis_manager
         self.requests_prefix = "req/{}"
+        self.emails = RedisSet('users')
+        self.displayNames = RedisSet('displayNames')
 
     def create_user(self, email):
         session_id = self.redis.get_value("usersession: {}".format(email))
-        user_data = self.redis.get_hash(email)
+        user_data = RedisHash(email).to_dict()
         if session_id and user_data:
             return User(user_data['school'], email, user_data['displayName'], session_id)
         return None
 
     def store_user_in_redis(self, email, password_hash, school, display_name):
-        self.redis.add_to_set('users', email)
-        self.redis.add_to_set('displayNames', display_name)
+        self.emails.add(email)
+        self.displayNames.add(display_name)
         user_data = {'school': school, 'displayName': display_name}
-        self.redis.set_hash(email, user_data)
-        self.redis.set_value("hash: {}".format(email), password_hash)
+        RedisHash(email).update(user_data)
+        self.redis.set("hash: {}".format(email), password_hash)
 
     def made_request(self, email, request_id):
-        return self.redis.add_to_set("req/{}".format(email), [request_id])
+        return RedisSet("req/{}".format(email)).add([request_id])
 
     def remove_request(self, email, request_id):
-        return self.redis.remove_from_set("req/{}".format(email), request_id)
+        return RedisSet("req/{}".format(email)).remove(request_id)
 
     def made_post(self, email, post_id):
-        return self.redis.add_to_set("posts/{}".format(email), post_id)
+        return RedisSet("posts/{}".format(email)).add([post_id])
 
     def get_requests(self, email):
-        return self.redis.get_set("req/{}".format(email))
+        return RedisSet("req/{}".format(email)).values()
 
     def get_posts(self, email):
-        return self.redis.get_set("posts/{}".format(email))
+        return RedisSet("posts/{}".format(email)).values()

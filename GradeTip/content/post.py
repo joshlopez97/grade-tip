@@ -2,6 +2,8 @@ from flask import current_app as app
 from flask_login import current_user
 
 from GradeTip.content.utility import get_time
+from GradeTip.redis.hash import RedisHash
+from GradeTip.redis.set import RedisSet
 
 
 class PostManager:
@@ -31,7 +33,7 @@ class PostManager:
         # store data into map with 'request/request_id' as the key
         identifier = "request/{}".format(request_id)
         self.user.made_request(self.user_email, identifier)
-        return self.redis.set_hash(identifier, {
+        return RedisHash(identifier).update({
             "sid": school_id,
             "title": form_data["title"],
             "description": form_data["description"],
@@ -49,7 +51,7 @@ class PostManager:
         # store data into map with 'sid/post_id' as the key
         identifier = "{}/{}".format(school_id, post_id)
         self.user.made_post(request["email"], identifier)
-        return self.redis.set_hash(identifier, {
+        return RedisHash(identifier).update({
             "title": request["title"],
             "description": request["description"],
             "uid": request["uid"],
@@ -60,10 +62,9 @@ class PostManager:
 
     def get_posts_from_school(self, school_id):
         """ Get all existing posts for school. """
-        post_ids = self.redis.get_set("posts/{}".format(school_id))
         posts = {}
-        for post_id in post_ids:
-            posts[post_id] = self.redis.get_hash("{}/{}".format(school_id, post_id))
+        for post_id in RedisSet("posts/{}".format(school_id)).values():
+            posts[post_id] = RedisHash("{}/{}".format(school_id, post_id)).to_dict()
         app.logger.debug("fetched {} posts for sid {}".format(len(posts), school_id))
         return posts
 

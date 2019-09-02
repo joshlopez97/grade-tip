@@ -1,6 +1,6 @@
 import json
 
-from flask import request
+from flask import request, jsonify
 
 from GradeTip.content import post_manager, listing_manager, request_manager
 
@@ -22,4 +22,4 @@ def deny_request(request_id):
 
 
 def fetch_post_requests():
-    return request_manager.fetch_post_requests()
+    return jsonify(request_manager.get_all_requests())

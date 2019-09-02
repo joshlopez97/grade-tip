@@ -1,9 +1,11 @@
 import random
 
+from GradeTip.redis.set import RedisSet
+
 
 class UsernameGenerator:
-    def __init__(self, redis_manager):
-        self.redis = redis_manager
+    def __init__(self):
+        self.displayNames = RedisSet("displayNames")
         self.nouns = []
         self.adjectives = []
         with open("resources/nouns.txt", "r") as f:
@@ -18,6 +20,6 @@ class UsernameGenerator:
         usernames = []
         while len(usernames) < count:
             username = self.get_username()
-            if not self.redis.exists_in_set('displayNames', username):
+            if not self.displayNames.exists(username):
                 usernames += [username]
         return usernames

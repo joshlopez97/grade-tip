@@ -9,6 +9,7 @@ from flask import current_app as app
 
 from GradeTip import college_data
 from GradeTip.content.utility import get_time
+from GradeTip.redis.hash import RedisHash
 from GradeTip.redis.list import RedisList
 
 
@@ -21,6 +22,7 @@ class GeolocationClient:
         """
         self.requests = RedisList("ipreq")
         self.redis = redis
+        self.cache = RedisHash("cached_ips")
 
     def locate_using_ip(self, user_ip):
         """
@@ -31,8 +33,8 @@ class GeolocationClient:
         """
 
         if not self.too_many_requests() and user_ip and not ipaddress.ip_address(str(user_ip)).is_private:
-            if self.redis.exists_in_hash('cached_ips', str(user_ip)):
-                geoloc = self.redis.get_from_hash('cached_ips', user_ip).split(",")
+            if self.cache.exists(str(user_ip)):
+                geoloc = self.cache.get(user_ip).split(",")
                 lon = float(geoloc[0])
                 lat = float(geoloc[1])
             else:
@@ -43,7 +45,7 @@ class GeolocationClient:
                 resp = json.loads(georeq.content.decode('utf-8'))
                 lon = float(resp['lon'])
                 lat = float(resp['lat'])
-                self.redis.set_hash_value('cached_ips', str(user_ip), "{},{}".format(lat, lon))
+                self.cache.set(str(user_ip), "{},{}".format(lat, lon))
             return lat, lon
         else:
             app.logger.info("Using default coordinates 37.8719, 122.2585")

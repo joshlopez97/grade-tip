@@ -5,4 +5,4 @@ from GradeTip.user.username import UsernameGenerator
 
 user_manager = UserManager(redis_manager)
 session_manager = SessionManager(redis_manager, user_manager)
-username_generator = UsernameGenerator(redis_manager)
+username_generator = UsernameGenerator()
