@@ -1,13 +1,14 @@
 from flask import current_app as app
 from flask_login import current_user
 
+from GradeTip.content.content import ContentManager
 from GradeTip.content.identifier import IDGenerator
 from GradeTip.content.utility import get_time
 from GradeTip.redis.hash import RedisHash
 from GradeTip.redis.set import RedisSet
 
 
-class TextPostManager:
+class TextPostManager(ContentManager):
     """
     Class manages user text posts on school pages.
     """
@@ -25,19 +26,19 @@ class TextPostManager:
         if not self.validate_post_data(form_data):
             return False
         # get new request_id
-        request_id = self.id_generator.generate("r-", self.user_email, "requests")
+        request_id = self.id_generator.generate("r-", super().user_email, "requests")
         if request_id is None:
             return False
 
         # store data into map with 'request/request_id' as the key
         identifier = "request/{}".format(request_id)
-        self.user.made_request(self.user_email, identifier)
+        self.user.made_request(super().user_email, identifier)
         return RedisHash(identifier).update({
             "sid": school_id,
             "title": form_data["title"],
             "description": form_data["description"],
-            "uid": self.display_name,
-            "email": self.user_email,
+            "uid": super().display_name,
+            "email": super().user_email,
             "time": get_time()
         })
 
@@ -49,7 +50,7 @@ class TextPostManager:
         """
         # get new post_id
         school_id = request["sid"]
-        post_id = self.id_generator.generate("p-", self.user_email, "posts/{}".format(school_id))
+        post_id = self.id_generator.generate("p-", super().user_email, "posts/{}".format(school_id))
 
         # store data into map with 'sid/post_id' as the key
         identifier = "{}/{}".format(school_id, post_id)
@@ -74,24 +75,6 @@ class TextPostManager:
             posts[post_id] = RedisHash("{}/{}".format(school_id, post_id)).to_dict()
         app.logger.debug("fetched {} posts for sid {}".format(len(posts), school_id))
         return posts
-
-    @property
-    def display_name(self):
-        """
-        Gets display name of current user
-        """
-        if current_user is not None and current_user.is_authenticated:
-            return current_user.display_name
-        return "Anon"
-
-    @property
-    def user_email(self):
-        """
-        Gets email of current user
-        """
-        if current_user is not None and current_user.is_authenticated:
-            return current_user.id
-        return "anon@anon.com"
 
     @staticmethod
     def validate_post_data(post_data):
