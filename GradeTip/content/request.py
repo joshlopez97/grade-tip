@@ -44,7 +44,7 @@ class RequestManager:
         """
         app.logger.debug("deleting request with id: {}".format(request_id))
         id_deleted = self.request_ids.remove(request_id)
-        hash_deleted = self.redis.remove("request/{}".format(request_id))
+        hash_deleted = self.redis.remove(request_id)
         return id_deleted and hash_deleted
 
     def pop_request(self, request_id):
@@ -64,7 +64,9 @@ class RequestManager:
         :return: dict containing request data
         """
         app.logger.debug("fetching request with id: {}".format(request_id))
-        return RedisHash("request/{}".format(request_id)).to_dict()
+        request_data = RedisHash(request_id).to_dict()
+        app.logger.debug("request id {} has data {}".format(request_id, request_data))
+        return request_data
 
     def approve_request(self, request_id):
         """

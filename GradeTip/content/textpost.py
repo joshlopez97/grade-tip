@@ -1,9 +1,7 @@
 from flask import current_app as app
-from flask_login import current_user
 
 from GradeTip.content.content import ContentManager
 from GradeTip.content.identifier import IDGenerator
-from GradeTip.content.utility import get_time
 from GradeTip.redis.hash import RedisHash
 from GradeTip.redis.set import RedisSet
 
@@ -13,6 +11,7 @@ class TextPostManager(ContentManager):
     Class manages user text posts on school pages.
     """
     def __init__(self, user_manager):
+        super().__init__(["title", "description"], "textpost")
         self.user = user_manager
         self.id_generator = IDGenerator()
 
@@ -23,23 +22,20 @@ class TextPostManager(ContentManager):
         :param form_data: raw form data submitted by user
         :return: boolean indicating success of operation
         """
-        if not self.validate_post_data(form_data):
+        if not super().validate_data(form_data):
             return False
         # get new request_id
         request_id = self.id_generator.generate("r-", super().user_email, "requests")
         if request_id is None:
             return False
 
-        # store data into map with 'request/request_id' as the key
-        identifier = "request/{}".format(request_id)
-        self.user.made_request(super().user_email, identifier)
-        return RedisHash(identifier).update({
+        # store data
+        return super().request_content(request_id, {
             "sid": school_id,
             "title": form_data["title"],
             "description": form_data["description"],
             "uid": super().display_name,
-            "email": super().user_email,
-            "time": get_time()
+            "email": super().user_email
         })
 
     def create_post(self, request):
@@ -54,14 +50,12 @@ class TextPostManager(ContentManager):
 
         # store data into map with 'sid/post_id' as the key
         identifier = "{}/{}".format(school_id, post_id)
-        self.user.made_post(request["email"], identifier)
-        return RedisHash(identifier).update({
+        return super().make_content(identifier, {
             "title": request["title"],
             "description": request["description"],
             "uid": request["uid"],
             "email": request["email"],
-            "time": request["time"],
-            "requestType": "textpost"
+            "time": request["time"]
         })
 
     def get_posts_from_school(self, school_id):
@@ -75,17 +69,3 @@ class TextPostManager(ContentManager):
             posts[post_id] = RedisHash("{}/{}".format(school_id, post_id)).to_dict()
         app.logger.debug("fetched {} posts for sid {}".format(len(posts), school_id))
         return posts
-
-    @staticmethod
-    def validate_post_data(post_data):
-        """
-        Validates post data meets requirements
-        :param post_data: dict containing post data
-        :return: boolean indicating result of validation
-        """
-        for field in ["title", "description"]:
-            value = post_data.get(field)
-            if not isinstance(value, str) or len(value) == 0 or len(value) > 2000:
-                app.logger.debug("Field {} cannot have value {}".format(field, value))
-                return False
-        return True

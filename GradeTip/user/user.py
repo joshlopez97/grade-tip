@@ -78,8 +78,5 @@ class UserManager:
     def made_post(self, email, post_id):
         return RedisSet("posts/{}".format(email)).add([post_id])
 
-    def get_requests(self, email):
-        return RedisSet("req/{}".format(email)).values()
-
-    def get_posts(self, email):
-        return RedisSet("posts/{}".format(email)).values()
+    def created_content(self, email, content_id):
+        return RedisSet("content/{}".format(email)).add(content_id)

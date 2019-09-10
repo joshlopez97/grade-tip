@@ -1,6 +1,6 @@
 import hashlib
 from datetime import datetime
-from random import random
+import random
 
 from GradeTip.redis.set import RedisSet
 
@@ -28,4 +28,5 @@ class IDGenerator:
         :param email: email to hash
         :return: string containing new hash
         """
-        return prefix + str(hashlib.sha1(email + datetime.now().microsecond + random.randint(10, 100)))
+        encoded_str = (email + str(datetime.now().microsecond) + str(random.randint(10, 100))).encode('utf-8')
+        return prefix + hashlib.sha1(encoded_str).hexdigest()

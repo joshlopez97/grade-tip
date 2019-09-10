@@ -5,7 +5,7 @@ from flask import url_for, request, render_template, redirect, abort, jsonify, c
 from flask_login import current_user, logout_user
 
 from GradeTip.admin import admin_authenticator
-from GradeTip.content import listing_manager, post_manager
+from GradeTip.content import listing_manager, post_manager, request_manager
 from GradeTip.schools import school_manager
 from GradeTip.user import session_manager, user_manager
 
@@ -150,10 +150,21 @@ def schoolpage(school_id):
 
     # user submitted request for post to be created
     if request.method == 'POST':
-        # log & return json indicating if request was successfully submitted
-        if not post_manager.request_post(school_id, request.form):
+        # make request
+        request_id = post_manager.request_post(school_id, request.form)
+
+        # return error if request failed
+        if not request_id:
             app.logger.info("Could not create request with {}".format(str(request.form)))
             return jsonify({"requested": False, "created": False})
+
+        # skip approval if config set to false
+        if app.config.get("REQUIRE_POST_APPROVAL") is not None and not app.config.get("REQUIRE_POST_APPROVAL"):
+            app.logger.debug("Promoting request {} to post".format(request_id))
+            request_manager.approve_request(request_id)
+            return jsonify({"requested": True, "created": True})
+
+        # create request only if config unset or true
         app.logger.info("Created request for post " + str(request.form))
         return jsonify({"requested": True, "created": False})
 
