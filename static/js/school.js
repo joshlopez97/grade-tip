@@ -136,8 +136,23 @@ function showNewPostPopup()
     {
       console.log(window.location);
       $.post(window.location, parsedFormData, (res, status, xhr) => {
-        destroyPopup();
-        showRequestProcessedNotice();
+        if (!!res && res['requested'] === true)
+        {
+          destroyPopup();
+          if (res['created'] === true)
+          {
+            location.reload();
+          }
+          else
+          {
+            showRequestProcessedNotice();
+          }
+        }
+        else
+        {
+          console.log(res);
+        }
+
       });
     }
     else
