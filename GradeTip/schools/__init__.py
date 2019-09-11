@@ -1,3 +1,3 @@
-from GradeTip.schools.school import SchoolManager
+from GradeTip.schools.school import Schools
 
-school_manager = SchoolManager()
+schools = Schools()

@@ -7,10 +7,10 @@ from math import pow
 import requests
 from flask import current_app as app
 
-from GradeTip import college_data
 from GradeTip.content.utility import get_time
 from GradeTip.redis.hash import RedisHash
 from GradeTip.redis.list import RedisList
+from GradeTip.schools import schools
 
 
 class GeolocationClient:
@@ -76,7 +76,7 @@ class LocationMapper:
         :param latitude: latitude of user location
         :param longitude: longitude of user location
         """
-        self.data = college_data
+        self.data = schools.get_college_data()
         self.latitude = latitude
         self.longitude = longitude
 
@@ -97,7 +97,7 @@ class LocationMapper:
         """
         for school in exclude:
             if school in self.data:
-                del college_data[school]
+                del self.data[school]
 
     def closest_schools(self, quantity, exclude=None):
         """
@@ -109,10 +109,10 @@ class LocationMapper:
         if isinstance(exclude, list) and len(exclude) > 0:
             self.exclude_schools(exclude)
         shortest = []
-        for college in college_data.keys():
+        for college in self.data.keys():
             # if school has geolocation data
-            if 'lon' in college_data[college]:
-                distance = self.distance_from(college_data[college]['lat'], college_data[college]['lon'])
+            if 'lon' in self.data[college]:
+                distance = self.distance_from(self.data[college]['lat'], self.data[college]['lon'])
                 if len(shortest) < quantity:
                     insort(shortest, (distance, college))
                 elif distance < shortest[quantity - 1][0]:
@@ -121,7 +121,7 @@ class LocationMapper:
         to_return = {'schools': [], 'sids': []}
         for school in shortest:
             to_return['schools'] += [school[1]]
-            to_return['sids'] += [college_data[school[1]]['sid']]
+            to_return['sids'] += [self.data[school[1]]['sid']]
         return to_return
 
 

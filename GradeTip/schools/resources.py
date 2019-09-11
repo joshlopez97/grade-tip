@@ -4,7 +4,7 @@ import traceback
 from flask import current_app as app, request
 
 from GradeTip.redis import redis_manager
-from GradeTip.schools import school_manager
+from GradeTip.schools import schools
 from GradeTip.schools.location import GeolocationClient, LocationMapper
 
 
@@ -45,4 +45,4 @@ def colleges():
     Returns college data.
     :return: JSON containing college data
     """
-    return json.dumps(school_manager.get_college_data())
+    return json.dumps(schools.get_college_data())

@@ -1,10 +1,10 @@
 import json
 
 
-class SchoolManager:
+class Schools:
     def __init__(self):
         self.college_data = {}
-        with open('course_catalog.json', 'r') as f:
+        with open('resources/course_catalog.json', 'r') as f:
             self.college_data = json.load(f)
 
     def get_college_data(self):

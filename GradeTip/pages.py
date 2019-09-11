@@ -6,7 +6,7 @@ from flask_login import current_user, logout_user
 
 from GradeTip.admin import admin_authenticator
 from GradeTip.content import listing_manager, post_manager, request_manager
-from GradeTip.schools import school_manager
+from GradeTip.schools import schools
 from GradeTip.user import session_manager, user_manager
 
 
@@ -19,11 +19,11 @@ def sellpage():
     school_name = ""
     school_id = request.args.get("sid")
     if school_id is not None and re.match(r'\d+', school_id):
-        school_name = school_manager.get_school_name(int(school_id))
+        school_name = schools.get_school_name(int(school_id))
     if request.method == 'POST':
         file = request.files.get('file')
         if listing_manager.request_listing(request.form, file):
-            return redirect("/school/{}?created=1".format(school_manager.get_school_id(request.form.get("school"))))
+            return redirect("/school/{}?created=1".format(schools.get_school_id(request.form.get("school"))))
 
     return render_template('sell.html', sid=school_id, school_name=school_name)
 
@@ -141,7 +141,7 @@ def schoolpage(school_id):
     School page for displaying all posts/content published to that school's page.
     :param school_id: the school_id for the school's page to be shown
     """
-    school_name = school_manager.get_school_name(int(school_id))
+    school_name = schools.get_school_name(int(school_id))
     if not school_name:
         abort(404)
     created = request.args.get("created")
@@ -178,7 +178,7 @@ def detailspage(school_id, post_id):
     :param school_id: ID of school that this post was made to
     :param post_id: ID of post being viewed
     """
-    school_name = school_manager.get_school_name(int(school_id))
+    school_name = schools.get_school_name(int(school_id))
     if not school_name:
         abort(404)
     return render_template('school.html', school=school_name, sid=school_id, pid=post_id)
