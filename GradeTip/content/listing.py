@@ -3,22 +3,23 @@ import traceback
 from flask import current_app as app
 from flask_login import current_user
 
+from GradeTip.content.content import ContentManager
 from GradeTip.content.identifier import IDGenerator
 from GradeTip.content.utility import get_time
 from GradeTip.redis.hash import RedisHash
 from GradeTip.redis.set import RedisSet
 
 
-class ListingManager:
+class ListingManager(ContentManager):
     """
     Class manages listing data. Listings are posts that contain PDF uploads of documents
     that are uploaded for a specific course at a specific school. Each listing must be approved
     by moderators before being submitted.
     """
-    def __init__(self, upload_manager, school_manager, user_manager):
+    def __init__(self, upload_manager, school_manager):
+        super().__init__(["school", "title", "cid", "kind"], "textpost")
         self.upload = upload_manager
         self.school = school_manager
-        self.user = user_manager
         self.id_generator = IDGenerator()
 
     def request_listing(self, form_data, file):
@@ -28,10 +29,10 @@ class ListingManager:
         :param file: flask file object for uploaded PDF document
         :return: boolean indicating success of operation
         """
-        if not self.validate_listing_data(form_data):
+        if not super().validate_data(form_data):
             return False
         # get new request_id
-        request_id = self.id_generator.generate("r-", self.user_email, "requests")
+        request_id = self.id_generator.generate("r-", super().user_email, "requests")
         if request_id is None:
             return False
 
@@ -45,22 +46,17 @@ class ListingManager:
             app.logger.error("Error: not all filepaths were added to set {}".format(upload_id))
             return False
 
-        # store data into map with 'request/request_id' as the key
-        identifier = "request/{}".format(request_id)
-        self.user.made_request(self.user_email, identifier)
-
-        return RedisHash(identifier).update({
+        # store request data in redis
+        return super().request_content(request_id, {
             "sid": self.school.get_school_id(form_data["school"]),
             "title": form_data["title"],
             "course": form_data["cid"],
             "kind": form_data["kind"],
-            "uid": self.display_name,
-            "email": self.user_email,
+            "uid": super().display_name,
+            "email": super().user_email,
             "upload_id": upload_id,
             "numPages": numPages,
-            "time": get_time(),
-            "requestId": request_id,
-            "requestType": "listing"
+            "requestId": request_id
         })
 
     def create_listing(self, request):
@@ -71,17 +67,16 @@ class ListingManager:
         """
         school_id = request["sid"]
         # get new listing_id
-        listing_id = self.id_generator.generate("l-", self.user_email, "listings/{}".format(school_id))
+        listing_id = self.id_generator.generate("l-", super().user_email, "listings/{}".format(school_id))
 
         # upload files
         new_upload_id = "u{}".format(listing_id)
         filepaths = self.upload.move_files_to_listing(request["upload_id"], new_upload_id)
         RedisSet(new_upload_id).add(filepaths)
 
-        # store data into map with 'sid/listing_id' as the key
+        # store listing data in redis
         identifier = "{}/{}".format(school_id, listing_id)
-        self.user.made_post(request["email"], identifier)
-        return RedisHash(identifier).update({
+        return super().make_content(identifier, {
             "sid": school_id,
             "title": request["title"],
             "course": request["course"],
@@ -89,8 +84,7 @@ class ListingManager:
             "uid": request["uid"],
             "email": request["email"],
             "upload_id": new_upload_id,
-            "time": request["time"],
-            "postType": "listing"
+            "time": request["time"]
         })
 
     def get_listings_from_school(self, school_id):
@@ -113,35 +107,3 @@ class ListingManager:
                 traceback.print_exc()
         app.logger.debug("fetched {} listings for sid {}".format(len(listings), school_id))
         return listings
-
-    @staticmethod
-    def validate_listing_data(listing_data):
-        """
-        Ensure all fields exist, are non-empty, and not too long.
-        :param listing_data: raw form data submitted for listing
-        :return: boolean result of validation
-        """
-        for field in ["school", "title", "cid", "kind"]:
-            value = listing_data.get(field)
-            if not isinstance(value, str) or len(value) == 0 or len(value) > 2000:
-                app.logger.debug("Field {} cannot have value {}".format(field, value))
-                return False
-        return True
-
-    @property
-    def display_name(self):
-        """
-        Gets display name of current user
-        """
-        if current_user is not None and current_user.is_authenticated:
-            return current_user.display_name
-        return "Anon"
-
-    @property
-    def user_email(self):
-        """
-        Gets email of current user
-        """
-        if current_user is not None and current_user.is_authenticated:
-            return current_user.id
-        return "anon@anon.com"

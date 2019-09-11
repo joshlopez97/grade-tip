@@ -21,7 +21,8 @@ class IDGenerator:
             return self.generate(prefix, email, set_name)
         return identifier
 
-    def _create_id_hash(self, prefix, email):
+    @staticmethod
+    def _create_id_hash(prefix, email):
         """
         Creates ID using SHA1 hashing
         :param prefix: prefix to append to front of has
