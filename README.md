@@ -18,11 +18,12 @@ cd grade-tip/
 pip3 install -r requirements.txt
 ```
 
-### Run in develop mode
+### Run application
+In develop mode:
 ```
 python3 wsgi.py
 ```
-### Run in production mode
+In production mode:
 ```
 uwsgi --socket 0.0.0.0:5000 --protocol=http -w wsgi:app
 ```
