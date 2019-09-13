@@ -33,7 +33,7 @@ For actual deployment instructions using NGINX, follow the instructions [here](h
 The motivation behind this website is to create an affordable service that would serve students better than existing services. Many services similar to this force students to pay a monthly subscription fee for access to documents, along with other caveats. If a student wants access to a certain document, they should be able to do that at a reasonable price. 
 
 ## School Data
-Using web crawling, this list has compiled a list of all universities and course codes from various Internet sources such as RateMyProfessor and online course catalogs. This information allows autocomplete to suggest school names and course codes in various forms. We've also pulled data from the [Geonames API](http://www.geonames.org/export/web-services.html) to populate GPS coordinates for most of our schools.
+Using web crawling, we've compiled a list of all universities and many course codes for each of these universities using various Internet sources such as RateMyProfessor and online course catalogs. This information allows autocomplete to suggest school names and course codes in various forms. We've also pulled data from the [Geonames API](http://www.geonames.org/export/web-services.html) to populate GPS coordinates for most of these schools to suggest nearby schools to students.
 
 ## Site Features
 ### Schools Near You
