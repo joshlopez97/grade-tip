@@ -110,8 +110,10 @@ function createPostHolder(post_data, pid) {
   if (post_data["postType"] === "textpost") {
     post = getTextPostHolder(post_data, pid);
   }
-  else
+  else {
     post = getListingHolder(post_data, pid);
+  }
+  window.document.title = `${post_data["title"]} | GradeTip`;
   post.append(getLikeReplyControls(pid));
   post.click(() => show_post(post_data, pid));
   return post;
