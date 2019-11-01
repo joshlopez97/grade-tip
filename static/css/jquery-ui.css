@@ -130,13 +130,10 @@
 	padding: 4px 1em 4px .4em;
 }
 .ui-menu .ui-menu-item:first-child .ui-menu-item-wrapper {
-	border-radius: 9px 9px 0px 0px;
 }
 .ui-menu .ui-menu-item:last-child .ui-menu-item-wrapper {
-	border-radius: 0px 0px 9px 9px;
 }
 .ui-menu .ui-menu-item:only-child .ui-menu-item-wrapper {
-	border-radius: 9px 9px 9px 9px;
 }
 .ui-menu .ui-menu-divider {
 	margin: 5px 0;
@@ -905,7 +902,6 @@ body .ui-tooltip {
 }
 .ui-widget.ui-widget-content {
 	border: 1px solid #c5c5c5;
-	border-radius:10px;
 }
 .ui-widget-content {
 	border: 1px solid #dddddd;
