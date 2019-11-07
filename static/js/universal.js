@@ -14,8 +14,32 @@ jQuery.ui.autocomplete.prototype._resizeMenu = function () {
 /* Function retrieves top 5 schools that match a query - used for autocomplete */
 let cached_results = {};
 
-function get_res(request, response) {
-  console.log(cached_results);
+function bold(str) {
+  return `<span class="ui-autocomplete-term">${str}</span>`;
+}
+
+function format_acronym_match(result, query) {
+  let words = [];
+  let result_words = result.split(' ');
+  for (let word of result_words) {
+    let firstLetter = word.charAt(0);
+    if (word.length > 0 && query.includes(firstLetter.toLowerCase()))
+      words.push(`${bold(firstLetter)}${word.substring(1)}`);
+    else
+      words.push(word);
+  }
+  return words.join(' ');
+}
+
+function format_partial_match(result, terms) {
+  for (let term of terms) {
+    result = result.replace(new RegExp(`(^${term}|\\s${term})`, "gi"), bold("$1"));
+  }
+  return result;
+}
+
+
+function search(request, response) {
   let results = new Set();
   let stopwords = ['of', 'at', 'and', 'the', 'for'];
   let query = request.term.toLowerCase().trim();
@@ -25,63 +49,70 @@ function get_res(request, response) {
   }
 
   let terms = query.split(' ').filter(Boolean);
+  let first = [];
   let second = [];
   let third = [];
   let fourth = [];
-  for (let college of college_list) {
+  for (let i = 0; i < college_list.length; i++) {
+    let college = college_list[i];
+    let sid = college_data[college]["sid"];
     // Format College
-    let acronym = college.toLowerCase().match(/\b(?!(?:of|at|and|the|for)[^a-zA-Z0-9])(\w)/g).join('');
-    let shortened = college.toLowerCase().match(/\b(?!(?:of|at|and|the|for)[^a-zA-Z0-9])(\w+)/g).join(' ');
+    let lowerCollege = college.toLowerCase();
+    let acronym = lowerCollege.match(/\b(?!(?:of|at|and|the|for)[^a-zA-Z0-9])(\w)/g).join('');
+    let shortened = lowerCollege.match(/\b(?!(?:of|at|and|the|for)[^a-zA-Z0-9])(\w+)/g).join(' ');
 
     // Get results in order of relevance
-    if (acronym === query || acronym === query.replace(/\s/g, ''))
-      results.add(college);
-    else if (college.toLowerCase().startsWith(query) || shortened.startsWith(query))
-      second.push(college);
-    else if (acronym.startsWith(query))
-      third.push(college);
+    if (acronym === query || acronym === query.replace(/\s/g, '')) {
+      const formatted_college = format_acronym_match(college, query);
+      first.push([sid, formatted_college]);
+    }
+    else if (lowerCollege.startsWith(query) || shortened.startsWith(query)) {
+      const formatted_college = format_partial_match(college, terms);
+      second.push([sid, formatted_college]);
+    }
+    else if (acronym.startsWith(query)) {
+      const formatted_college = format_acronym_match(college, query);
+      third.push([sid, formatted_college]);
+    }
     // Check acronym versions of query
     else if (terms.length > 1 && acronym.startsWith(terms[0])) {
-      let parsed_college = college.toLowerCase().match(/\b(\w+)/g);
+      // continuously remove letters from college name to handle partial acronym match
+      // ex: for the school "Univerity of California Irvine",
+      // "uc" matches "University of California" leaving "Irvine" remaining in shift_parsed
+      let parsed_college = college.match(/\b(\w+)/g);
       let shift_parsed = parsed_college.slice();
+      let removed = [];
       for (let i = 0; i < terms[0].length;) {
         if (shift_parsed.length === 0)
           break;
-        if (!stopwords.includes(shift_parsed[0]))
+        if (!stopwords.includes(shift_parsed[0].toLowerCase()))
           i++;
+        removed.push(shift_parsed[0].slice());
         shift_parsed.splice(0, 1);
       }
+
       let remaining_college = shift_parsed.join(' ').trim();
       let remaining_query = query.substring(terms[0].length + 1);
 
-      if (shift_parsed.length === terms.length - 1 && remaining_college.includes(remaining_query)) {
-        third.push(college);
-      } else if (remaining_college.includes(remaining_query)) {
-        fourth.push(college);
+      if (new RegExp(remaining_query, "gi").test(remaining_college)) {
+        const formatted_college = format_acronym_match(removed.join(" "), terms[0]) + " " +
+          format_partial_match(shift_parsed.join(" "), terms.slice(1, terms.length));
+        if (shift_parsed.length === terms.length - 1) {
+          third.push([sid, formatted_college]);
+        }
+        else {
+          fourth.push([sid, formatted_college]);
+        }
       }
-    }
-    else {
-      let allin = true;
-      for (let term of terms) {
-        let regex = new RegExp("\\b" + term, 'g');
-        if (!college.toLowerCase().match(regex))
-          allin = false;
-      }
-      if (allin)
-        fourth.push(college);
-
     }
   }
-  maxres:
-    for (let tier of [second, third, fourth]) {
-      for (let item of tier) {
-        results.add(item);
-        if (results.size >= 5)
-          break maxres;
-      }
+  for (let tier of [first, second, third, fourth]) {
+    for (let school_info of tier) {
+      results.add(`<span id=${school_info[0]}>${school_info[1]}</span>`);
     }
+  }
   if (results.size > 0 && Object.keys(cached_results).length < 50)
-    cached_results[query] = Array.from(results).splice(0, 5);
+    cached_results[query] = Array.from(results);
   response(cached_results[query]);
 }
 
@@ -93,17 +124,15 @@ function focusField(elem) {
 }
 
 function linkToSchool(event, ui) {
-  let school = ui.item.value;
-  console.log(school);
-  if (!(school in college_data))
-    return false;
-  let sid = college_data[school]['sid'];
+  event.preventDefault();
+  let school = $(ui.item.value);
+  let sid = school.attr("id");
   window.location.href = ("/school/" + sid);
+  return false;
 }
 
 /* Sidebar display for mobile devices */
 function displaySidebar() {
-  console.log("display");
   let sidebar = $(".sidebar");
   const ANIMATE_TIME = 300;
   if (sidebar.length > 0)

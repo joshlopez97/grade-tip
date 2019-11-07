@@ -172,7 +172,7 @@ $(document).ready(function() {
         $(this).blur();
         focusField($("#email"));
       },
-      source: get_res,
+      source: search,
       appendTo: "#school-holder"
     });
     $("#get-username").click(getUsername);

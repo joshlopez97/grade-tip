@@ -9,7 +9,7 @@ $(document).ready(function() {
         $(this).blur();
         focusField($("#cid"));
       },
-      source: get_res,
+      source: search,
       appendTo: '#school-holder'
     }).focus();
     $("#cid").on("focus", function() {

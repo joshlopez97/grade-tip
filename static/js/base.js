@@ -26,7 +26,7 @@ $(document).ready(function() {
 
   /* Autocomplete school search bar */
   $("#usearch").autocomplete({
-    source: get_res, 
+    source: search,
     open: function( event, ui ) {
       $('.ui-autocomplete.ui-menu').addClass('usearch');
       $('.ui-menu-item').addClass('usearch')

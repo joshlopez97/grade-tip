@@ -1,30 +1,33 @@
-$(document).ready(function() {
-  $(window).resize(function() {
+$(document).ready(function () {
+  $(window).resize(function () {
     sizer();
   });
-  let schools = [];
   let last = [];
   let searchbar = $("#cv-searchbar");
   searchbar.autocomplete({
-    source: get_res, 
-    select: linkToSchool
+    source: search,
+    select: linkToSchool,
+    scroll: true
   });
 
-  $("#cv-searchbtn").click(function(e){
+  $("#cv-searchbtn").click(function (e) {
     e.preventDefault();
     return false;
   });
   setUpHomepage();
+
   function sizer() {
-    $("#cv-search").css("margin-top",(document.body.clientHeight * 0.17) + "px");
+    $("#cv-search").css("margin-top", (document.body.clientHeight * 0.17) + "px");
   }
+
   function generateMore() {
     if (!$(".schools").hasClass('loading')) {
-      $(this).off('click'); 
+      $(this).off('click');
       return fetchNewSchools();
     }
     return false;
   }
+
   function setUpHomepage() {
     sizer();
     $("#cv-search").append(
@@ -32,7 +35,7 @@ $(document).ready(function() {
             <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
             <div class='schools-holder'><ul class='schools'></ul></div>`
     );
-    let createLoadMoreBtn = function() {
+    let createLoadMoreBtn = function () {
       if ($("#more").length === 0) {
         $("#cv-search").append("<div id='more'></div>");
         $("#more").click(generateMore);
@@ -43,9 +46,10 @@ $(document).ready(function() {
   }
 
 
-  function fetchSchools(end=function(){}, heightAdjust=0, firstCall=false) {
+  function fetchSchools(end = function () {
+  }, heightAdjust = 0, firstCall = false) {
     let ipGeoLocationUsed = false;
-    let onComplete = function(data) {
+    let onComplete = function (data) {
       const nearest = $.parseJSON(data);
       if (nearest.length === 0 || nearest['schools'].length === 0)
         return noSchools();
@@ -56,22 +60,27 @@ $(document).ready(function() {
         }
         $(".lds-ring").remove();
         last = last.concat(nearest['schools']);
-        for (let i = 0; i<nearest['schools'].length; i++) {
-          appendSchool(nearest['schools'][i],nearest['sids'][i]);
-          if (i+1 === nearest['schools'].length)
-            $(".schools-holder").height($(".schools").height()-heightAdjust);
+        for (let i = 0; i < nearest['schools'].length; i++) {
+          appendSchool(nearest['schools'][i], nearest['sids'][i]);
+          if (i + 1 === nearest['schools'].length)
+            $(".schools-holder").height($(".schools").height() - heightAdjust);
         }
         return end();
       }
     };
 
-    let geoLocSuccess = function(pos) {
+    let geoLocSuccess = function (pos) {
       console.log('success');
-      let payload = {"last": JSON.stringify(last), "quantity": 5, "lat": pos.coords.latitude, "lon": pos.coords.longitude};
+      let payload = {
+        "last": JSON.stringify(last),
+        "quantity": 5,
+        "lat": pos.coords.latitude,
+        "lon": pos.coords.longitude
+      };
       $.post("/nearest", payload, onComplete);
     };
 
-    let geoLocFailure = function() {
+    let geoLocFailure = function () {
       console.log('failed');
       ipGeoLocationUsed = true;
       let payload = {"last": JSON.stringify(last), "quantity": 5};
@@ -111,9 +120,9 @@ $(document).ready(function() {
       $(".ns").addClass('pending');
 
       const height = schools.height();
-      let animateSchools = function() {
-        schools.addClass("loading").animate({"top":"-"+height+"px"}, 400, function() {
-          $(this).css("top","0px");
+      let animateSchools = function () {
+        schools.addClass("loading").animate({"top": "-" + height + "px"}, 400, function () {
+          $(this).css("top", "0px");
           $(this).removeClass("loading");
           $(".pending").remove();
           $("#more").click(generateMore)
@@ -122,6 +131,7 @@ $(document).ready(function() {
       return fetchSchools(animateSchools, height);
     }
   }
+
   function appendSchool(school, sid) {
     if ($("#" + sid).length === 0) {
       let newSchool = $("<li class='ns'><a class='nschool' id=" + sid + ">" + school + "</a></li>")
@@ -129,7 +139,8 @@ $(document).ready(function() {
       newSchool.on("click", "a.nschool", () => window.location = ("/school/" + sid));
     }
   }
-  $(window).on('load', function() {
+
+  $(window).on('load', function () {
     console.log('index.js window loaded');
   });
 });
