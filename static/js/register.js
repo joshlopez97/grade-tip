@@ -1,6 +1,7 @@
 $(document).ready(function() {
   $(window).on('load',function(){
-    focusField($("#school"));
+    const schoolInputField = $("#school");
+    focusField(schoolInputField);
     let un_index = 0;
     let usernames = [];
     let ondeck = [];
@@ -163,11 +164,9 @@ $(document).ready(function() {
       else if ($("#saveForm").is(":disabled"))
         $("#saveForm").prop("disabled",true);
     });
-    $("#school").on("focus", function() {
-      $(this).autocomplete("search");
-    }).autocomplete({
+    schoolInputField.autocomplete({
       select: function(event, ui){
-        $(this).val(ui.item.value);
+        $(this).val(selectSchool(event, ui));
         valid($(this));
         $(this).blur();
         focusField($("#email"));
@@ -186,7 +185,7 @@ $(document).ready(function() {
       let username = usernames[un_index];
       un_index++;
       if (un_index === 50) {
-        usernames = ondeck
+        usernames = ondeck;
         un_index = 0;
       }
 

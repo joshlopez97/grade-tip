@@ -131,6 +131,19 @@ function linkToSchool(event, ui) {
   return false;
 }
 
+function selectSchool(event, ui) {
+  event.preventDefault();
+  let sid = $(ui.item.value).attr("id");
+  let school_name = "";
+  for (let college_name of college_list) {
+    if (`${college_data[college_name]["sid"]}` === sid) {
+      school_name = college_name;
+      break;
+    }
+  }
+  return school_name;
+}
+
 /* Sidebar display for mobile devices */
 function displaySidebar() {
   let sidebar = $(".sidebar");

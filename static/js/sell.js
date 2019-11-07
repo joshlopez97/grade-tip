@@ -1,11 +1,9 @@
 $(document).ready(function() {
   $(window).on('load',function(){
     setSchoolValue();
-    $("#school").on("focus", function() {
-      $(this).autocomplete("search");
-    }).autocomplete({
+    $("#school").autocomplete({
       select: function(event, ui){
-        $(this).val(ui.item.value);
+        $(this).val(selectSchool(event, ui));
         $(this).blur();
         focusField($("#cid"));
       },

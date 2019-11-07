@@ -127,14 +127,6 @@ form li div
 	padding:0 0 2px;
 }
 
-form li span
-{
-	color:#444;
-	float:left;
-	margin:0 4px 0 0;
-	padding:0 0 8px;
-}
-
 form li div.left
 {
 	display:inline;
