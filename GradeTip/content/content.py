@@ -7,7 +7,7 @@ from GradeTip.redis.hash import RedisHash
 from GradeTip.user import user_manager
 
 
-class ContentManager:
+class ContentStore:
     """
     Class manages user text posts on school pages.
     """

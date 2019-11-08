@@ -5,7 +5,7 @@ from flask_login import LoginManager
 
 from GradeTip.content.resources import posts_by_sid, fetch_post_requests, approve_request, deny_request
 from GradeTip.pages import (loginpage, registerpage, logout, indexpage,
-                            internal_server_error, page_not_found, schoolpage, monitorpage, detailspage, sellpage,
+                            internal_server_error, page_not_found, schoolpage, monitorpage, detailspage, listingpage,
                             aboutpage, termspage, privacypage)
 from GradeTip.schools.resources import nearest, colleges
 from GradeTip.user import user_manager
@@ -45,7 +45,7 @@ def register_page_routes(app):
                      methods=['GET', 'POST'])
     app.add_url_rule('/register', 'registerpage', registerpage,
                      methods=['GET', 'POST'])
-    app.add_url_rule('/upload', 'uploadpage', sellpage,
+    app.add_url_rule('/upload', 'uploadpage', listingpage,
                      methods=['GET', 'POST'])
     app.add_url_rule('/school/<school_id>', 'school', schoolpage,
                      methods=['GET', 'POST'])

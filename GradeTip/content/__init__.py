@@ -1,13 +1,14 @@
 from GradeTip.admin import admin_authenticator
-from GradeTip.content.listing import ListingManager
-from GradeTip.content.textpost import TextPostManager
-from GradeTip.content.request import RequestManager
-from GradeTip.content.upload import UploadManager
-from GradeTip.redis import redis_manager
+from GradeTip.content.listing import ListingStore
+from GradeTip.content.textpost import TextPostStore
+from GradeTip.content.request import RequestStore
+from GradeTip.content.upload import UploadStore
+from GradeTip.indexer import indexer
+from GradeTip.redis import redis_values
 from GradeTip.schools import schools
 from GradeTip.user import user_manager
 
-post_manager = TextPostManager(user_manager)
-upload_manager = UploadManager()
-listing_manager = ListingManager(upload_manager, schools)
-request_manager = RequestManager(redis_manager, post_manager, upload_manager, listing_manager, admin_authenticator)
+post_store = TextPostStore(user_manager)
+upload_store = UploadStore(indexer)
+listing_store = ListingStore(upload_store, schools)
+request_store = RequestStore(redis_values, post_store, upload_store, listing_store, admin_authenticator)

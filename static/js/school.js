@@ -1,6 +1,6 @@
 let url = [location.protocol, '//', location.host, location.pathname].join('');
 $(document).ready(function() {
-  checkIfUserCreatedPost();
+  checkIfUserRequestedPost();
   show_school_page(true);
 });
 
@@ -16,13 +16,13 @@ window.onpopstate = function(e){
 
 };
 
-function checkIfUserCreatedPost()
+function checkIfUserRequestedPost()
 {
-  let created = $("#created")
-  if (created[0].value === "1")
+  let requested = $("#requested");
+  if (requested[0].value === "1")
   {
     showRequestProcessedNotice();
-    created[0].value = "0";
+    requested[0].value = "0";
   }
 }
 

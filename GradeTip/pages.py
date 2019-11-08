@@ -5,27 +5,9 @@ from flask import url_for, request, render_template, redirect, abort, jsonify, c
 from flask_login import current_user, logout_user
 
 from GradeTip.admin import admin_authenticator
-from GradeTip.content import listing_manager, post_manager, request_manager
+from GradeTip.content import listing_store, post_store, request_store
 from GradeTip.schools import schools
 from GradeTip.user import session_manager, user_manager
-
-
-def sellpage():
-    """ On POST, retrieves sell form info and file upload and creates a request
-    to be approved by moderators.
-
-    On GET, loads sell form to user.
-    """
-    school_name = ""
-    school_id = request.args.get("sid")
-    if school_id is not None and re.match(r'\d+', school_id):
-        school_name = schools.get_school_name(int(school_id))
-    if request.method == 'POST':
-        file = request.files.get('file')
-        if listing_manager.request_listing(request.form, file):
-            return redirect("/school/{}?created=1".format(schools.get_school_id(request.form.get("school"))))
-
-    return render_template('sell.html', sid=school_id, school_name=school_name)
 
 
 def monitorpage():
@@ -144,31 +126,67 @@ def schoolpage(school_id):
     school_name = schools.get_school_name(int(school_id))
     if not school_name:
         abort(404)
-    created = request.args.get("created")
-    if created is None:
-        created = "0"
+    requested_listing = request.args.get("requested")
+    if requested_listing is None:
+        requested_listing = "0"
+    created_listing = request.args.get("created")
+    if created_listing is None:
+        created_listing = "0"
 
     # user submitted request for post to be created
     if request.method == 'POST':
         # make request
-        request_id = post_manager.request_post(school_id, request.form)
+        request_id = post_store.request_post(school_id, request.form)
 
         # return error if request failed
         if not request_id:
-            app.logger.info("Could not create request with {}".format(str(request.form)))
+            app.logger.error("Could not create request with {}".format(str(request.form)))
             return jsonify({"requested": False, "created": False})
+        requested = True
+        created = False
 
         # skip approval if config set to false
         if app.config.get("REQUIRE_POST_APPROVAL") is not None and not app.config.get("REQUIRE_POST_APPROVAL"):
-            app.logger.debug("Promoting request {} to post".format(request_id))
-            request_manager.approve_request(request_id)
-            return jsonify({"requested": True, "created": True})
+            app.logger.info("Promoting request {} to post".format(request_id))
+            request_store.approve_request(request_id)
+            created = True
 
-        # create request only if config unset or true
         app.logger.info("Created request for post " + str(request.form))
-        return jsonify({"requested": True, "created": False})
+        return jsonify({"requested": requested, "created": created})
 
-    return render_template('school.html', school=school_name, sid=school_id, created=created)
+    return render_template('school.html',
+                           school=school_name,
+                           sid=school_id,
+                           requested=requested_listing,
+                           created=created_listing)
+
+
+def listingpage():
+    """ On POST, retrieves listing form info and file upload and creates a request
+    to be approved by moderators.
+
+    On GET, loads listing form to user.
+    """
+    school_name = ""
+    school_id = request.args.get("sid")
+    error = None
+    if school_id is not None and re.match(r'\d+', school_id):
+        school_name = schools.get_school_name(int(school_id))
+    if request.method == 'POST':
+        file = request.files.get('file')
+        request_id = listing_store.request_listing(request.form, file)
+        if not request_id:
+            app.logger.error("Could not create request with {}".format(str(request.form)))
+            error = "We are experiencing issues right now. Please try again later"
+        else:
+            # skip approval if config set to false
+            if app.config.get("REQUIRE_POST_APPROVAL") is not None and not app.config.get("REQUIRE_POST_APPROVAL"):
+                app.logger.info("Promoting request {} to post".format(request_id))
+                request_store.approve_request(request_id)
+                return redirect("/school/{}?created=1".format(schools.get_school_id(request.form.get("school"))))
+            return redirect("/school/{}?requested=1".format(schools.get_school_id(request.form.get("school"))))
+
+    return render_template('sell.html', sid=school_id, school_name=school_name, error=error)
 
 
 def detailspage(school_id, post_id):

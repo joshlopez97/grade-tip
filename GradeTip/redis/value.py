@@ -53,3 +53,21 @@ class RedisValues:
             app.logger.error(e)
             traceback.print_exc()
         return False
+
+    def increment(self, key_name):
+        try:
+            self.redis_server.incr(key_name)
+            return True
+        except Exception as e:
+            app.logger.error(e)
+            traceback.print_exc()
+        return False
+
+    def increment_by(self, key_name, amount):
+        try:
+            self.redis_server.incrby(key_name, amount)
+            return True
+        except Exception as e:
+            app.logger.error(e)
+            traceback.print_exc()
+        return False

@@ -3,7 +3,7 @@ import traceback
 
 from flask import current_app as app, request
 
-from GradeTip.redis import redis_manager
+from GradeTip.redis import redis_values
 from GradeTip.schools import schools
 from GradeTip.schools.location import GeolocationClient, LocationMapper
 
@@ -21,7 +21,7 @@ def nearest():
         latitude, longitude = (request.form.get("lat"), request.form.get("lon"))
         if not latitude or not longitude:
             app.logger.debug("Location not provided, using IP address to determine location")
-            client = GeolocationClient(redis_manager)
+            client = GeolocationClient(redis_values)
             ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
             latitude, longitude = client.locate_using_ip(ip)
         else:

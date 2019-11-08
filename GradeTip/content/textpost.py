@@ -1,12 +1,12 @@
 from flask import current_app as app
 
-from GradeTip.content.content import ContentManager
+from GradeTip.content.content import ContentStore
 from GradeTip.content.identifier import IDGenerator
 from GradeTip.redis.hash import RedisHash
 from GradeTip.redis.set import RedisSet
 
 
-class TextPostManager(ContentManager):
+class TextPostStore(ContentStore):
     """
     Class manages user text posts on school pages.
     """
@@ -20,7 +20,7 @@ class TextPostManager(ContentManager):
         Request to create a post in a school's page.
         :param school_id: ID of school to make request
         :param form_data: raw form data submitted by user
-        :return: boolean indicating success of operation
+        :return: request ID if successful, otherwise None
         """
         if not super().validate_data(form_data):
             return False
@@ -42,7 +42,7 @@ class TextPostManager(ContentManager):
         """
         Create a post for a school's page. The incoming data is in the form of a post request.
         :param request: dict containing request data to promote
-        :return: boolean indicating whether or not post was created.
+        :return: post ID if successful, otherwise None
         """
         # get new post_id
         school_id = request["sid"]

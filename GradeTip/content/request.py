@@ -4,7 +4,7 @@ from GradeTip.redis.hash import RedisHash
 from GradeTip.redis.set import RedisSet
 
 
-class RequestManager:
+class RequestStore:
     """
     Class for managing request data. A request is created each time a user wants to submit
     content to GradeTip. Once that content is approved by moderators, the request is deleted and replaced
@@ -42,7 +42,7 @@ class RequestManager:
         :param request_id: ID of request to be deleted
         :return: boolean indicating success of operation
         """
-        app.logger.debug("deleting request with id: {}".format(request_id))
+        app.logger.info("deleting request with id: {}".format(request_id))
         id_deleted = self.request_ids.remove(request_id)
         hash_deleted = self.redis.remove(request_id)
         return id_deleted and hash_deleted
@@ -74,7 +74,7 @@ class RequestManager:
         :param request_id:
         :return: JSON with result of operation
         """
-        app.logger.debug("approving request with id: {}".format(request_id))
+        app.logger.info("approving request with id: {}".format(request_id))
         request_data = self.pop_request(request_id)
         result = False
         if request_data is not None:
@@ -90,7 +90,7 @@ class RequestManager:
         :param request_id:
         :return: JSON with result of operation
         """
-        app.logger.debug("denying request with id: {}".format(request_id))
+        app.logger.info("denying request with id: {}".format(request_id))
         request_data = self.pop_request(request_id)
         if request_data is not None and request_data.get("requestType") == "listing":
             return jsonify({"result": self.redis.remove(request_data["upload_id"])})
