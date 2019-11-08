@@ -30,15 +30,17 @@ $(document).ready(function () {
 
   function setUpHomepage() {
     sizer();
-    $("#cv-search").append(
+    let searchBar = $("#cv-search");
+    searchBar.append(
       `<h5 class='schools-header' style='margin:10px 0'>Schools Near You</h5>
             <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
             <div class='schools-holder'><ul class='schools'></ul></div>`
     );
     let createLoadMoreBtn = function () {
       if ($("#more").length === 0) {
-        $("#cv-search").append("<div id='more'></div>");
-        $("#more").click(generateMore);
+        searchBar.append(
+          $("<div id='more'></div>").click(generateMore)
+        );
         $(".schools-holder").height($(".schools").height());
       }
     };

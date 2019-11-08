@@ -14,6 +14,9 @@ class FrequencyStore:
         return "{}{}".format(self.id_generator.prefixes.df, term)
 
     def increment_doc_count(self):
+        """
+        Increments the total number of documents indexed
+        """
         self.redis.increment(self.id_generator.value_names.doc_count)
 
     def increment_doc_frequency(self, term):
