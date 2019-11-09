@@ -1,22 +1,25 @@
 /* Search bar */
 #cv-search {
-	position:relative;
+  position: relative;
   margin: 130px 0 0 8%;
-  width:800px;
+  width: 800px;
 }
+
 #cv-searchbar, #cv-searchbtn {
-  border: 2px solid #666;
+  border: 1px solid #777;
   display: inline-block;
   background: white;
 }
+
 #cv-searchbar {
   border-radius: 5px 0 0 5px;
   width: 600px;
-  height: 60px;
+  height: 58px;
   font-size: 20pt;
   border-right: none;
   vertical-align: top;
 }
+
 #cv-searchbtn {
   cursor: pointer;
   border-radius: 0 5px 5px 0;
@@ -27,43 +30,53 @@
   margin-left: -5px;
   text-align: center;
 }
+
 #cv-searchbtn-icon {
   display: inline-block;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 13px;
+  padding-bottom: 13px;
+  height: 30px;
+  width: 30px;
 }
+
 svg#cv-searchbtn-icon path {
   fill: #666;
 }
+
 #cv-searchbar:focus, #cv-searchbar:focus + #cv-searchbtn {
   border-color: #555;
 }
+
 #cv-searchbar:focus + #cv-searchbtn > svg#cv-searchbtn-icon path {
   fill: #555;
 }
 
 /* Schools near you list */
 .schools-holder {
-  position:relative;
+  position: relative;
   overflow: hidden;
 }
+
 .schools {
   position: absolute;
   list-style: none;
-  left:0;
-  right:0;
-  margin:auto;
+  left: 0;
+  right: 0;
+  margin: auto;
   padding: 0 5px;
 }
+
 .nschool, #more {
   color: black;
   cursor: pointer;
   font-weight: bold;
   font-size: 12pt;
 }
+
 .nschool {
   text-decoration: underline;
 }
+
 #more {
   background: url(/img/downward_caret.png) no-repeat center center;
   width: 100px;
@@ -82,71 +95,102 @@ svg#cv-searchbtn-icon path {
   z-index: -2;
   background-size: cover;
 }
+
 .home-background.bg {
   background: url(/img/home.png) repeat-x bottom center;
 }
+
 .home-background.fg {
   background: url(/img/clouds.png) repeat-x bottom center;
   animation: slide 5s linear infinite;
   -webkit-animation: slide 100s linear infinite;
 }
+
 @keyframes slide {
-    from { background-position: 0 bottom; }
-    to { background-position: -1512px bottom; }
+  from {
+    background-position: 0 bottom;
+  }
+  to {
+    background-position: -1512px bottom;
+  }
 }
+
 @-webkit-keyframes slide {
-    from { background-position: 0 bottom; }
-    to { background-position: -1512px bottom; }
+  from {
+    background-position: 0 bottom;
+  }
+  to {
+    background-position: -1512px bottom;
+  }
 }
+
 @media screen and (max-width: 800px) {
   @keyframes slide {
-    from { background-position: 0 bottom; }
-    to { background-position: -800px bottom; }
+    from {
+      background-position: 0 bottom;
+    }
+    to {
+      background-position: -800px bottom;
+    }
   }
   @-webkit-keyframes slide {
-      from { background-position: 0 bottom; }
-      to { background-position: -800px bottom; }
+    from {
+      background-position: 0 bottom;
+    }
+    to {
+      background-position: -800px bottom;
+    }
   }
   .home-background {
     background-size: 800px !important;
   }
+
   #cv-search {
     text-align: center;
     margin: 110px auto auto;
     width: 100%;
   }
+
   .cv-holder {
     text-align: center;
   }
+
   #cv-searchbar {
     width: unset;
-    height: 40px;
+    height: 38px;
     font-size: 20px;
   }
+
   #cv-searchbtn {
     height: 36px;
-    width: 50px;
+    width: 40px;
   }
+
   #cv-searchbtn-icon {
-    width: 25px;
-    padding: 1px;
+    width: 22px;
+    padding: 3px 0;
   }
+
   .cv {
     margin: auto !important;
   }
+
   .nschool {
     font-size: 13pt;
   }
+
   #more {
-    margin-top:8px;
+    margin-top: 8px;
   }
 }
+
 .lds-ring {
   display: inline-block;
   position: relative;
   width: 64px;
   height: 64px;
 }
+
 .lds-ring div {
   box-sizing: border-box;
   display: block;
@@ -159,15 +203,19 @@ svg#cv-searchbtn-icon path {
   animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
   border-color: #df79ac transparent transparent transparent;
 }
+
 .lds-ring div:nth-child(1) {
   animation-delay: -0.45s;
 }
+
 .lds-ring div:nth-child(2) {
   animation-delay: -0.3s;
 }
+
 .lds-ring div:nth-child(3) {
   animation-delay: -0.15s;
 }
+
 @keyframes lds-ring {
   0% {
     transform: rotate(0deg);

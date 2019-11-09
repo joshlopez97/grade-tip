@@ -210,45 +210,19 @@ a {
   height: 61px;
   top: 0;
 }
-.usearch-mobile {
-  display: inline-block !important;
-  border-radius: 10px !important;
-  border: 2px solid #ff99cc !important;
-}
-.usearch-mobile-holder {
-  text-align: right !important;
-  display: inline-block !important;
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  margin-left: 50px !important;
-  margin-top: 7px !important;
-}
 .ui-menu {
   text-align: left !important;
 }
 
-/* Pop Up Search Bar
+/* Navigation Searchbar
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-.usearch-holder {
-  display: none;
-  margin-left:60px;
-  height:45px;
-  width:400px;
-  position: absolute;
-  z-index: 100;
+#site-search {
+  border: 1px solid #999;
+  border-radius: 3px;
 }
 
-.usearch-bar {
-  margin: 0 !important;
-  font-size: 16pt;
-  border-radius: 0 10px 10px 10px;
-  border: 2px solid #cc0066 !important;
-  width: 400px;
-  height: 45px !important;
-  z-index: 100;
-}
-
+/* Sidebar
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
 .sidebar {
   position: fixed;
   height: 100%;

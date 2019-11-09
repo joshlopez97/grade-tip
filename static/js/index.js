@@ -4,13 +4,17 @@ $(document).ready(function () {
   });
   let last = [];
   let searchbar = $("#cv-searchbar");
+  let searchbtn = $("#cv-searchbtn");
   searchbar.autocomplete({
     source: search,
     select: linkToSchool,
-    scroll: true
+    scroll: true,
+    open: function() {
+        $("ul.ui-menu").width(searchbtn.outerWidth() + searchbar.outerWidth() - 2);
+    }
   });
 
-  $("#cv-searchbtn").click(function (e) {
+  searchbtn.click(function (e) {
     e.preventDefault();
     return false;
   });

@@ -6,11 +6,6 @@ $.get("/colleges", function (data) {
   college_list = Object.keys(college_data);
 });
 
-jQuery.ui.autocomplete.prototype._resizeMenu = function () {
-  let ul = this.menu.element;
-  ul.outerWidth(this.element.outerWidth());
-};
-
 /* Function retrieves top 5 schools that match a query - used for autocomplete */
 let cached_results = {};
 
