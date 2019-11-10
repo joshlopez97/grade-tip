@@ -44,7 +44,7 @@ svg#cv-searchbtn-icon path {
 }
 
 #cv-searchbar:focus, #cv-searchbar:focus + #cv-searchbtn {
-  border-color: #555;
+  border-color: #000000;
 }
 
 #cv-searchbar:focus + #cv-searchbtn > svg#cv-searchbtn-icon path {

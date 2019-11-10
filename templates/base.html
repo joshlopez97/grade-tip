@@ -1,66 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-{% block head %}
-<meta charset="utf-8">
-<title>{% block title%}{% endblock %}</title>
-{% block page_description %}{% endblock %}
-{% block css %}
-<!-- Me
-–––––––––––––––––––––––––––––––––––––––––––––––––– -->
-<meta name="author" content="Josh Lopez">
+  {% block head %}
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock %}</title>
+    {% block page_description %}{% endblock %}
+    {% block css %}
+      <!-- Me
+      –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+      <meta name="author" content="Josh Lopez">
 
-<!-- Mobile Specific Metas
-–––––––––––––––––––––––––––––––––––––––––––––––––– -->
-<meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- Mobile Specific Metas
+      –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- FONT
-–––––––––––––––––––––––––––––––––––––––––––––––––– -->
-<link rel="stylesheet" type="text/css"
-  href="{{ url_for('static', filename='css/font.css') }}">
+      <!-- FONT
+      –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+      <link rel="stylesheet" type="text/css"
+            href="{{ url_for('static', filename='css/font.css') }}">
 
 
-<!-- CSS
-–––––––––––––––––––––––––––––––––––––––––––––––––– -->
-<link rel="stylesheet" type="text/css"
-  href="{{ url_for('static', filename='css/jquery-ui.css') }}">
-<link rel="stylesheet" type="text/css"
-  href="{{ url_for('static', filename='css/normalize.css') }}">
-<link rel="stylesheet" type="text/css"
-  href="{{ url_for('static', filename='css/skeleton.css') }}">
-<link rel="stylesheet" type="text/css"
-  href="{{ url_for('static', filename='css/base.css')}}">
-{% endblock %}
-{% block javascript %}
-<!-- Javascript
-–––––––––––––––––––––––––––––––––––––––––––––––––– -->
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js">
-</script>
-<script type="text/javascript"
-  src="{{url_for('static', filename='js/jquery.js')}}">
-</script>
-<script type="text/javascript"
-  src="{{url_for('static', filename='js/jquery-ui.js')}}">
-</script>
-<script type="text/javascript"
-  src="{{url_for('static', filename='js/universal.js')}}">
-</script>
-{% endblock %}
+      <!-- CSS
+      –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+      <link rel="stylesheet" type="text/css"
+            href="{{ url_for('static', filename='css/jquery-ui.css') }}">
+      <link rel="stylesheet" type="text/css"
+            href="{{ url_for('static', filename='css/normalize.css') }}">
+      <link rel="stylesheet" type="text/css"
+            href="{{ url_for('static', filename='css/skeleton.css') }}">
+      <link rel="stylesheet" type="text/css"
+            href="{{ url_for('static', filename='css/base.css') }}">
+    {% endblock %}
+    {% block javascript %}
+      <!-- Javascript
+      –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+      <script type="text/javascript"
+              src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js">
+      </script>
+      <script type="text/javascript"
+              src="{{ url_for('static', filename='js/jquery.js') }}">
+      </script>
+      <script type="text/javascript"
+              src="{{ url_for('static', filename='js/jquery-ui.js') }}">
+      </script>
+      <script type="text/javascript"
+              src="{{ url_for('static', filename='js/universal.js') }}">
+      </script>
+    {% endblock %}
 
-<!-- Favicon
-–––––––––––––––––––––––––––––––––––––––––––––––––– -->
-<link rel="shortcut icon"
-  href="{{ url_for('static', filename='img/favicon.png') }}">
-{% endblock %}
+    <!-- Favicon
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="shortcut icon"
+          href="{{ url_for('static', filename='img/favicon.png') }}">
+  {% endblock %}
 </head>
 <body>
 {% block body %}
 
-<!-- Navigation
-–––––––––––––––––––––––––––––––––––––––––––––––––– -->
-{% block navbar %}
-  <nav class="navbar" id="navbar-main">
+  <!-- Navigation
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  {% block navbar %}
+    <nav class="navbar" id="navbar-main">
       <ul class="navbar-list">
         <li class="navbar-brand">
           <a id="logo-link" href="{{ url_for('index') }}">
@@ -68,56 +68,63 @@
           </a>
         </li>
         <li class="navbar-holder">
-          <input id="site-search" name="site-search" type="text">
+          <div class="site-search-holder">
+            <svg class="site-search-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 451 451" xml:space="preserve">
+              <path d="M447.05,428l-109.6-109.6c29.4-33.8,47.2-77.9,47.2-126.1C384.65,86.2,298.35,0,192.35,0C86.25,0,0.05,86.3,0.05,192.3 s86.3,192.3,192.3,192.3c48.2,0,92.3-17.8,126.1-47.2L428.05,447c2.6,2.6,6.1,4,9.5,4s6.9-1.3,9.5-4
+    C452.25,441.8,452.25,433.2,447.05,428z M26.95,192.3c0-91.2,74.2-165.3,165.3-165.3c91.2,0,165.3,74.2,165.3,165.3
+    s-74.1,165.4-165.3,165.4C101.15,357.7,26.95,283.5,26.95,192.3z"></path>
+            </svg>
+            <input id="site-search" name="site-search" type="text" placeholder="Search">
+          </div>
           <button class="gtbtn nav" id="upload-btn" onclick="location.href='/upload';">Upload</button>
-          <button class="gtbtn nav usearch" id="about-btn" onclick="location.href='/about';">About</button>
+          <button class="gtbtn nav" id="about-btn" onclick="location.href='/about';">About</button>
         </li>
         <li class="navbar-login">
           {% if current_user.is_authenticated %}
-          <button class="gtbtn acct profile" onclick="location.href='/logout';">Logout</button>
+            <button class="gtbtn acct profile" onclick="location.href='/logout';">Logout</button>
           {% else %}
-          <button class="gtbtn acct" id="reg-btn" onclick="location.href='/register';">Register</button>
-          <button class="gtbtn acct" id="login-btn" onclick="location.href='/login';">Login</button>
+            <button class="gtbtn acct" id="reg-btn" onclick="location.href='/register';">Register</button>
+            <button class="gtbtn acct" id="login-btn" onclick="location.href='/login';">Login</button>
           {% endif %}
         </li>
       </ul>
-  </nav>
-  <div class="sidebar-icon-holder">
-    <div class="icon-wrapper">
-      <div class="sidebar-button"></div>
-      <div class="circle icon">
-        <span class="line top"></span>
-        <span class="line middle"></span>
-        <span class="line bottom"></span>
+    </nav>
+    <div class="sidebar-icon-holder">
+      <div class="icon-wrapper">
+        <div class="sidebar-button"></div>
+        <div class="circle icon">
+          <span class="line top"></span>
+          <span class="line middle"></span>
+          <span class="line bottom"></span>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="top-space"></div>
-  <div id="darken"></div>
-{% endblock %}
+    <div class="top-space"></div>
+    <div id="darken"></div>
+  {% endblock %}
 
-<!-- Primary Page Layout
-–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 
-{% block extended_content %}
+  {% block extended_content %}
 
-{% endblock %}
+  {% endblock %}
 
 
-<!-- Company info
-–––––––––––––––––––––––––––––––––––––––––––––––––– -->
-<!-- <div class="row">
+  <!-- Company info
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <!-- <div class="row">
   {% block footer %}
   <p class="footer" style="text-align:center;">
   </p>
   {% endblock %}
 </div> -->
-<script type="text/javascript"
-  src="{{url_for('static', filename='js/base.js')}}">
-</script>
+  <script type="text/javascript"
+          src="{{ url_for('static', filename='js/base.js') }}">
+  </script>
 
-<!-- End Document
-–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 {% endblock %}
 </body>
 

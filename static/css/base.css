@@ -1,10 +1,10 @@
- /* Table of Contents:
- ––––––––––––––––––––––––––––––––––––––––––––––––––
- - Base Style
- - Error Pages
- - Navigation Bar
- - Table
- */
+/* Table of Contents:
+––––––––––––––––––––––––––––––––––––––––––––––––––
+- Base Style
+- Error Pages
+- Navigation Bar
+- Table
+*/
 
 /* Base Style
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
@@ -12,26 +12,33 @@ body {
   font-family: 'Open Sans', sans-serif;
   background: #f3f3f3;
 }
+
 a {
   text-decoration: none;
 }
+
 ::selection {
   background: #e1e1e1;
 }
+
 ::-moz-selection {
   background: #e1e1e1;
 }
+
 .header {
   text-align: center;
   font-weight: 600;
   font-size: 25pt !important;
 }
+
 .header > h1 {
   font-size: 25pt;
 }
+
 .top-space {
   height: 48px;
 }
+
 .footer {
   top: 1000px;
   position: absolute;
@@ -41,14 +48,17 @@ a {
   font-size: 11px;
   font-weight: 600;
 }
+
 #loader {
   position: fixed;
   width: 100%;
   height: 100%;
   z-index: 1000;
   background: black !important;
-  top:0 !important; left:0 !important;
+  top: 0 !important;
+  left: 0 !important;
 }
+
 .load-anim {
   background: none;
   position: absolute;
@@ -66,11 +76,13 @@ a {
   margin-top: 10em;
   margin-bottom: 10em;
 }
+
 /* div containing 'go back to home' button */
 .errorPage .row:last-child {
   width: 300px; /* match width of button */
   margin: 1em auto auto;
 }
+
 .errorPage a {
   margin-bottom: 2em;
 }
@@ -87,7 +99,9 @@ a {
   width: 100%;
   top: 0;
   left: 0;
+  overflow: hidden;
 }
+
 .navbar-list {
   list-style: none;
   margin-bottom: 0;
@@ -95,11 +109,13 @@ a {
   position: absolute;
   height: 49px;
 }
+
 .sidebar-list {
   list-style: none;
   position: absolute;
   margin-top: 50px;
 }
+
 .navbar-brand {
   line-height: 5rem;
   position: relative;
@@ -108,28 +124,33 @@ a {
   display: inline-block;
   padding: 0 10px;
 }
+
 #logo-link {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
 }
+
 #logo {
   height: 28px;
   cursor: pointer;
   vertical-align: middle;
 }
+
 /* navbar list items on top right */
 .navbar-holder {
   position: relative;
   display: inline-block;
   vertical-align: top;
 }
+
 .navbar-login {
   float: right;
   position: relative;
   display: inline-block;
   vertical-align: top;
 }
+
 /* navbar list links */
 .navbar-link {
   font-size: 16px;
@@ -144,8 +165,7 @@ a {
 .gtbtn:active,
 .gtbtn:focus,
 .gtbtn:focus-within,
-.gtbtn:visited
-{
+.gtbtn:visited {
   border-radius: 0;
   background: white;
   color: black;
@@ -161,21 +181,26 @@ a {
   letter-spacing: 0;
   text-transform: none;
 }
+
 .gtbtn.nav {
   line-height: 5px;
   margin: 3px 60px 0;
 }
+
 .side .gtbtn {
-   margin: 7px 12px 0 !important;
+  margin: 7px 12px 0 !important;
 }
+
 .gtbtn.acct {
   line-height: 5px;
   margin: 3px 20px 0;
 }
+
 .gtbtn:hover {
   color: #cc0066;
   background: white;
 }
+
 .gtbtn.side:hover {
   border-bottom: 4px solid black;
   color: #dc94b8;
@@ -185,6 +210,7 @@ a {
   text-transform: none;
   font-weight: normal;
 }
+
 .usearch-mobile-icon-holder {
   display: none;
   cursor: pointer;
@@ -193,6 +219,7 @@ a {
   top: 0;
   right: 0;
 }
+
 .sidebar-icon-holder {
   display: none;
   cursor: pointer;
@@ -210,15 +237,52 @@ a {
   height: 61px;
   top: 0;
 }
+
 .ui-menu {
   text-align: left !important;
 }
 
 /* Navigation Searchbar
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-#site-search {
-  border: 1px solid #999;
+.site-search-holder {
+  border: 1px solid #bebebe;
   border-radius: 3px;
+  background: #f6f6f6;
+  display: inline-block;
+  width: 140px;
+}
+.site-search-holder:focus {
+  animation: grow-searchbar 1s linear;
+}
+
+@keyframes grow-searchbar {
+  from {
+    width: 140px;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.site-search-icon {
+  width: 12pt;
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding-left: 5px;
+}
+.site-search-icon > path {
+  fill: #777;
+}
+
+#site-search {
+  height: 31px;
+  margin: 0;
+  padding-left: 30px;
+  width: 100%;
+  border: none;
+  background: none;
 }
 
 /* Sidebar
@@ -233,6 +297,7 @@ a {
   z-index: 950;
   border-right: 1px solid #ccc;
 }
+
 .sidebar.empty {
   height: 15px;
   top: 46px;
@@ -244,6 +309,7 @@ a {
   .navbar-holder, .navbar-login {
     display: none;
   }
+
   .navbar-brand {
     position: relative;
     margin: 0;
@@ -251,63 +317,76 @@ a {
     display: inline-block;
     padding: 0;
   }
+
   #logo-link {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
+
   .navbar-list {
     text-align: center;
   }
+
   .usearch-mobile-icon-holder {
     display: inline-block;
     z-index: 500;
   }
+
   .sidebar-icon-holder {
     display: inline-block;
   }
 }
 
- /* Mobile sidebar icon animation */
+/* Mobile sidebar icon animation */
 .icon-wrapper {
   height: 30px;
   width: 30px;
 }
+
 .circle {
-  width:30px;
-  height:30px;
-  position:relative;
+  width: 30px;
+  height: 30px;
+  position: relative;
 }
+
 .line {
   position: absolute;
   height: 3px;
-  width:100%;
+  width: 100%;
   background: black;
-  border-radius:4px;
+  border-radius: 4px;
   transition: all cubic-bezier(0.26, 0.0, 0.27, 0.0) 0.2s;
 }
+
 .top {
-  top:18%;
+  top: 18%;
 }
+
 .middle {
   width: 80%;
-  top:48%;
+  top: 48%;
 }
+
 .bottom {
-  top:78%;
+  top: 78%;
 }
+
 .icon.close .top {
-  transform:rotate(45deg);
-  top:48%;
+  transform: rotate(45deg);
+  top: 48%;
 }
+
 .icon.close .middle {
   width: 100%;
 }
+
 .icon.close .middle, .icon.close .bottom {
-  transform:rotate(-45deg);
-  top:48%;
+  transform: rotate(-45deg);
+  top: 48%;
 }
+
 #darken {
   display: none;
   position: fixed;
@@ -333,6 +412,7 @@ a {
   -ms-user-select: none;
   user-select: none;
 }
+
 .checkbox input[type="checkbox"] {
   position: absolute;
   opacity: 0;
@@ -340,6 +420,7 @@ a {
   height: 0;
   width: 0;
 }
+
 .gt-checkmark {
   position: absolute;
   top: 0;
@@ -351,20 +432,25 @@ a {
   border-radius: 5px;
   border: 1px solid #ddd;
 }
+
 .gt-checkmark:hover {
   background-color: #f3f3f3;
 }
+
 .checkbox input:checked ~ .gt-checkmark {
   background-color: #f9f9f9;
 }
+
 .gt-checkmark:after {
   content: "";
   position: absolute;
   display: none;
 }
+
 .checkbox input:checked ~ .gt-checkmark:after {
   display: block;
 }
+
 .checkbox .gt-checkmark:after {
   left: 8px;
   top: 3px;
