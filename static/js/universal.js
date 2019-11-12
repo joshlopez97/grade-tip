@@ -1,19 +1,17 @@
 /* Get college and high school data */
 let college_list = [];
 let college_data = {};
-$.get("/colleges", function (data) {
-  college_data = $.parseJSON(data);
-  college_list = Object.keys(college_data);
-});
+get_college_data();
 
 /* Function retrieves top 5 schools that match a query - used for autocomplete */
 let cached_results = {};
 
 function bold(str) {
-  return `<span class="ui-autocomplete-term">${str}</span>`;
+  return `<span class="matched-term">${str}</span>`;
 }
 
 function format_acronym_match(result, query) {
+  console.log("RESULT", result);
   let words = [];
   let result_words = result.split(' ');
   for (let word of result_words) {
@@ -27,22 +25,28 @@ function format_acronym_match(result, query) {
 }
 
 function format_partial_match(result, terms) {
+  console.log("RESULT2", result);
   for (let term of terms) {
-    result = result.replace(new RegExp(`(^${term}|\\s${term})`, "gi"), bold("$1"));
+    result = result.replace(new RegExp(`(^${term}|(?<!<[a-z]+)\\s${term})`, "gi"), bold("$1"));
   }
   return result;
 }
 
+function get_college_data(callback=()=>{}) {
+  $.get("/colleges", function (data) {
+    college_data = $.parseJSON(data);
+    college_list = Object.keys(college_data);
+    callback();
+  });
+}
 
-function search(request, response) {
+
+function search_college_names(query) {
   let results = new Set();
   let stopwords = ['of', 'at', 'and', 'the', 'for'];
-  let query = request.term.toLowerCase().trim();
   if (query in cached_results) {
-    response(cached_results[query]);
-    return;
+    return cached_results[query];
   }
-
   let terms = query.split(' ').filter(Boolean);
   let first = [];
   let second = [];
@@ -108,7 +112,13 @@ function search(request, response) {
   }
   if (results.size > 0 && Object.keys(cached_results).length < 50)
     cached_results[query] = Array.from(results);
-  response(cached_results[query]);
+  return cached_results[query];
+}
+
+
+function search(request, response) {
+  let query = request.term.toLowerCase().trim();
+  response(search_college_names(query));
 }
 
 /* Helper function to focus an input field */
@@ -118,12 +128,16 @@ function focusField(elem) {
   }, 0);
 }
 
-function linkToSchool(event, ui) {
+function schoolAutocompleteClickHandler(event, ui) {
   event.preventDefault();
   let school = $(ui.item.value);
   let sid = school.attr("id");
-  window.location.href = ("/school/" + sid);
+  linkToSchool(sid);
   return false;
+}
+
+function linkToSchool(school_id) {
+  window.location.href = (`/school/${school_id}`);
 }
 
 function selectSchool(event, ui) {

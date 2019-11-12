@@ -1,13 +1,14 @@
 import os
 
-from flask import Flask
+from flask import Flask, Blueprint
 from flask_login import LoginManager
 
 from GradeTip.content.resources import posts_by_sid, fetch_post_requests, approve_request, deny_request
 from GradeTip.pages import (loginpage, registerpage, logout, indexpage,
                             internal_server_error, page_not_found, schoolpage, monitorpage, detailspage, listingpage,
-                            aboutpage, termspage, privacypage)
+                            aboutpage, termspage, privacypage, searchpage)
 from GradeTip.schools.resources import nearest, colleges
+from GradeTip.search.resources import posts_query, school_query
 from GradeTip.user import user_manager
 from GradeTip.user.resources import usernames, validate_email
 
@@ -43,6 +44,8 @@ def register_page_routes(app):
                      methods=['GET', 'POST'])
     app.add_url_rule('/', 'index', indexpage,
                      methods=['GET', 'POST'])
+    app.add_url_rule('/search', 'search', searchpage,
+                     methods=['GET', 'POST'])
     app.add_url_rule('/register', 'registerpage', registerpage,
                      methods=['GET', 'POST'])
     app.add_url_rule('/upload', 'uploadpage', listingpage,
@@ -63,15 +66,22 @@ def register_page_routes(app):
 
 
 def register_api_routes(app):
+    api_blueprint = Blueprint('api', 'api')
     # Content-related endpoints
-    app.add_url_rule('/admin/requests', '/admin/requests', fetch_post_requests,
+    app.add_url_rule('/admin/requests', 'admin/requests', fetch_post_requests,
                      methods=['GET'])
-    app.add_url_rule('/admin/approve/<request_id>', '/admin/approve', approve_request,
+    app.add_url_rule('/admin/approve/<request_id>', 'admin/approve', approve_request,
                      methods=['GET'])
-    app.add_url_rule('/admin/deny/<request_id>', '/admin/deny', deny_request,
+    app.add_url_rule('/admin/deny/<request_id>', 'admin/deny', deny_request,
                      methods=['GET'])
-    app.add_url_rule('/school/posts', '/school/posts', posts_by_sid,
+    app.add_url_rule('/school/posts', 'school/posts', posts_by_sid,
                      methods=['POST'])
+
+    # Search endpoints
+    api_blueprint.add_url_rule('/content/search', 'content-search', posts_query,
+                               methods=['GET'])
+    api_blueprint.add_url_rule('/school/search', 'schools-search', school_query,
+                               methods=['GET'])
 
     # School-related endpoints
     app.add_url_rule('/nearest', 'nearest', nearest,
@@ -84,6 +94,7 @@ def register_api_routes(app):
                      methods=['GET'])
     app.add_url_rule('/validate_email', 'validate_email', validate_email,
                      methods=['POST'])
+    app.register_blueprint(api_blueprint, url_prefix='/api')
 
 
 def register_error_handlers(app):
@@ -125,4 +136,3 @@ def load_user(email):
     """
 
     return user_manager.create_user(email)
-

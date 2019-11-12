@@ -7,7 +7,8 @@ $(document).ready(function () {
   let searchbtn = $("#cv-searchbtn");
   searchbar.autocomplete({
     source: search,
-    select: linkToSchool,
+    focus: () => { return false; },
+    select: schoolAutocompleteClickHandler,
     scroll: true,
     open: function() {
         $("ul.ui-menu").width(searchbtn.outerWidth() + searchbar.outerWidth() - 2);

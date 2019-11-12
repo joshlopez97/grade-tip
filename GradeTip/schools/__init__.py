@@ -1,3 +1,3 @@
-from GradeTip.schools.school import Schools
+from GradeTip.schools.school import SchoolStore
 
-schools = Schools()
+school_store = SchoolStore()

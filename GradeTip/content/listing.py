@@ -4,7 +4,6 @@ from flask import current_app as app
 
 from GradeTip.content.content import ContentStore
 from GradeTip.content.identifier import IDGenerator
-from GradeTip.redis.hash import RedisHash
 from GradeTip.redis.set import RedisSet
 
 
@@ -74,8 +73,7 @@ class ListingStore(ContentStore):
         RedisSet(new_upload_id).add(filepaths)
 
         # store listing data in redis
-        identifier = "{}/{}".format(school_id, listing_id)
-        return super().make_content(identifier, {
+        return super().make_content(listing_id, {
             "sid": school_id,
             "title": request["title"],
             "course": request["course"],
@@ -86,21 +84,29 @@ class ListingStore(ContentStore):
             "time": request["time"]
         })
 
+    def get_listing(self, listing_id):
+        """
+        Get listing data for listing with given ID
+        :param listing_id: ID of listing to find
+        :return: dict containing listing data
+        """
+        listing_data = super().get_content(listing_id)
+        listing_data["preview"] = self.upload.get_preview_from_listing(listing_data["upload_id"])
+        listing_data["id"] = listing_id
+        app.logger.debug("fetched listing {}".format(listing_data))
+        return listing_data
+
     def get_listings_from_school(self, school_id):
         """
         Get all existing listings for school.
         :param school_id: ID of school to get listings from
         :return: dict containing all listing data for school
         """
-        listing_ids = RedisSet("listings/{}".format(school_id)).values()
         listings = {}
-        for listing_id in listing_ids:
+        listing_set_key = self.id_generator.set_names.listing(school_id)
+        for listing_id in RedisSet(listing_set_key).values():
             try:
-                listing_data = RedisHash("{}/{}".format(school_id, listing_id)).to_dict()
-                listing_data["preview"] = self.upload.get_preview_from_listing(listing_data["upload_id"])
-                del listing_data["upload_id"]
-                listings[listing_id] = listing_data
-                app.logger.debug("fetched listing {}".format(listing_data))
+                listings[listing_id] = self.get_listing(listing_id)
             except:
                 app.logger.debug("failed to fetch listing with id {}".format(listing_id))
                 traceback.print_exc()

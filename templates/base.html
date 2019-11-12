@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <title>{% block title %}{% endblock %}</title>
     {% block page_description %}{% endblock %}
+    {% block endpoints %}{% endblock %}
     {% block css %}
       <!-- Me
       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -74,7 +75,9 @@
     C452.25,441.8,452.25,433.2,447.05,428z M26.95,192.3c0-91.2,74.2-165.3,165.3-165.3c91.2,0,165.3,74.2,165.3,165.3
     s-74.1,165.4-165.3,165.4C101.15,357.7,26.95,283.5,26.95,192.3z"></path>
             </svg>
-            <input id="site-search" name="site-search" type="text" placeholder="Search">
+            <form style="margin: 0" action="/search">
+              <input id="site-search" name="query" type="text" placeholder="Search" value="{{ query }}">
+            </form>
           </div>
           <button class="gtbtn nav" id="upload-btn" onclick="location.href='/upload';">Upload</button>
           <button class="gtbtn nav" id="about-btn" onclick="location.href='/about';">About</button>

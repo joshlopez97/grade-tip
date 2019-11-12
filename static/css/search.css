@@ -1,0 +1,58 @@
+.results-description {
+  padding: 15px 30px;
+}
+
+.results-banner {
+  background: white;
+  box-shadow: 0 0 5px grey;
+}
+
+.results-tab-bar {
+  padding: 0 30px;
+}
+
+.results-tab {
+  display: inline-block;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.results-tab.active {
+  font-weight: bold;
+  border-bottom: 2px solid black;
+}
+
+.see-more-btn {
+  font-size: 10pt;
+  padding: 5px;
+}
+
+div.results {
+  margin: 30px;
+  padding: 10px 30px 5px;
+  background: white;
+  box-shadow: 0 0 5px #bdbdbd;
+  display: none;
+}
+
+div.results.show {
+  display: block;
+}
+
+.school-result-holder {
+  background: white;
+  padding: 15px 30px;
+  border: 1px solid #d4d4d4;
+  font-size: 13pt;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.school-result-holder:hover {
+  border-color: #9f9f9f;
+}
+
+.no-results-msg {
+  padding: 10px;
+  font-size: 10pt;
+}

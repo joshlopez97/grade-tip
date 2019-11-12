@@ -42,5 +42,5 @@ class Indexer:
         for term, term_info in term_freqs.items():
             if page is not None:
                 term_info['pg'] = page
-            self.freq_store.set_term_frequency(term, upload_id, json.dumps(term_info))
-            self.freq_store.increment_doc_frequency(term)
+            self.freq_store.set_tf(term, upload_id, json.dumps(term_info))
+            self.freq_store.increment_df(term)

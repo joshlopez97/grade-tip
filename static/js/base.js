@@ -32,7 +32,7 @@ $(document).ready(function() {
       $('.ui-menu-item').addClass('usearch')
     },
     appendTo:"#usearch-holder",
-    select: linkToSchool
+    select: schoolAutocompleteClickHandler
   });
   $(window).on('load', function() {
     console.log('base.js window loaded')

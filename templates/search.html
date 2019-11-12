@@ -1,15 +1,43 @@
 {% extends "base.html" %}
 {% block title %}Results for {{ query }}{% endblock %}
+{% block endpoints %}
+  <meta id="api-content-search" data-endpoint="{{ url_for('api.content-search') }}">
+  <meta id="api-schools-search" data-endpoint="{{ url_for('api.schools-search') }}">
+{% endblock %}
+
 {% block css %}
   {{ super() }}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/school.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/search.css') }}">
+{% endblock %}
+{% block javascript %}
+  {{ super() }}
+  <script type="text/javascript" src="{{ url_for('static', filename='js/search.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/posts.js') }}"></script>
 {% endblock %}
 {% block extended_content %}
   {{ super() }}
   <div id="results-container">
-    <div class="results-description">
-      Showing results that match "{{ query }}"
+    <div class="results-banner">
+      <div class="results-description">
+        Showing results that match "{{ query }}"
+      </div>
+      <div class="results-tab-bar">
+        <a href="/search?query={{ query }}&type=all" class="results-tab {{ 'active' if type == 'all' else '' }}">All</a>
+        <a href="/search?query={{ query }}&type=posts" class="results-tab {{ 'active' if type == 'posts' else '' }}">Posts</a>
+        <a href="/search?query={{ query }}&type=schools" class="results-tab {{ 'active' if type == 'schools' else '' }}">Schools</a>
+      </div>
     </div>
-    <ul id="results-list">
-    </ul>
+    <div id="schools-container" class="results">
+      <div class="results-header">Schools</div>
+      <div id="school-results" class="results-list"></div>
+    </div>
+    <div id="posts-container" class="results">
+      <div class="results-header">Posts & Documents</div>
+      <div id="post-results" class="results-list"></div>
+    </div>
   </div>
+  <div class="large-post-holder"></div>
+  <input type="hidden" id="query-value" value="{{ query }}">
+  <input type="hidden" id="type-value" value="{{ type }}">
 {% endblock %}

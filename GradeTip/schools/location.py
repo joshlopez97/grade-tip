@@ -10,7 +10,7 @@ from flask import current_app as app
 from GradeTip.content.utility import get_time
 from GradeTip.redis.hash import RedisHash
 from GradeTip.redis.list import RedisList
-from GradeTip.schools import schools
+from GradeTip.schools import school_store
 
 
 class GeolocationClient:
@@ -76,7 +76,7 @@ class LocationMapper:
         :param latitude: latitude of user location
         :param longitude: longitude of user location
         """
-        self.data = schools.get_college_data()
+        self.data = school_store.get_college_data()
         self.latitude = latitude
         self.longitude = longitude
 

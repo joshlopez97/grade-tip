@@ -284,6 +284,10 @@ a {
   border: none;
   background: none;
 }
+.matched-term {
+  font-weight: bold;
+  color: black;
+}
 
 /* Sidebar
 –––––––––––––––––––––––––––––––––––––––––––––––––– */

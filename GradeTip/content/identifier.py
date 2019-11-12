@@ -26,7 +26,7 @@ class IDGenerator:
         :param email: email of user
         :return: string containing ID
         """
-        set_name = "{}/{}".format(self.set_names.post, school_id)
+        set_name = self.set_names.post(school_id)
         return self.generate(self.prefixes.post, email, set_name)
 
     def generate_listing_id(self, email, school_id):
@@ -36,7 +36,7 @@ class IDGenerator:
         :param email: email of user
         :return: string containing ID
         """
-        set_name = "{}/{}".format(self.set_names.listing, school_id)
+        set_name = self.set_names.listing(school_id)
         return self.generate(self.prefixes.listing, email, set_name)
 
     def generate(self, prefix, email, set_name):
@@ -86,8 +86,14 @@ class Prefixes:
 class SetNames:
     def __init__(self):
         self.request = "requests"
-        self.post = "posts"
-        self.listing = "listings"
+        self._post = "posts-"
+        self._listing = "listings-"
+
+    def listing(self, school_id):
+        return "{}{}".format(self._listing, school_id)
+
+    def post(self, school_id):
+        return "{}{}".format(self._post, school_id)
 
 
 class ValueNames:

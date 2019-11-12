@@ -1,10 +1,11 @@
-function show_post(post_data, pid, pushState=true)
+function showPost(post_data, pid, pushState=true)
 {
-  console.log(post_data);
   $(".school-page-controls").css("display", "none");
   $("ul.posts").css("display", "none");
-  if (pushState)
+  if (pushState) {
     changeURLtoPost(post_data, pid);
+  }
+  window.document.title = `${post_data["title"]} | GradeTip`;
   displayBackBtnInBanner(post_data, pid);
   populatePostData(post_data);
 }
@@ -21,9 +22,7 @@ function displayBackBtnInBanner()
   let backBtn = $(".back-btn");
   backBtn.css("display", "table-cell");
   backBtn.click(() => {
-    let sid = get_school_id();
-    window.history.pushState({"page": "school"}, "", `/school/${sid}`);
-    show_school_page(false);
+    showSchoolPage(true);
   });
 }
 

@@ -10,6 +10,7 @@ class TextPostStore(ContentStore):
     """
     Class manages user text posts on school pages.
     """
+
     def __init__(self, user_manager):
         super().__init__(["title", "description"], "textpost")
         self.user = user_manager
@@ -46,11 +47,10 @@ class TextPostStore(ContentStore):
         """
         # get new post_id
         school_id = request["sid"]
-        post_id = self.id_generator.generate("p-", super().user_email, "posts/{}".format(school_id))
+        post_id = self.id_generator.generate_post_id(super().user_email, school_id)
 
         # store data into map with 'sid/post_id' as the key
-        identifier = "{}/{}".format(school_id, post_id)
-        return super().make_content(identifier, {
+        return super().make_content(post_id, {
             "title": request["title"],
             "description": request["description"],
             "uid": request["uid"],
@@ -65,7 +65,8 @@ class TextPostStore(ContentStore):
         :return: dict containing all posts for school
         """
         posts = {}
-        for post_id in RedisSet("posts/{}".format(school_id)).values():
-            posts[post_id] = RedisHash("{}/{}".format(school_id, post_id)).to_dict()
+        post_set_key = self.id_generator.set_names.post(school_id)
+        for post_id in RedisSet(post_set_key).values():
+            posts[post_id] = super().get_content(post_id)
         app.logger.debug("fetched {} posts for sid {}".format(len(posts), school_id))
         return posts

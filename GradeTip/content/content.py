@@ -60,6 +60,15 @@ class ContentStore:
         if RedisHash(identifier).update(data) is not None:
             return identifier
 
+    @staticmethod
+    def get_content(content_id):
+        """
+        Get content data for content with given ID
+        :param content_id: ID of content
+        :return: dict containing content data
+        """
+        return RedisHash(content_id).to_dict()
+
     def request_content(self, identifier, data):
         """
         Creates new redis hash with specified data representing a user request to create content.

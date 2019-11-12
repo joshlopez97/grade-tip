@@ -1,12 +1,10 @@
-
 /* Banner containing school name and icon */
-.navbar
-{
+.navbar {
   box-shadow: none;
   border-bottom: 1px solid #ccc;
 }
-.banner 
-{
+
+.banner {
   display: block;
   font-weight: 100;
   color: black;
@@ -15,58 +13,63 @@
   padding: 5px 30px;
   height: 50px;
 }
-.panel-icon-holder path
-{
+
+.panel-icon-holder path {
   fill: black;
 }
-span.banner-title 
-{
-	font-size: 14pt;
+
+span.banner-title {
+  font-size: 14pt;
   font-family: "Helvetica Heue", Helvetica, Arial, sans-serif;
-	display: table-cell;
+  display: table-cell;
   line-height: 1em;
   overflow: hidden;
   height: 50px;
   vertical-align: middle;
   padding: 3px 0 0 10px;
+  display: none;
 }
-svg.panel-icon 
-{
-	position: absolute;
-	display:block;
-	height: 40px;
-	width: 40px;
-	padding: 5px;
+
+svg.panel-icon {
+  position: absolute;
+  display: block;
+  height: 40px;
+  width: 40px;
+  padding: 5px;
 }
+
 div.panel-icon-holder {
   margin-right: 8px;
   height: 100%;
   width: 60px;
   position: relative;
-  display: table-cell;
+  display: none;
 }
+
 svg.panel-icon {
   height: 40px;
   width: 40px;
   padding: 5px;
 }
-div.container 
-{
-	top:0; left:0;
-	display: block;
+
+div.container {
+  top: 0;
+  left: 0;
+  display: block;
   width: 100%;
   padding: 20px;
   margin: 0;
 }
+
 /* Create post button */
-.create-post
-{
+.create-post {
   padding: 5px 10px;
   cursor: pointer;
   background: white;
   display: inline-block;
   box-shadow: 0 0 2px #ababab;
 }
+
 .create-post-icon {
   display: inline-block;
   height: 20px;
@@ -81,13 +84,16 @@ div.container
   border: 1px solid #ccc;
   cursor: pointer;
 }
+
 .create-post:hover, .post-type:hover {
   background: #fbfbfb;
   color: #CC0066;
 }
+
 .post-type:last-child {
   border-top: none;
 }
+
 .post-types-list {
   position: absolute;
   box-shadow: 0 3px 6px -2px #cecccc;
@@ -95,20 +101,19 @@ div.container
   background: white;
   width: 250px;
 }
+
 .post-types-list.show {
   display: block;
 }
 
-
 /* Form to create new post */
-.cform
-{
+.cform {
   visibility: hidden;
   padding: 10px;
   text-overflow: ellipsis;
 }
-.cfield
-{
+
+.cfield {
   border: 1px solid #aaa;
   border-radius: 12px;
   display: inline-block;
@@ -116,151 +121,157 @@ div.container
   font-size: 15pt;
   width: 90%;
 }
-.ctime
-{
+
+.ctime {
   width: 90% !important;
-  
+
 }
-.cdate
-{
+
+.cdate {
   background: url(/img/cal.png) no-repeat 98% 50%;
 }
-.tlabel
-{
+
+.tlabel {
   display: block;
   margin-bottom: 7px;
 }
-.tholder
-{
+
+.tholder {
   display: inline-block;
   width: 47%;
 }
+
 /*.cdate
 {
   width: 48% !important;
   min-width: 210px !important;
   margin-right: 3%;
 }*/
-input[type="text"].cfield
-{
+input[type="text"].cfield {
   height: 45px;
 }
-textarea.cfield
-{
+
+textarea.cfield {
   height: 180px;
   resize: none;
 }
-label.description
-{
-  border:none;
-  color:#222;
-  display:block;
-  font-size:12pt;
-  line-height:150%;
-  padding:0 0 1px;
+
+label.description {
+  border: none;
+  color: #222;
+  display: block;
+  font-size: 12pt;
+  line-height: 150%;
+  padding: 0 0 1px;
 }
-p.notice
-{
+
+p.notice {
   display: inline;
   padding-top: 0;
-  clear:both;
-  color:#777;
+  clear: both;
+  color: #777;
   font-weight: normal;
-  font-size:9pt;
+  font-size: 9pt;
   font-style: italic;
-  margin:0 0 5px;
+  margin: 0 0 5px;
 }
-.button_text
-{
-  overflow:visible;
-  padding:0 7px;
+
+.button_text {
+  overflow: visible;
+  padding: 0 7px;
   font-size: 14pt;
   width: 150px !important;
 }
-#saveForm
-{
-  float:right;
+
+#saveForm {
+  float: right;
 }
-#saveForm:disabled
-{
-  background:gray;
+
+#saveForm:disabled {
+  background: gray;
 }
-#cancelForm
-{
+
+#cancelForm {
   background: #e874aa;
 }
-#cancelForm:hover
-{
-  background:#af567f;
+
+#cancelForm:hover {
+  background: #af567f;
 }
 
 /* Custom radio buttons */
 label.cont {
-    display: inline-block;
-    position: relative;
-    margin: 5px 10px 5px 0px;
-    cursor: pointer;
-    font-size: 22px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    width: 116px;
-    height: 26px;
+  display: inline-block;
+  position: relative;
+  margin: 5px 10px 5px 0px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  width: 116px;
+  height: 26px;
 }
+
 label.cont input.aradio {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
 }
+
 span.checkmark {
   font-weight: normal;
   font-size: 12pt;
   line-height: 26px;
-    position: absolute;
-    height: 26px;
-    width: 100px;
-    padding: 0 8px 0;
-    background-color: #ddd;
-    border-radius: 999px;
-    text-align: center;
-    margin: 0px;
+  position: absolute;
+  height: 26px;
+  width: 100px;
+  padding: 0 8px 0;
+  background-color: #ddd;
+  border-radius: 999px;
+  text-align: center;
+  margin: 0px;
 }
+
 label.cont:hover input.aradio ~ span.checkmark {
-    background-color: #bbb;
+  background-color: #bbb;
 }
+
 label.cont input.aradio:checked ~ span.checkmark {
-    background-color: #ff99cc;
+  background-color: #ff99cc;
 }
+
 span.checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
+  content: "";
+  position: absolute;
+  display: none;
 }
+
 label.cont input.radio:checked ~ span.checkmark:after {
-    display: inline-block;
+  display: inline-block;
 }
+
 label.cont .checkmark:after {
   background: transparent;
 }
 
 /* Buttons for selecting type of post */
-div.button-holder
-{
-	display: table-cell;
-	padding: 3px 5px 5px 10px;
+div.button-holder {
+  display: table-cell;
+  padding: 3px 5px 5px 10px;
 }
-span.pb-header
-{
-	display:block;
-	margin-left: 10px;
-	margin-top: 10px;
-	font-size: 17pt;
-	line-height: 1.5em;
+
+span.pb-header {
+  display: block;
+  margin-left: 10px;
+  margin-top: 10px;
+  font-size: 17pt;
+  line-height: 1.5em;
 }
-.postbtn
-{
-	display:block;
+
+.postbtn {
+  display: block;
   margin: 5px;
   padding: 0 12px;
   border-radius: 15px;
@@ -272,6 +283,7 @@ span.pb-header
   text-align: left;
   background: #196ab1;
 }
+
 div.btn-icon-holder {
   height: 50px;
   width: 52px;
@@ -279,73 +291,91 @@ div.btn-icon-holder {
   display: table-cell;
   padding-right: 8px;
 }
+
 svg.btn-icon {
-	position: absolute;
-	display:block;
-	height: 50px;
-	width: 50px;
+  position: absolute;
+  display: block;
+  height: 50px;
+  width: 50px;
 }
+
 span.btn-content {
-	display: table-cell;
-	vertical-align: middle;
+  display: table-cell;
+  vertical-align: middle;
 }
 
 /* Posts list */
 ul.posts {
   list-style: none;
 }
+
 li.post-holder {
   background: white;
   border: 1px solid #ddd;
   margin: 5px 0;
   padding: 3px 9px;
   cursor: pointer;
+  list-style: none;
 }
+
 li.post-holder:hover {
   border: 1px solid #aaa;
 }
+
 .post-info {
   color: #888;
   font-size: 9pt;
 }
+
 .post-user {
 
 }
+
 .post-title {
   font-weight: bold;
   font-size: 13pt;
 }
+
 .post-description {
   font-size: 10pt;
 }
+
 .post-btn {
   font-size: 9pt;
   margin-right: 10px;
   cursor: pointer;
 }
+
 .post-btn:active, .post-btn.clicked {
   color: #993366;
   font-weight: bold;
 }
+
 .post-time {
 }
+
 .post-content {
   display: inline-block;
   vertical-align: top;
   padding: 5px;
 }
+
 .post_thumbnail-holder {
   display: inline-block;
 }
+
 .post-thumbnail {
   height: 75px;
 }
+
 .post-preview-holder {
 }
+
 .post-preview {
   height: unset;
   width: 100%;
 }
+
 .noposts {
   background: white;
   border: 1px solid #ddd;
@@ -360,19 +390,24 @@ div.large-post-holder {
   padding: 15px 15px 10px;
   display: none;
 }
+
 .large-post-holder .post-title {
   font-size: 15pt;
 }
+
 .large-post-holder .post-description {
   font-size: 11pt;
 }
+
 .large-post-holder .post-content {
   margin-bottom: 10px;
 }
+
 .large-post-holder .post-btn {
   font-size: 9.5pt;
   margin-right: 15px;
 }
+
 .back-btn {
   display: none;
   vertical-align: middle;
@@ -381,18 +416,22 @@ div.large-post-holder {
   font-size: 13pt;
   cursor: pointer;
 }
+
 .school-page-controls {
   margin-bottom: 20px;
+  display: none;
 }
 
 /* Mobile support */
 @media screen and (max-width: 975px) {
   span.pb-header {
-  	font-size: 15pt;
+    font-size: 15pt;
   }
+
   div.button-holder {
-  	display: block;
+    display: block;
   }
+
   .button_text {
     width: 125px !important;
   }

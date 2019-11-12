@@ -6,7 +6,7 @@ from flask_login import current_user, logout_user
 
 from GradeTip.admin import admin_authenticator
 from GradeTip.content import listing_store, post_store, request_store
-from GradeTip.schools import schools
+from GradeTip.schools import school_store
 from GradeTip.user import session_manager, user_manager
 
 
@@ -94,6 +94,16 @@ def indexpage():
     return render_template('index.html')
 
 
+def searchpage():
+    query = request.args.get("query")
+    if query is None:
+        abort(404)
+    search_type = request.args.get("type")
+    if search_type is None:
+        search_type = "all"
+    return render_template('search.html', query=query, type=search_type)
+
+
 def aboutpage():
     """
     Simple page explaining what gradetip is and how it works.
@@ -123,7 +133,7 @@ def schoolpage(school_id):
     School page for displaying all posts/content published to that school's page.
     :param school_id: the school_id for the school's page to be shown
     """
-    school_name = schools.get_school_name(int(school_id))
+    school_name = school_store.get_school_name(int(school_id))
     if not school_name:
         abort(404)
     requested_listing = request.args.get("requested")
@@ -171,7 +181,7 @@ def listingpage():
     school_id = request.args.get("sid")
     error = None
     if school_id is not None and re.match(r'\d+', school_id):
-        school_name = schools.get_school_name(int(school_id))
+        school_name = school_store.get_school_name(int(school_id))
     if request.method == 'POST':
         file = request.files.get('file')
         request_id = listing_store.request_listing(request.form, file)
@@ -183,8 +193,8 @@ def listingpage():
             if app.config.get("REQUIRE_POST_APPROVAL") is not None and not app.config.get("REQUIRE_POST_APPROVAL"):
                 app.logger.info("Promoting request {} to post".format(request_id))
                 request_store.approve_request(request_id)
-                return redirect("/school/{}?created=1".format(schools.get_school_id(request.form.get("school"))))
-            return redirect("/school/{}?requested=1".format(schools.get_school_id(request.form.get("school"))))
+                return redirect("/school/{}?created=1".format(school_store.get_school_id(request.form.get("school"))))
+            return redirect("/school/{}?requested=1".format(school_store.get_school_id(request.form.get("school"))))
 
     return render_template('sell.html', sid=school_id, school_name=school_name, error=error)
 
@@ -196,9 +206,10 @@ def detailspage(school_id, post_id):
     :param school_id: ID of school that this post was made to
     :param post_id: ID of post being viewed
     """
-    school_name = schools.get_school_name(int(school_id))
+    school_name = school_store.get_school_name(int(school_id))
     if not school_name:
         abort(404)
+    print(post_id)
     return render_template('school.html', school=school_name, sid=school_id, pid=post_id)
 
 
