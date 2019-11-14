@@ -76,7 +76,7 @@ function getPostsForSchool(sid) {
   $.post("/school/posts", {"sid": sid}, function (data) {
     let posts = $.parseJSON(data);
     showPosts(posts);
-    if (location.pathname.match("/[0-9]*/l-[0-9a-zA-Z]*")) {
+    if (location.pathname.match("/[0-9]*/(l|p)-[0-9a-zA-Z]*")) {
       console.log("pathname");
       let path = location.pathname;
       let pid = path.substring(path.lastIndexOf('/') + 1);
