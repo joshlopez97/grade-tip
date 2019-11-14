@@ -34,6 +34,15 @@ class UserCache:
         key = self._get_key_for(ip_address)
         return RedisHash(key).update(data)
 
+    def delete(self, ip_address, key_to_delete):
+        """
+        Removes (key, value) pair from IP address hash
+        :param ip_address: IP address of cached data
+        :param key_to_delete: key to delete
+        """
+        ip_address_key = self._get_key_for(ip_address)
+        return RedisHash(ip_address_key).delete(key_to_delete)
+
     def _get_key_for(self, ip_address):
         """
         Returns redis key for ip address cached data

@@ -6,6 +6,7 @@ from flask import current_app as app
 
 class RedisHash:
     """ Wrapper class for interacting with Redis hashes. """
+
     def __init__(self, hash_name):
         self.redis = redis_server
         self.hash_name = hash_name
@@ -75,6 +76,20 @@ class RedisHash:
         try:
             app.logger.debug("Checking if key {} exists in hash {}".format(key, self.hash_name))
             return self.redis.hexists(self.hash_name, key)
+        except Exception as e:
+            app.logger.error(e)
+            traceback.print_exc()
+        return False
+
+    def delete(self, key):
+        """
+        Deletes key from hash.
+        :param key: Name of key to delete
+        :return: boolean indicating if key was deleted
+        """
+        try:
+            app.logger.debug("Deleting key {} from hash {}".format(key, self.hash_name))
+            return self.redis.hdel(self.hash_name, key)
         except Exception as e:
             app.logger.error(e)
             traceback.print_exc()

@@ -25,10 +25,19 @@ def nearest():
             client = GeolocationClient(redis_values, user_cache)
             ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
             latitude, longitude, location_str = client.locate_using_ip(ip)
-            response["approximate_location"] = location_str
+            if location_str is not None:
+                response["approximate_location"] = location_str
         else:
             app.logger.debug("Location provided {}, {}".format(latitude, longitude))
             latitude, longitude = (float(latitude), float(longitude))
+            ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+            if ip is not None:
+                ip_str = str(ip)
+                user_cache.set(ip_str, {
+                    "lon": longitude,
+                    "lat": latitude
+                })
+                user_cache.delete(ip_str, "approximate_location")
         exclude = json.loads(request.form.get('last'))
         quantity = int(request.form.get('quantity', 5))
         app.logger.debug("exclude={}".format(exclude))
