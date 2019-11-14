@@ -14,7 +14,8 @@ class UserCache:
         :param ip_address: IP address to check
         :return: boolean indicating if IP is cached
         """
-        return self.cached.exists(ip_address)
+        key = self._get_key_for(ip_address)
+        return self.cached.exists(key)
 
     def get(self, ip_address):
         """
