@@ -71,7 +71,7 @@ $(document).ready(function () {
   function showApproximateLocation(approx_location) {
     let approxLocationHolder = $("#approximate-location");
     approxLocationHolder.text(`Near ${approx_location} `);
-    if (navigator.geolocation) {
+    if (navigator.geolocation && getCookie("location") !== 'false') {
       let changeBtn = $("<a id='change-location'>Change</a>").click(function () {
         changeBtn.append(`<div class="lds-ring"><div></div><div></div><div></div><div></div></div>`);
         requestLocation(function onFailure(error) {
