@@ -59,11 +59,21 @@ svg#cv-searchbtn-icon path {
 
 span#approximate-location {
   font-size: 8pt;
+  margin-left: 5px;
+}
+
+a#change-location {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.schools-header {
+  margin: 10px 0;
 }
 
 .schools-title {
-  margin: 10px 0;
   display: inline-block;
+  margin:0;
 }
 
 .schools {
@@ -197,6 +207,14 @@ span#approximate-location {
 
   #more {
     margin-top: 8px;
+  }
+
+  #approximate-location {
+    margin: 0;
+  }
+
+  .schools-title {
+    display: block;
   }
 }
 
