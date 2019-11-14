@@ -17,7 +17,7 @@ def nearest():
 
     :return: JSON containing N closest school names and their ids
     """
-    response = {'schools': [], 'sids': []}
+    response = {'schools': []}
     try:
         latitude, longitude = (request.form.get("lat"), request.form.get("lon"))
         if not latitude or not longitude:

@@ -125,11 +125,7 @@ class LocationMapper:
                 elif distance < shortest[quantity - 1][0]:
                     shortest.pop(quantity - 1)
                     insort(shortest, (distance, college))
-        to_return = {'schools': [], 'sids': []}
+        to_return = {'schools': []}
         for school in shortest:
-            to_return['schools'] += [school[1]]
-            to_return['sids'] += [self.data[school[1]]['sid']]
+            to_return['schools'] += [{"name": school[1], "id": self.data[school[1]]['sid']}]
         return to_return
-
-
-

@@ -221,18 +221,18 @@ a#change-location {
 .lds-ring {
   display: inline-block;
   position: relative;
-  width: 64px;
-  height: 64px;
+  width: 10pt;
+  height: 10pt;
 }
 
 .lds-ring div {
   box-sizing: border-box;
   display: block;
   position: absolute;
-  width: 51px;
-  height: 51px;
-  margin: 6px;
-  border: 6px solid #df79ac;
+  width: 10pt;
+  height: 10pt;
+  margin: 0 5px;
+  border: 1px solid #df79ac;
   border-radius: 50%;
   animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
   border-color: #df79ac transparent transparent transparent;
