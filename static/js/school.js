@@ -37,6 +37,7 @@ function showSchoolPage(pushState = false) {
   if (pushState) {
     changeUrlToSchool(sid);
     ensurePostsAndBannerAreVisible();
+    attachEventListeners(sid);
   }
   attachEventListeners(sid);
   getPostsForSchool(sid);
@@ -53,16 +54,17 @@ function ensurePostsAndBannerAreVisible() {
 }
 
 function attachEventListeners(sid) {
-  $("#create-post").click(showPostTypesDropDown);
+  $("#create-post").click(togglePostTypesDropDown);
   $("#create-text-post").click(showNewPostPopup);
   $("#sell-document").click(() => window.location = `/upload?sid=${sid}`)
 }
 
-function showPostTypesDropDown() {
+function togglePostTypesDropDown() {
   $(".post-types-list").toggleClass("show");
+  $(".clickaway").toggleClass("show").click(togglePostTypesDropDown);
 }
 
-function validate_form_data(form_data) {
+function validateFormData(form_data) {
   if (non_empty(form_data["title"]) && non_empty(form_data["description"]))
     return form_data["title"].length < 256 && form_data["description"].length < 2000;
   return false;
@@ -137,7 +139,7 @@ function showNewPostPopup() {
     let formData = getFormData(popup);
     let parsedFormData = {"title": formData["title"], "description": formData["description"]};
     console.log(formData);
-    if (validate_form_data(parsedFormData)) {
+    if (validateFormData(parsedFormData)) {
       console.log(window.location);
       $.post(window.location, parsedFormData, (res, status, xhr) => {
         if (!!res && res['requested'] === true) {
