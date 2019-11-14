@@ -2,14 +2,14 @@ import re
 
 from flask import current_app as app
 
-from GradeTip.content.identifier import IDGenerator
+from GradeTip.content.identifier import NameProvider
 from GradeTip.indexer.frequency import FrequencyStore
 
 
 class DocumentSearch:
     def __init__(self, redis_values, listing_store):
         self.freq_store = FrequencyStore(redis_values)
-        self.id_generator = IDGenerator()
+        self.name_provider = NameProvider()
         self.listing_store = listing_store
 
     @staticmethod
@@ -22,7 +22,7 @@ class DocumentSearch:
         return re.findall(r'\w+', query)
 
     def get_post_id(self, upload_id):
-        return upload_id[len(self.id_generator.prefixes.upload):]
+        return upload_id[len(self.name_provider.prefixes.upload):]
 
     def search(self, query):
         app.logger.info("Fetching document results for \"{}\"".format(query))

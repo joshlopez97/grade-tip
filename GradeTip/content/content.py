@@ -1,7 +1,6 @@
-from flask_login import current_user
 from flask import current_app as app
+from flask_login import current_user
 
-from GradeTip.content.identifier import IDGenerator
 from GradeTip.content.utility import get_time
 from GradeTip.redis.hash import RedisHash
 from GradeTip.user import user_manager
@@ -14,7 +13,6 @@ class ContentStore:
     def __init__(self, fields, content_type):
         self.fields = fields
         self.type = content_type
-        self.id_generator = IDGenerator()
 
     @property
     def display_name(self):

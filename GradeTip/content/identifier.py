@@ -5,7 +5,10 @@ import random
 from GradeTip.redis.set import RedisSet
 
 
-class IDGenerator:
+class NameProvider:
+    """
+    Generates unique IDs and provides names/keys/prefixes for all data stored in Redis
+    """
     def __init__(self):
         self.prefixes = Prefixes()
         self.set_names = SetNames()
@@ -82,10 +85,14 @@ class Prefixes:
         self.df = "df-"
         self.tf = "tf-"
 
+        # IP Address cache
+        self.ip = "ip-"
+
 
 class SetNames:
     def __init__(self):
         self.request = "requests"
+        self.cached_ips = "cached_ips"
         self._post = "posts-"
         self._listing = "listings-"
 

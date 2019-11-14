@@ -6,6 +6,7 @@ from flask import current_app as app, request
 from GradeTip.redis import redis_values
 from GradeTip.schools import school_store
 from GradeTip.schools.location import GeolocationClient, LocationMapper
+from GradeTip.user import user_cache
 
 
 def nearest():
@@ -21,9 +22,10 @@ def nearest():
         latitude, longitude = (request.form.get("lat"), request.form.get("lon"))
         if not latitude or not longitude:
             app.logger.debug("Location not provided, using IP address to determine location")
-            client = GeolocationClient(redis_values)
+            client = GeolocationClient(redis_values, user_cache)
             ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
-            latitude, longitude = client.locate_using_ip(ip)
+            latitude, longitude, location_str = client.locate_using_ip(ip)
+            response["approximate_location"] = location_str
         else:
             app.logger.debug("Location provided {}, {}".format(latitude, longitude))
             latitude, longitude = (float(latitude), float(longitude))
@@ -32,7 +34,7 @@ def nearest():
         app.logger.debug("exclude={}".format(exclude))
         app.logger.debug("quantity={}".format(quantity))
         mapper = LocationMapper(latitude, longitude)
-        response = mapper.closest_schools(quantity, exclude)
+        response.update(mapper.closest_schools(quantity, exclude))
     except Exception as e:
         app.logger.error(e)
         traceback.print_exc()

@@ -14,7 +14,7 @@ from GradeTip.schools import school_store
 
 
 class GeolocationClient:
-    def __init__(self, redis):
+    def __init__(self, redis, user_cache):
         """
         Makes request to geolocation api to approximate user location based on
         ip address.
@@ -22,7 +22,7 @@ class GeolocationClient:
         """
         self.requests = RedisList("ipreq")
         self.redis = redis
-        self.cache = RedisHash("cached_ips")
+        self.cache = user_cache
 
     def locate_using_ip(self, user_ip):
         """
@@ -33,10 +33,12 @@ class GeolocationClient:
         """
 
         if not self.too_many_requests() and user_ip and not ipaddress.ip_address(str(user_ip)).is_private:
-            if self.cache.exists(str(user_ip)):
-                geoloc = self.cache.get(user_ip).split(",")
-                lon = float(geoloc[0])
-                lat = float(geoloc[1])
+            ip_string = str(user_ip)
+            if self.cache.is_cached(ip_string):
+                ip_data = self.cache.get(ip_string)
+                lon = ip_data.get("lon")
+                lat = ip_data.get("lat")
+                location = ip_data.get("location")
             else:
                 time = get_time()
                 self.requests.push(time)
@@ -45,12 +47,17 @@ class GeolocationClient:
                 resp = json.loads(georeq.content.decode('utf-8'))
                 lon = float(resp['lon'])
                 lat = float(resp['lat'])
-                self.cache.set(str(user_ip), "{},{}".format(lat, lon))
-            return lat, lon
+                location = "{}, {}".format(resp['city'], resp['region'])
+                self.cache.set(ip_string, {
+                    "lon": lon,
+                    "lat": lat,
+                    "location": location
+                })
+            return lat, lon, location
         else:
             app.logger.info("Using default coordinates 37.8719, 122.2585")
             # default coordinates to return on failure
-            return 37.8719, 122.2585
+            return 37.8719, 122.2585, "Irvine, CA"
 
     def too_many_requests(self, allowed=100, minutes=1):
         """

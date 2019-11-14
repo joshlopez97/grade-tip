@@ -1,11 +1,11 @@
-from GradeTip.content.identifier import IDGenerator
+from GradeTip.content.identifier import NameProvider
 from GradeTip.redis.hash import RedisHash
 
 
 class FrequencyStore:
     def __init__(self, redis_manager):
         self.redis = redis_manager
-        self.id_generator = IDGenerator()
+        self.name_provider = NameProvider()
 
     def _tf_key(self, term):
         """
@@ -13,7 +13,7 @@ class FrequencyStore:
         :param term: term to get Redis key for
         :return: string containing Redis key
         """
-        return "{}{}".format(self.id_generator.prefixes.tf, term)
+        return "{}{}".format(self.name_provider.prefixes.tf, term)
 
     def _df_key(self, term):
         """
@@ -21,13 +21,13 @@ class FrequencyStore:
         :param term: term to get Redis key for
         :return: string containing Redis key
         """
-        return "{}{}".format(self.id_generator.prefixes.df, term)
+        return "{}{}".format(self.name_provider.prefixes.df, term)
 
     def increment_doc_count(self):
         """
         Increments the total number of documents indexed
         """
-        self.redis.increment(self.id_generator.value_names.doc_count)
+        self.redis.increment(self.name_provider.value_names.doc_count)
 
     def increment_df(self, term):
         """

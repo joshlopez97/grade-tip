@@ -2,7 +2,7 @@ import json
 import re
 from collections import defaultdict
 
-from GradeTip.content.identifier import IDGenerator
+from GradeTip.content.identifier import NameProvider
 from GradeTip.indexer.frequency import FrequencyStore
 from GradeTip.indexer.pdf_reader import PDFReader
 from nltk import PorterStemmer
@@ -12,7 +12,7 @@ class Indexer:
     def __init__(self, redis_manager):
         self.pdf_reader = PDFReader()
         self.ps = PorterStemmer()
-        self.id_generator = IDGenerator()
+        self.name_provider = NameProvider()
         self.freq_store = FrequencyStore(redis_manager)
 
     def index_pdf(self, pdf_path, upload_id):

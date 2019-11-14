@@ -57,6 +57,15 @@ svg#cv-searchbtn-icon path {
   overflow: hidden;
 }
 
+span#approximate-location {
+  font-size: 8pt;
+}
+
+.schools-title {
+  margin: 10px 0;
+  display: inline-block;
+}
+
 .schools {
   position: absolute;
   list-style: none;
@@ -69,20 +78,27 @@ svg#cv-searchbtn-icon path {
 .nschool, #more {
   color: black;
   cursor: pointer;
-  font-weight: bold;
-  font-size: 12pt;
-}
-
-.nschool {
-  text-decoration: underline;
+  font-size: 11pt;
 }
 
 #more {
-  background: url(/img/downward_caret.png) no-repeat center center;
   width: 100px;
   height: 25px;
   background-size: 25px;
   display: inline-block;
+  position: relative;
+}
+
+#more:hover > svg > path {
+  fill: #993366
+}
+
+#more > svg {
+  height: 30px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /* Background image */

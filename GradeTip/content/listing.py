@@ -3,7 +3,7 @@ import traceback
 from flask import current_app as app
 
 from GradeTip.content.content import ContentStore
-from GradeTip.content.identifier import IDGenerator
+from GradeTip.content.identifier import NameProvider
 from GradeTip.redis.set import RedisSet
 
 
@@ -17,7 +17,7 @@ class ListingStore(ContentStore):
         super().__init__(["school", "title", "cid", "kind"], "listing")
         self.upload = upload_manager
         self.school = school_manager
-        self.id_generator = IDGenerator()
+        self.name_provider = NameProvider()
 
     def request_listing(self, form_data, file):
         """
@@ -29,12 +29,12 @@ class ListingStore(ContentStore):
         if not super().validate_data(form_data):
             return False
         # get new request_id
-        request_id = self.id_generator.generate_request_id(super().user_email)
+        request_id = self.name_provider.generate_request_id(super().user_email)
         if request_id is None:
             return False
 
         # upload files
-        upload_id = self.id_generator.generate_upload_id(request_id)
+        upload_id = self.name_provider.generate_upload_id(request_id)
         filepaths, numPages = self.upload.add_file_to_listing(file, upload_id)
         if len(filepaths) == 0:
             app.logger.error("Error: no filepaths were created")
@@ -65,10 +65,10 @@ class ListingStore(ContentStore):
         school_id = request["sid"]
         user_email = request["uid"]
         # get new listing_id
-        listing_id = self.id_generator.generate_listing_id(user_email, school_id)
+        listing_id = self.name_provider.generate_listing_id(user_email, school_id)
 
         # upload files
-        new_upload_id = self.id_generator.generate_upload_id(listing_id)
+        new_upload_id = self.name_provider.generate_upload_id(listing_id)
         filepaths = self.upload.promote_uploads(request["upload_id"], new_upload_id)
         RedisSet(new_upload_id).add(filepaths)
 
@@ -103,7 +103,7 @@ class ListingStore(ContentStore):
         :return: dict containing all listing data for school
         """
         listings = {}
-        listing_set_key = self.id_generator.set_names.listing(school_id)
+        listing_set_key = self.name_provider.set_names.listing(school_id)
         for listing_id in RedisSet(listing_set_key).values():
             try:
                 listings[listing_id] = self.get_listing(listing_id)

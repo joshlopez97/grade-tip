@@ -1,7 +1,7 @@
 from flask import current_app as app
 
 from GradeTip.content.content import ContentStore
-from GradeTip.content.identifier import IDGenerator
+from GradeTip.content.identifier import NameProvider
 from GradeTip.redis.hash import RedisHash
 from GradeTip.redis.set import RedisSet
 
@@ -14,7 +14,7 @@ class TextPostStore(ContentStore):
     def __init__(self, user_manager):
         super().__init__(["title", "description"], "textpost")
         self.user = user_manager
-        self.id_generator = IDGenerator()
+        self.name_provider = NameProvider()
 
     def request_post(self, school_id, form_data):
         """
@@ -26,7 +26,7 @@ class TextPostStore(ContentStore):
         if not super().validate_data(form_data):
             return False
         # get new request_id
-        request_id = self.id_generator.generate("r-", super().user_email, "requests")
+        request_id = self.name_provider.generate("r-", super().user_email, "requests")
         if request_id is None:
             return False
 
@@ -47,7 +47,7 @@ class TextPostStore(ContentStore):
         """
         # get new post_id
         school_id = request["sid"]
-        post_id = self.id_generator.generate_post_id(super().user_email, school_id)
+        post_id = self.name_provider.generate_post_id(super().user_email, school_id)
 
         # store data into map with 'sid/post_id' as the key
         return super().make_content(post_id, {
@@ -65,7 +65,7 @@ class TextPostStore(ContentStore):
         :return: dict containing all posts for school
         """
         posts = {}
-        post_set_key = self.id_generator.set_names.post(school_id)
+        post_set_key = self.name_provider.set_names.post(school_id)
         for post_id in RedisSet(post_set_key).values():
             posts[post_id] = super().get_content(post_id)
         app.logger.debug("fetched {} posts for sid {}".format(len(posts), school_id))

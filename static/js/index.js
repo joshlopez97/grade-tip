@@ -7,11 +7,13 @@ $(document).ready(function () {
   let searchbtn = $("#cv-searchbtn");
   searchbar.autocomplete({
     source: search,
-    focus: () => { return false; },
+    focus: () => {
+      return false;
+    },
     select: schoolAutocompleteClickHandler,
     scroll: true,
-    open: function() {
-        $("ul.ui-menu").width(searchbtn.outerWidth() + searchbar.outerWidth() - 2);
+    open: function () {
+      $("ul.ui-menu").width(searchbtn.outerWidth() + searchbar.outerWidth() - 2);
     }
   });
 
@@ -36,20 +38,28 @@ $(document).ready(function () {
   function setUpHomepage() {
     sizer();
     let searchBar = $("#cv-search");
-    searchBar.append(
-      `<h5 class='schools-header' style='margin:10px 0'>Schools Near You</h5>
-            <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-            <div class='schools-holder'><ul class='schools'></ul></div>`
+    searchBar.append(`
+      <div class='schools-header'>
+        <h5 class='schools-title'>Suggested Schools</h5>
+        <span id="approximate-location"></span>
+      </div>
+      <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+      <div class='schools-holder'><ul class='schools'></ul></div>`
     );
     let createLoadMoreBtn = function () {
       if ($("#more").length === 0) {
-        searchBar.append(
-          $("<div id='more'></div>").click(generateMore)
-        );
+        let loadMoreBtn = $("<div id='more'><svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.0\" x=\"0px\" y=\"0px\" viewBox=\"0 0 100 125\" enable-background=\"new 0 0 100 100\" xml:space=\"preserve\"><path d=\"M21.364,42.218l24.329,24.329c0.026,0.027,0.034,0.065,0.061,0.091c1.146,1.146,2.659,1.715,4.17,1.711   c1.511,0.004,3.023-0.564,4.17-1.711c0.027-0.027,0.034-0.064,0.061-0.091l24.329-24.329c2.285-2.285,2.285-6.024,0-8.308   s-6.024-2.285-8.308,0L49.923,54.161L29.672,33.91c-2.285-2.285-6.024-2.285-8.308,0S19.079,39.934,21.364,42.218z\"/></svg></div>").click(generateMore);
+        searchBar.append(loadMoreBtn);
         $(".schools-holder").height($(".schools").height());
       }
     };
     fetchSchools(createLoadMoreBtn, 0, true);
+  }
+
+
+  function showApproximateLocation(approx_location) {
+    $("#approximate-location").text(`Near ${approx_location}`);
+
   }
 
 
@@ -58,8 +68,9 @@ $(document).ready(function () {
     let ipGeoLocationUsed = false;
     let onComplete = function (data) {
       const nearest = $.parseJSON(data);
-      if (nearest.length === 0 || nearest['schools'].length === 0)
+      if (nearest.length === 0 || nearest['schools'].length === 0) {
         return noSchools();
+      }
       else {
         if (firstCall) {
           $(".schools").empty();
@@ -71,6 +82,10 @@ $(document).ready(function () {
           appendSchool(nearest['schools'][i], nearest['sids'][i]);
           if (i + 1 === nearest['schools'].length)
             $(".schools-holder").height($(".schools").height() - heightAdjust);
+        }
+        const approx_location = nearest["approximate_location"];
+        if (!!approx_location) {
+          showApproximateLocation(approx_location);
         }
         return end();
       }
