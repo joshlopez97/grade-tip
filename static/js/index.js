@@ -46,7 +46,12 @@ $(document).ready(function () {
       </div>
       <div class='schools-holder'><ul class='schools'></ul></div>`
     );
-    fetchSchools2(showSchools);
+    if (geolocationProvidedPreviously()) {
+      requestLocation();
+    }
+    else {
+      fetchSchools(showSchools);
+    }
   }
 
   function createLoadMoreBtn() {
@@ -64,27 +69,49 @@ $(document).ready(function () {
     if (navigator.geolocation) {
       let changeBtn = $("<a id='change-location'>Change</a>").click(function () {
         changeBtn.append(`<div class="lds-ring"><div></div><div></div><div></div><div></div></div>`);
-        navigator.geolocation.getCurrentPosition(
-          function onSuccess(pos) {
-            console.log(pos);
-            lastSchools = [];
-            clearSchools();
-            fetchSchools2(showSchools, pos);
-          },
-          function onFailure(error) {
-            $(".lds-ring").remove();
-          }
-        );
+        requestLocation();
       });
       approxLocationHolder.append(changeBtn);
     }
+  }
+
+  function requestLocation() {
+    navigator.geolocation.getCurrentPosition(
+      function onSuccess(pos) {
+        storeLocationCookie(true);
+        console.log(pos);
+        lastSchools = [];
+        clearSchools();
+        fetchSchools(showSchools, pos);
+      },
+      function onFailure(error) {
+        storeLocationCookie(false);
+        $(".lds-ring").remove();
+        $("#change-location").css("display", "none");
+      }
+    );
   }
 
   function hideApproximateLocation() {
     $("#approximate-location").css("display", "none");
   }
 
-  function fetchSchools2(callback = () => {
+  function getCookie(name) {
+    let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    if (match) return match[2];
+  }
+
+  function geolocationProvidedPreviously() {
+    let locationCookie = getCookie("location");
+    return !!locationCookie && (locationCookie === true || locationCookie === 'true');
+
+  }
+
+  function storeLocationCookie(result) {
+    document.cookie = `location=${result}`;
+  }
+
+  function fetchSchools(callback = () => {
   }, pos = null) {
     let payload = {"last": JSON.stringify(lastSchools), "quantity": 50};
     if (pos !== null) {
@@ -111,6 +138,9 @@ $(document).ready(function () {
   function showSchools(schools = lastSchools, heightAdjust = 0, callback = () => {
   }) {
     let nextSchools = getNextSchools(schools);
+    if (nextSchools.length > 0) {
+      $(".schools-header").css('display', 'block');
+    }
     for (let i = 0; i < nextSchools.length; i++) {
       let school = nextSchools[i];
       appendSchool(school.name, school.id);

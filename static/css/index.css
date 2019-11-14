@@ -69,6 +69,7 @@ a#change-location {
 
 .schools-header {
   margin: 10px 0;
+  display: none;
 }
 
 .schools-title {
