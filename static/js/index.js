@@ -84,6 +84,12 @@ $(document).ready(function () {
     }
   }
 
+  function showExactLocation(pos) {
+    $("#approximate-location").append(`
+      Near <a href="https://www.google.com/maps/@${pos.coords.latitude},${pos.coords.longitude},17z">Current Location</a>
+    `);
+  }
+
   function requestLocation(onFailure) {
     navigator.geolocation.getCurrentPosition(
       function onSuccess(pos) {
@@ -97,7 +103,7 @@ $(document).ready(function () {
   }
 
   function hideApproximateLocation() {
-    $("#approximate-location").css("display", "none");
+    $("#approximate-location").empty();
   }
 
   function getCookie(name) {
@@ -133,6 +139,9 @@ $(document).ready(function () {
         const approx_location = nearest["approximate_location"];
         if (!!approx_location && pos == null) {
           showApproximateLocation(approx_location);
+        }
+        else {
+          showExactLocation(pos);
         }
       }
       callback(lastSchools);

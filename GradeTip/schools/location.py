@@ -57,7 +57,7 @@ class GeolocationClient:
         else:
             app.logger.info("Using default coordinates 37.8719, 122.2585")
             # default coordinates to return on failure
-            return 37.8719, 122.2585, "Irvine, CA"
+            return 37.8719, 122.2585, "Mountain View, CA"
 
     def too_many_requests(self, allowed=100, minutes=1):
         """
