@@ -47,7 +47,12 @@ $(document).ready(function () {
       <div class='schools-holder'><ul class='schools'></ul></div>`
     );
     if (geolocationProvidedPreviously()) {
-      requestLocation();
+      requestLocation(function onFailure(error) {
+        console.log(error, 'poop');
+        storeLocationCookie(false);
+        $(".lds-ring").remove();
+        fetchSchools(showSchools);
+      });
     }
     else {
       fetchSchools(showSchools);
@@ -69,26 +74,25 @@ $(document).ready(function () {
     if (navigator.geolocation) {
       let changeBtn = $("<a id='change-location'>Change</a>").click(function () {
         changeBtn.append(`<div class="lds-ring"><div></div><div></div><div></div><div></div></div>`);
-        requestLocation();
+        requestLocation(function onFailure(error) {
+          storeLocationCookie(false);
+          $(".lds-ring").remove();
+          $("#change-location").css("display", "none");
+        });
       });
       approxLocationHolder.append(changeBtn);
     }
   }
 
-  function requestLocation() {
+  function requestLocation(onFailure) {
     navigator.geolocation.getCurrentPosition(
       function onSuccess(pos) {
         storeLocationCookie(true);
-        console.log(pos);
         lastSchools = [];
         clearSchools();
         fetchSchools(showSchools, pos);
       },
-      function onFailure(error) {
-        storeLocationCookie(false);
-        $(".lds-ring").remove();
-        $("#change-location").css("display", "none");
-      }
+      onFailure
     );
   }
 
