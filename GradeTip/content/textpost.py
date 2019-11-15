@@ -2,7 +2,6 @@ from flask import current_app as app
 
 from GradeTip.content.content import ContentStore
 from GradeTip.content.identifier import NameProvider
-from GradeTip.redis.hash import RedisHash
 from GradeTip.redis.set import RedisSet
 
 
@@ -26,7 +25,7 @@ class TextPostStore(ContentStore):
         if not super().validate_data(form_data):
             return False
         # get new request_id
-        request_id = self.name_provider.generate("r-", super().user_email, "requests")
+        request_id = self.name_provider.generate_request_id(super().user_email)
         if request_id is None:
             return False
 
@@ -41,24 +40,26 @@ class TextPostStore(ContentStore):
 
     def create_post(self, request):
         """
-        Create a post for a school's page. The incoming data is in the form of a post request.
+        Create a post for a school's page. Request data is promoted to a text post with a new
+        text post ID.
         :param request: dict containing request data to promote
         :return: post ID if successful, otherwise None
         """
         # get new post_id
         school_id = request["sid"]
-        post_id = self.name_provider.generate_post_id(super().user_email, school_id)
+        user_email = request["email"]
+        post_id = self.name_provider.generate_post_id(user_email, school_id)
 
-        # store data into map with 'sid/post_id' as the key
         return super().make_content(post_id, {
             "title": request["title"],
+            "sid": school_id,
             "description": request["description"],
             "uid": request["uid"],
-            "email": request["email"],
+            "email": user_email,
             "time": request["time"]
         })
 
-    def get_posts_from_school(self, school_id):
+    def get_posts(self, school_id):
         """
         Get all existing posts for school.
         :param school_id: ID of school

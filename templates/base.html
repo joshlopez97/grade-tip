@@ -5,7 +5,9 @@
     <meta charset="utf-8">
     <title>{% block title %}{% endblock %}</title>
     {% block page_description %}{% endblock %}
-    {% block endpoints %}{% endblock %}
+    {% block endpoints %}
+      <meta id="api-school-data" data-endpoint="{{ url_for('school.data') }}">
+    {% endblock %}
     {% block css %}
       <!-- Me
       –––––––––––––––––––––––––––––––––––––––––––––––––– -->

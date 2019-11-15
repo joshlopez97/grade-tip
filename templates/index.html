@@ -3,6 +3,10 @@
 {% block page_description %}
   <meta name="description" content="Share your old tests, homework or notes to other students.">
 {% endblock %}
+{% block endpoints %}
+  {{ super() }}
+  <meta id="api-nearest-schools" data-endpoint="{{ url_for('school.nearest') }}">
+{% endblock %}
 {% block css %}
   {{ super() }}
   <link rel="stylesheet" type="text/css"

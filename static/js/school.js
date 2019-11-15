@@ -36,14 +36,13 @@ function showSchoolPage(pushState = false) {
   let sid = get_school_id();
   if (pushState) {
     changeUrlToSchool(sid);
-    ensurePostsAndBannerAreVisible();
-    attachEventListeners(sid);
+    ensurePostsAndBannerAreVisible(sid);
   }
   attachEventListeners(sid);
   getPostsForSchool(sid);
 }
 
-function ensurePostsAndBannerAreVisible() {
+function ensurePostsAndBannerAreVisible(sid) {
   $(".back-btn").css("display", "none");
   $("div.large-post-holder").css("display", "none");
 
@@ -54,9 +53,9 @@ function ensurePostsAndBannerAreVisible() {
 }
 
 function attachEventListeners(sid) {
-  $("#create-post").click(togglePostTypesDropDown);
-  $("#create-text-post").click(showNewPostPopup);
-  $("#sell-document").click(() => window.location = `/upload?sid=${sid}`)
+  $("#create-post").unbind("click").click(togglePostTypesDropDown);
+  $("#create-text-post").unbind("click").click(showNewPostPopup);
+  $("#sell-document").unbind("click").click(() => window.location = `/upload?sid=${sid}`)
 }
 
 function togglePostTypesDropDown() {
@@ -65,8 +64,9 @@ function togglePostTypesDropDown() {
 }
 
 function validateFormData(form_data) {
-  if (non_empty(form_data["title"]) && non_empty(form_data["description"]))
+  if (non_empty(form_data["title"]) && non_empty(form_data["description"])) {
     return form_data["title"].length < 256 && form_data["description"].length < 2000;
+  }
   return false;
 }
 
@@ -75,7 +75,8 @@ function non_empty(data) {
 }
 
 function getPostsForSchool(sid) {
-  $.post("/school/posts", {"sid": sid}, function (data) {
+  const postsFromSchoolEndpoint = $("#api-school-posts").data().endpoint;
+  $.post(postsFromSchoolEndpoint, {"sid": sid}, function (data) {
     let posts = $.parseJSON(data);
     showPosts(posts);
     if (location.pathname.match("/[0-9]*/(l|p)-[0-9a-zA-Z]*")) {

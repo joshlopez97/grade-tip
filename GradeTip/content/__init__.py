@@ -1,5 +1,6 @@
 from GradeTip.admin import admin_authenticator
 from GradeTip.content.listing import ListingStore
+from GradeTip.content.reply import ReplyStore
 from GradeTip.content.textpost import TextPostStore
 from GradeTip.content.request import RequestStore
 from GradeTip.content.upload import UploadStore
@@ -12,3 +13,4 @@ post_store = TextPostStore(user_manager)
 upload_store = UploadStore(indexer)
 listing_store = ListingStore(upload_store, school_store)
 request_store = RequestStore(redis_values, post_store, upload_store, listing_store, admin_authenticator)
+reply_store = ReplyStore(user_manager)

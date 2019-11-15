@@ -33,7 +33,8 @@ function format_partial_match(result, terms) {
 }
 
 function get_college_data(callback=()=>{}) {
-  $.get("/colleges", function (data) {
+  const getCollegesEndpoint = $("#api-school-data").data().endpoint;
+  $.get(getCollegesEndpoint, function (data) {
     college_data = $.parseJSON(data);
     college_list = Object.keys(college_data);
     callback();

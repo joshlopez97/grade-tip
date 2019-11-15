@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Results for {{ query }}{% endblock %}
 {% block endpoints %}
-  <meta id="api-content-search" data-endpoint="{{ url_for('api.content-search') }}">
-  <meta id="api-schools-search" data-endpoint="{{ url_for('api.schools-search') }}">
+  {{ super() }}
+  <meta id="api-content-search" data-endpoint="{{ url_for('content.search') }}">
+  <meta id="api-schools-search" data-endpoint="{{ url_for('school.search') }}">
 {% endblock %}
 
 {% block css %}

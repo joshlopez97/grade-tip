@@ -23,7 +23,7 @@ class RequestStore:
         Gets all requests submitted to GradeTip.
         :return: dict containing request_ids as keys and request data as values
         """
-        if not self.auth.validate_headers(request.headers):
+        if not request.headers or not self.auth.validate_headers(request.headers):
             return jsonify({}), 404
         requests = {}
         for request_id in self.request_ids.values():

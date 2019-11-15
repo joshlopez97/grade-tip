@@ -59,6 +59,15 @@ class ContentStore:
             return identifier
 
     @staticmethod
+    def content_exists(identifier):
+        """
+        Checks if content with specified ID exists.
+        :param identifier: ID of content to check for
+        :return: boolean indicating if content exists or not
+        """
+        return RedisHash(identifier).exists()
+
+    @staticmethod
     def get_content(content_id):
         """
         Get content data for content with given ID

@@ -67,15 +67,19 @@ class RedisHash:
             traceback.print_exc()
         return None
 
-    def exists(self, key):
+    def exists(self, key=None):
         """
-        Check if key exists in hash.
+        Check if key exists in hash. If key is not provided, check if hash exists
         :param key: Name of key to look for
         :return: boolean indicating if key exists
         """
         try:
-            app.logger.debug("Checking if key {} exists in hash {}".format(key, self.hash_name))
-            return self.redis.hexists(self.hash_name, key)
+            if key is not None:
+                app.logger.debug("Checking if key {} exists in hash {}".format(key, self.hash_name))
+                return self.redis.hexists(self.hash_name, key)
+            else:
+                app.logger.debug("Checking if hash {} exists", self.hash_name)
+                return self.redis.exists(self.hash_name)
         except Exception as e:
             app.logger.error(e)
             traceback.print_exc()

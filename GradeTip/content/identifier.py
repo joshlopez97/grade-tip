@@ -9,6 +9,7 @@ class NameProvider:
     """
     Generates unique IDs and provides names/keys/prefixes for all data stored in Redis
     """
+
     def __init__(self):
         self.prefixes = Prefixes()
         self.set_names = SetNames()
@@ -42,6 +43,16 @@ class NameProvider:
         set_name = self.set_names.listing(school_id)
         return self.generate(self.prefixes.listing, email, set_name)
 
+    def generate_reply_id(self, email, content_id):
+        """
+        Generates unique ID for a reply
+        :param email: email of user
+        :param content_id: ID of content being replied to
+        :return: string containing ID
+        """
+        set_name = self.set_names.reply(content_id)
+        return self.generate(self.prefixes.reply, email, set_name)
+
     def generate(self, prefix, email, set_name):
         """
         Generate unique ID, recursively regenerate on collision. Store unique ID
@@ -65,7 +76,7 @@ class NameProvider:
     def _create_id_hash(prefix, email):
         """
         Creates ID using SHA1 hashing
-        :param prefix: prefix to append to front of has
+        :param prefix: prefix to append to front of hash
         :param email: email to hash
         :return: string containing new hash
         """
@@ -80,6 +91,7 @@ class Prefixes:
         self.listing = "l-"
         self.upload = "u-"
         self.post = "p-"
+        self.reply = "re-"
 
         # search-related data
         self.df = "df-"
@@ -95,12 +107,16 @@ class SetNames:
         self.cached_ips = "cached_ips"
         self._post = "posts-"
         self._listing = "listings-"
+        self._reply = "replies-"
 
     def listing(self, school_id):
         return "{}{}".format(self._listing, school_id)
 
     def post(self, school_id):
         return "{}{}".format(self._post, school_id)
+
+    def reply(self, content_id):
+        return "{}{}".format(self._reply, content_id)
 
 
 class ValueNames:

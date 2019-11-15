@@ -96,7 +96,7 @@ class ListingStore(ContentStore):
         app.logger.debug("fetched listing {}".format(listing_data))
         return listing_data
 
-    def get_listings_from_school(self, school_id):
+    def get_listings(self, school_id):
         """
         Get all existing listings for school.
         :param school_id: ID of school to get listings from

@@ -21,8 +21,10 @@ class DocumentSearch:
         """
         return re.findall(r'\w+', query)
 
-    def get_post_id(self, upload_id):
-        return upload_id[len(self.name_provider.prefixes.upload):]
+    def get_post_id(self, match_id):
+        if match_id.startswith(self.name_provider.prefixes.upload):
+            return match_id[len(self.name_provider.prefixes.upload):]
+        return match_id
 
     def search(self, query):
         app.logger.info("Fetching document results for \"{}\"".format(query))

@@ -2,7 +2,7 @@ import json
 
 from flask import request, jsonify
 
-from GradeTip.content import post_store, listing_store, request_store
+from GradeTip.content import post_store, listing_store, request_store, reply_store
 
 
 def posts_by_sid():
@@ -11,10 +11,20 @@ def posts_by_sid():
     :return: JSON containing all post data for school
     """
     sid = request.form.get('sid')
-    posts = post_store.get_posts_from_school(sid)
-    listings = listing_store.get_listings_from_school(sid)
+    posts = post_store.get_posts(sid)
+    listings = listing_store.get_listings(sid)
     posts.update(listings)
     return json.dumps(posts)
+
+
+def replies_by_content_id():
+    """
+    Endpoint to get all replies for content with given ID.
+    :return: JSON containing all reply data for content
+    """
+    content_id = request.form.get("content_id")
+    replies = reply_store.get_replies(content_id)
+    return json.dumps(replies)
 
 
 def approve_request(request_id):
