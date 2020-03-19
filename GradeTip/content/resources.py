@@ -12,7 +12,7 @@ def posts_by_sid():
     """
     sid = request.form.get('sid')
     posts = post_store.get_posts(sid)
-    listings = listing_store.get_liinstings(sid)
+    listings = listing_store.get_listings(sid)
     posts.update(listings)
     return json.dumps(posts)
 
