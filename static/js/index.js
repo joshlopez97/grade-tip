@@ -89,7 +89,7 @@ $(document).ready(function () {
 
   function showExactLocation(pos) {
     $("#approximate-location").append(`
-      Near <a href="https://www.google.com/maps/@${pos.coords.latitude},${pos.coords.longitude},17z">Approximate Location</a>
+      Near <a href="https://www.google.com/maps/@${pos.coords.latitude},${pos.coords.longitude},17z">approximate location</a>
     `);
   }
 
