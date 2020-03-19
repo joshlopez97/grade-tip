@@ -7,7 +7,7 @@ from GradeTip.content.resources import posts_by_sid, fetch_post_requests, approv
     replies_by_content_id
 from GradeTip.pages import (loginpage, registerpage, logout, indexpage,
                             internal_server_error, page_not_found, schoolpage, monitorpage, detailspage, listingpage,
-                            aboutpage, termspage, privacypage, searchpage)
+                            aboutpage, termspage, privacypage, searchpage, reply_to_content)
 from GradeTip.schools.resources import nearest, colleges
 from GradeTip.search.resources import posts_query, school_query
 from GradeTip.user import user_manager
@@ -53,6 +53,8 @@ def register_page_routes(app):
                      methods=['GET', 'POST'])
     app.add_url_rule('/school/<school_id>', 'school', schoolpage,
                      methods=['GET', 'POST'])
+    app.add_url_rule('/reply', 'reply', reply_to_content,
+                     methods=['POST'])
     app.add_url_rule('/school/<school_id>/<post_id>', 'details', detailspage,
                      methods=['GET', 'POST'])
     app.add_url_rule('/monitor', 'monitor', monitorpage,
@@ -87,7 +89,7 @@ def register_api_routes(app):
 
     content_blueprint = Blueprint("content", "content")
     content_blueprint.add_url_rule('/replies', 'replies', replies_by_content_id,
-                                   methods=['POST'])
+                                   methods=['GET'])
     content_blueprint.add_url_rule('/search', 'search', posts_query,
                                    methods=['GET'])
     app.register_blueprint(school_blueprint, url_prefix='/api/v1/school')

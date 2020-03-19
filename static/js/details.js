@@ -1,5 +1,4 @@
-function showPost(post_data, pid, pushState=true)
-{
+function showPost(post_data, pid, pushState = true) {
   $(".school-page-controls").css("display", "none");
   $("ul.posts").css("display", "none");
   if (pushState) {
@@ -10,15 +9,28 @@ function showPost(post_data, pid, pushState=true)
   populatePostData(post_data);
 }
 
-function changeURLtoPost(post_data, pid){
-  let sid = get_school_id();
+function getReplies(pid, callback) {
+  const repliesEndpoint = $("#api-content-replies").data().endpoint;
+  console.log(repliesEndpoint);
+  $.ajax({
+    type: "get",
+    url: repliesEndpoint,
+    success: callback,
+    error: function(xhr) {
+      console.log("Something went wrong", xhr);
+    }
+});
+}
+
+function changeURLtoPost(post_data, pid) {
+  let sid = getSchoolId();
   window.history.pushState({"page": "details", "pid": pid, "post_data": post_data}, "", `/school/${sid}/${pid}`);
 }
 
-function displayBackBtnInBanner()
-{
+function displayBackBtnInBanner() {
   $(".panel-icon-holder").css("display", "none");
   $(".banner-title").css("display", "none");
+  $(".large-post-holder").css("display", "block");
   let backBtn = $(".back-btn");
   backBtn.css("display", "table-cell");
   backBtn.click(() => {
@@ -26,19 +38,37 @@ function displayBackBtnInBanner()
   });
 }
 
-function populatePostData(post_data)
-{
-  let post_holder = $("div.large-post-holder");
-  post_holder.css("display", "block");
-  post_holder.empty();
-  if (post_data["postType"] === 'listing')
-    post_holder.append(listingDetails(post_data));
-  else
-    post_holder.append(textPostDetails(post_data));
+function createRepliesSection(replies) {
+  console.log("replies");
+  console.log(typeof replies);
+  let sortedReplies = Object.entries(replies);
+  sortedReplies.sort(function (a, b) {
+    return new Date(b[1].time) - new Date(a[1].time);
+  });
+  let repliesHolder = $("#post-replies-container");
+  for (let [pid, post_data] of sortedReplies) {
+    console.log(post_data);
+    repliesHolder.append(createPostHolder(post_data, pid));
+  }
 }
 
-function textPostDetails(post_data)
-{
+function populatePostData(post_data) {
+  let postHolder = $("div#large-post-content");
+  postHolder.css("display", "block");
+  postHolder.empty();
+  if (post_data["postType"] === 'listing') {
+    postHolder.append(listingDetails(post_data));
+  }
+  else {
+    postHolder.append(textPostDetails(post_data));
+  }
+  getReplies(pid, function (res) {
+    const jsonData = JSON.parse(res);
+    postHolder.append(createRepliesSection(jsonData));
+  });
+}
+
+function textPostDetails(post_data) {
   return $(`
     <div class="post-info">
       <span class="post-user">Posted by ${post_data["uid"]}</span>
@@ -55,8 +85,7 @@ function textPostDetails(post_data)
   `);
 }
 
-function listingDetails(post_data)
-{
+function listingDetails(post_data) {
   return $(`
     <div class="post-info">
       <span class="post-user">Posted by ${post_data["uid"]}</span>

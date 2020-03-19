@@ -10,11 +10,12 @@ class RequestStore:
     content to GradeTip. Once that content is approved by moderators, the request is deleted and replaced
     by the corresponding content data type.
     """
-    def __init__(self, redis_manager, post_manager, upload_manager, listing_manager, auth_manager):
-        self.redis = redis_manager
-        self.post = post_manager
-        self.upload = upload_manager
-        self.listing = listing_manager
+    def __init__(self, redis_values, post_store, upload_store, listing_store, reply_store, auth_manager):
+        self.redis = redis_values
+        self.post = post_store
+        self.upload = upload_store
+        self.listing = listing_store
+        self.reply = reply_store
         self.auth = auth_manager
         self.request_ids = RedisSet("requests")
 
@@ -78,10 +79,15 @@ class RequestStore:
         request_data = self.pop_request(request_id)
         result = False
         if request_data is not None:
-            if request_data.get("requestType") == "textpost":
+            request_type = request_data.get("requestType")
+            if request_type == "textpost":
                 result = self.post.create_post(request_data)
-            else:
+            elif request_type == "listing":
                 result = self.listing.create_listing(request_data)
+            elif request_type == "reply":
+                result = self.reply.create_reply(request_data)
+            else:
+                app.logger.error("Unknown request type {}".format(request_type))
         return jsonify({"result": result})
 
     def deny_request(self, request_id):

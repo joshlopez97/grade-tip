@@ -116,6 +116,7 @@ div.container {
   z-index: 0;
   display: none;
 }
+
 .clickaway.show {
   display: block;
 }
@@ -155,12 +156,6 @@ div.container {
   width: 47%;
 }
 
-/*.cdate
-{
-  width: 48% !important;
-  min-width: 210px !important;
-  margin-right: 3%;
-}*/
 input[type="text"].cfield {
   height: 45px;
 }
@@ -398,28 +393,65 @@ li.post-holder:hover {
 }
 
 /* Post details Page */
-div.large-post-holder {
+div.large-post-content {
   background: white;
   border: 1px solid #ddd;
   padding: 15px 15px 10px;
   display: none;
 }
 
-.large-post-holder .post-title {
+.large-post-content .post-title {
   font-size: 15pt;
 }
 
-.large-post-holder .post-description {
+.large-post-content .post-description {
   font-size: 11pt;
 }
 
-.large-post-holder .post-content {
+.large-post-content .post-content {
   margin-bottom: 10px;
 }
 
-.large-post-holder .post-btn {
+.large-post-content .post-btn {
   font-size: 9.5pt;
   margin-right: 15px;
+}
+
+/* Replies to posts */
+form#make-reply {
+  margin-left: 10px;
+}
+
+#reply-text {
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  background: white;
+  border: 1px solid #ddd;
+  margin: 0;
+}
+
+#reply-text:focus {
+  border: 1px solid #cc0066;
+}
+
+input#reply-submit {
+  padding: 6px 20px;
+  width: unset;
+  border-radius: 5px;
+  font-size: 10pt;
+  height: unset;
+  text-transform: none;
+  font-weight: 100;
+  letter-spacing: initial;
+}
+
+.char-counter {
+  font-size: 9pt;
+  color: #666;
+  display: block;
+  line-height: 9pt;
+  text-align: right;
 }
 
 .back-btn {

@@ -24,7 +24,7 @@ function checkIfUserRequestedPost() {
   }
 }
 
-function get_school_id() {
+function getSchoolId() {
   return $("#sid")[0].value;
 }
 
@@ -33,7 +33,7 @@ function changeUrlToSchool(sid) {
 }
 
 function showSchoolPage(pushState = false) {
-  let sid = get_school_id();
+  let sid = getSchoolId();
   if (pushState) {
     changeUrlToSchool(sid);
     ensurePostsAndBannerAreVisible(sid);

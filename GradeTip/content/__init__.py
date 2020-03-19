@@ -12,5 +12,5 @@ from GradeTip.user import user_manager
 post_store = TextPostStore(user_manager)
 upload_store = UploadStore(indexer)
 listing_store = ListingStore(upload_store, school_store)
-request_store = RequestStore(redis_values, post_store, upload_store, listing_store, admin_authenticator)
 reply_store = ReplyStore(user_manager)
+request_store = RequestStore(redis_values, post_store, upload_store, listing_store, reply_store, admin_authenticator)

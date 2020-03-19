@@ -22,7 +22,7 @@ def replies_by_content_id():
     Endpoint to get all replies for content with given ID.
     :return: JSON containing all reply data for content
     """
-    content_id = request.form.get("content_id")
+    content_id = request.args.get("content_id")
     replies = reply_store.get_replies(content_id)
     return json.dumps(replies)
 

@@ -5,7 +5,7 @@ from flask import url_for, request, render_template, redirect, abort, jsonify, c
 from flask_login import current_user, logout_user
 
 from GradeTip.admin import admin_authenticator
-from GradeTip.content import listing_store, post_store, request_store
+from GradeTip.content import listing_store, post_store, request_store, reply_store
 from GradeTip.schools import school_store
 from GradeTip.user import session_manager, user_manager
 
@@ -169,6 +169,34 @@ def schoolpage(school_id):
                            sid=school_id,
                            requested=requested_listing,
                            created=created_listing)
+
+
+def reply_to_content():
+    """
+    Endpoint used to handle requests to create replies to content.
+    """
+    school_id = request.form.get("school_id")
+    school_name = school_store.get_school_name(int(school_id))
+    if not school_name:
+        abort(404)
+    request_id = reply_store.request_reply(school_id, request.form)
+    requested = False
+    created = False
+    if not request_id:
+        app.logger.error("Could not create request with {}".format(str(request.form)))
+        return jsonify({"requested": requested, "created": created})
+    requested = True
+    if app.config.get("REQUIRE_POST_APPROVAL") is not None and not app.config.get("REQUIRE_POST_APPROVAL"):
+        app.logger.info("Promoting request {} to post".format(request_id))
+        request_store.approve_request(request_id)
+        created = True
+
+    app.logger.info("Created request for reply " + str(request.form))
+    return redirect(url_for("details",
+                            school_id=school_id,
+                            post_id=request.form.get("content_id"),
+                            created=created,
+                            requested=requested))
 
 
 def listingpage():

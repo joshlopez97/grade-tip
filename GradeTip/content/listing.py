@@ -91,6 +91,8 @@ class ListingStore(ContentStore):
         :return: dict containing listing data
         """
         listing_data = super().get_content(listing_id)
+        if not listing_data:
+            raise ValueError("Listing with ID {} does not exist".format(listing_id))
         listing_data["preview"] = self.upload.get_preview_from_listing(listing_data["upload_id"])
         listing_data["id"] = listing_id
         app.logger.debug("fetched listing {}".format(listing_data))
@@ -107,8 +109,7 @@ class ListingStore(ContentStore):
         for listing_id in RedisSet(listing_set_key).values():
             try:
                 listings[listing_id] = self.get_listing(listing_id)
-            except:
-                app.logger.debug("failed to fetch listing with id {}".format(listing_id))
-                traceback.print_exc()
+            except Exception as e:
+                app.logger.error("failed to fetch listing with id {}\n{}", listing_id, str(e))
         app.logger.debug("fetched {} listings for sid {}".format(len(listings), school_id))
         return listings

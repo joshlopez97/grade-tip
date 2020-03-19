@@ -13,13 +13,23 @@ function getTextPostHolder(post_data, pid) {
   `);
 }
 
-function getNumPagesLabel(numPages)
-{
+function getNumPagesLabel(numPages) {
   if (typeof numPages === 'undefined' || numPages === null || numPages === 0)
     return "";
   if (numPages === "1")
     return "1 page";
   return numPages + " pages";
+}
+
+function getReplyHolder(pid) {
+  return $(`
+    <form id="make-reply" action="/reply" method="post">
+      <input type="hidden" name="content_id" value="${pid}">
+      <input type="hidden" name="school_id" value="${getSchoolId()}">
+      <textarea id="reply-text" name="text" maxlength="2000"></textarea>
+      <input id="reply-submit" type="submit" value="Submit">
+    </form>
+  `);
 }
 
 function getListingHolder(post_data, pid) {
@@ -41,6 +51,21 @@ function getListingHolder(post_data, pid) {
   `);
 }
 
+function addCharCounter(inputBox) {
+  let charCounter = $(`<span class='char-counter'>0 / 2000 characters</span>`);
+  inputBox.on("input", () => {
+    charCounter.text(`${inputBox.val().length} / 2000 characters`);
+  });
+  charCounter.insertAfter(inputBox);
+}
+
+function replyToPost(pid) {
+  console.log("reply");
+  let replyInputBox = getReplyHolder(pid).insertAfter(`#${pid}`).find("#reply-text");
+  replyInputBox.focus();
+  addCharCounter(replyInputBox);
+}
+
 function getLikeReplyControls(pid) {
   let controls = $(`
     <div class="post-controls">
@@ -48,9 +73,13 @@ function getLikeReplyControls(pid) {
       <a id="reply-${pid}" class="post-btn">Reply</a>
     </div>
   `);
-  controls.on("click", `#like-${pid}`, (e)=>{
+  controls.on("click", `#like-${pid}`, (e) => {
     e.stopPropagation();
     likePost(pid);
+  });
+  controls.on("click", `#reply-${pid}`, (e) => {
+    e.stopPropagation();
+    replyToPost(pid);
   });
   return controls;
 }
@@ -62,11 +91,11 @@ function getApproveDenyControls(pid) {
       <a class="post-btn" id="deny-${pid}">Deny</a>
     </div>
   `);
-  controls.on("click", `#approve-${pid}`, ()=>{
+  controls.on("click", `#approve-${pid}`, () => {
     console.log("Approved " + pid);
     adminRequest(`/admin/approve/${pid}`, "GET", (res) => console.log(res));
   });
-  controls.on("click", `#deny-${pid}`, ()=>{
+  controls.on("click", `#deny-${pid}`, () => {
     console.log("Deny " + pid);
     adminRequest(`/admin/deny/${pid}`, "GET", (res) => console.log(res));
   });

@@ -129,7 +129,7 @@ $(document).ready(function () {
       payload["lon"] = pos.coords.longitude;
       hideApproximateLocation();
     }
-    const nearestEndpoint = $("#api-nearest-schools").data().endpoint;
+    const nearestEndpoint = $("#api-school-nearest").data().endpoint;
     $.post(nearestEndpoint, payload, function cacheSchools(data) {
       const nearest = $.parseJSON(data);
       if (!!nearest && !!nearest['schools'] && nearest['schools'].length > 0) {
