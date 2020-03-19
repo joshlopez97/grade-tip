@@ -44,13 +44,16 @@ $(document).ready(function () {
         <h5 class='schools-title'>Suggested Schools</h5>
         <span id="approximate-location"></span>
       </div>
-      <div class='schools-holder'><ul class='schools'></ul></div>`
+      <div class='schools-holder'>
+        <ul class='schools'>
+          <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+        </ul>
+      </div>`
     );
     if (geolocationProvidedPreviously()) {
       requestLocation(function onFailure(error) {
         console.log(error, 'poop');
         storeLocationCookie(false);
-        $(".lds-ring").remove();
         fetchSchools(showSchools);
       });
     }
@@ -76,7 +79,7 @@ $(document).ready(function () {
         changeBtn.append(`<div class="lds-ring"><div></div><div></div><div></div><div></div></div>`);
         requestLocation(function onFailure(error) {
           storeLocationCookie(false);
-          $(".lds-ring").remove();
+          // $(".lds-ring").remove();
           $("#change-location").css("display", "none");
         });
       });
@@ -86,7 +89,7 @@ $(document).ready(function () {
 
   function showExactLocation(pos) {
     $("#approximate-location").append(`
-      Near <a href="https://www.google.com/maps/@${pos.coords.latitude},${pos.coords.longitude},17z">Current Location</a>
+      Near <a href="https://www.google.com/maps/@${pos.coords.latitude},${pos.coords.longitude},17z">Approximate Location</a>
     `);
   }
 
@@ -131,6 +134,7 @@ $(document).ready(function () {
     }
     const nearestEndpoint = $("#api-school-nearest").data().endpoint;
     $.post(nearestEndpoint, payload, function cacheSchools(data) {
+      $(".lds-ring").remove();
       const nearest = $.parseJSON(data);
       if (!!nearest && !!nearest['schools'] && nearest['schools'].length > 0) {
         // cache nearest school data

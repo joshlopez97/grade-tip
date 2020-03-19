@@ -226,6 +226,12 @@ a#change-location {
   height: 10pt;
 }
 
+.lds-ring.lds-large {
+  width: 25pt;
+  height: 25pt;
+  margin: 25pt;
+}
+
 .lds-ring div {
   box-sizing: border-box;
   display: block;
@@ -233,10 +239,16 @@ a#change-location {
   width: 10pt;
   height: 10pt;
   margin: 0 5px;
-  border: 1px solid #df79ac;
+  border: 1px solid black;
   border-radius: 50%;
   animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: #df79ac transparent transparent transparent;
+  border-color: black transparent transparent transparent;
+}
+
+.lds-ring.lds-large div {
+  width: 25pt;
+  height: 25pt;
+  border-width: 2px;
 }
 
 .lds-ring div:nth-child(1) {
